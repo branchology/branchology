@@ -1,0 +1,24 @@
+version: '2'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/api/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./:/usr/src/app
+    links:
+      - db
+    ports:
+      - '4000:4000'
+    environment:
+      - APP_ENV=local
+  db:
+    image: postgres:10.3
+    environment:
+      POSTGRES_USER: branchology
+      POSTGRES_PASSWORD: branchology
+      POSTGRES_DB: branchology
+    ports:
+      - '5432:8432'
