@@ -1,4 +1,6 @@
 import knex from 'knex';
-import config from '../knexfile';
+import knexConfig from '../knexfile';
 
-export default knex(config);
+const testConfig = { client: 'pg', debug: false };
+
+export default knex(process.env.NODE_ENV === 'test' ? testConfig : knexConfig);

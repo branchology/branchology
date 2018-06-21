@@ -1,13 +1,13 @@
-YARN = docker-compose run web yarn
+YARN = docker-compose run api yarn
 
 docker-lint:
 	${YARN} run lint
 
 docker-migrate-latest:
-	${YARN} migrations:latest
+	${YARN} migrate:latest
 
 docker-migrate-rollback:
-	${YARN} migrations:rollback
+	${YARN} migrate:rollback
 
 docker-migration-make:
 	${YARN} migrations:make ${name}
@@ -23,3 +23,12 @@ docker-packages-install:
 
 docker-packages-remove:
 	$(YARN) remove ${name}
+
+docker-seed-create:
+	${YARN} seed:create name ${name}
+
+docker-seed-run:
+	${YARN} seed:run
+
+docker-test:
+	$(YARN) test

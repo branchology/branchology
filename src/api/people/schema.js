@@ -1,13 +1,25 @@
 export default `
   enum Sex {
-    MALE
-    FEMALE
+    M
+    F
+  }
+
+  type Name {
+    id: ID!
+    given: String
+    surname: String
+  }
+
+  type PersonEvent {
+    id: ID!
+    date: String
   }
 
   type Person {
     id: ID!
     slug: String!
     sex: Sex
+    names: [Name]
   }
 
   type PeopleCollection {

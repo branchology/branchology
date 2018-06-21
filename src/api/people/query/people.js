@@ -1,3 +1,6 @@
-export default function peopleQuery() {
-  return { items: [{ id: 500 }, { id: 600 }] };
+import { findAllPeople } from 'db';
+import { applyPaging } from 'lib';
+
+export default function peopleQuery(root, { filter, sorting, paging }) {
+  return applyPaging(findAllPeople(filter, sorting), paging);
 }

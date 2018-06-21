@@ -1,4 +1,4 @@
-import 'config';
+import './config';
 
 const {
   DATABASE_DEBUG = false,
