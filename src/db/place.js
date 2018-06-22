@@ -3,6 +3,12 @@ import { generateUuid, returnFirst } from '../lib';
 
 export const PLACE_TABLE = 'places';
 
+export function findPlaceByIds(ids) {
+  return db(PLACE_TABLE)
+    .select('*')
+    .whereIn('id', ids);
+}
+
 export async function createPlace(data) {
   const { postalCode, stateProvince, ...otherPlaceData } = data;
 

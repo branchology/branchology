@@ -5,6 +5,7 @@ import {
 } from './loader';
 import { person, people } from './query';
 import schema from './schema';
+import { placeLoader } from '../place/loader';
 
 const resolvers = {
   Query: {
@@ -28,6 +29,9 @@ const resolvers = {
   PersonEvent: {
     type({ type }) {
       return type.toUpperCase();
+    },
+    place({ place_id }) {
+      return placeLoader.load(place_id);
     },
   },
 };
