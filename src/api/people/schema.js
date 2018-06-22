@@ -10,9 +10,18 @@ export default `
     surname: String
   }
 
+  enum PersonEventType {
+    BIRT
+    BAPM
+    DEAT
+    BURI
+  }
+
   type PersonEvent {
     id: ID!
+    type: PersonEventType!
     date: String
+    place: Place
   }
 
   type Person {
@@ -20,6 +29,7 @@ export default `
     slug: String!
     sex: Sex
     names: [Name]
+    events: [PersonEvent]
   }
 
   type PeopleCollection {

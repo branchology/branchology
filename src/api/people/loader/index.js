@@ -1,3 +1,4 @@
+import personEventLoader from './personEventLoader';
 import personNameLoader from './personNameLoader';
 
-export { personNameLoader };
+export { personEventLoader, personNameLoader };

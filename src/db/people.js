@@ -1,6 +1,6 @@
 import db from './conn';
 import { generateUuid, returnFirst } from '../lib';
-import { createEvent } from './event';
+import { createEvent, EVENT_TABLE } from './event';
 
 export const PEOPLE_TABLE = 'people';
 export const PERSON_EVENT_TABLE = 'person_events';
@@ -9,6 +9,14 @@ export const PERSON_NAME_TABLE = 'person_names';
 export function findAllPeople(filter, sorting) {
   // TODO: Sorting + filtering
   return db.select(['*']).from(PEOPLE_TABLE);
+}
+
+export function findPersonEventsByPersonIds(ids) {
+  return db
+    .select(['e.*', 'pe.person_id'])
+    .from(`${PERSON_EVENT_TABLE} as pe`)
+    .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
+    .whereIn('person_id', ids);
 }
 
 export function findPersonNamesByPersonIds(ids) {
