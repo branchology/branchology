@@ -39,5 +39,9 @@ exports.seed = async db => {
     given: 'Abraham',
     surname: 'Lincoln',
     sex: 'M',
+    birthDate: '12 Feb 1809',
+    birthPlaceId: hodgenville.id,
+    deathDate: '15 Apr 1865',
+    deathPlaceId: dc.id,
   });
 };

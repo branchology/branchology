@@ -3,6 +3,7 @@ import { generateUuid, returnFirst } from '../lib';
 import { createEvent } from './event';
 
 export const PEOPLE_TABLE = 'people';
+export const PERSON_EVENT_TABLE = 'person_events';
 export const PERSON_NAME_TABLE = 'person_names';
 
 export function findAllPeople(filter, sorting) {
@@ -65,7 +66,7 @@ export async function createPerson(data) {
       place: birthPlace,
       placeId: birthPlaceId,
     });
-    // TODO ADD TO PeopleEvents....
+    await attachPersonEvent(personId, birth.id);
   }
 
   if (deathDate || deathPlace || deathPlaceId) {
@@ -74,8 +75,16 @@ export async function createPerson(data) {
       place: deathPlace,
       placeId: deathPlaceId,
     });
-    // TODO ADD TO PeopleEvents....
+    await attachPersonEvent(personId, death.id);
   }
 
   return Promise.all(bagOfPromises).then(() => person);
+}
+
+export function attachPersonEvent(personId, eventId) {
+  const id = generateUuid();
+
+  return db(PERSON_EVENT_TABLE)
+    .insert({ id, person_id: personId, event_id: eventId }, '*')
+    .then(returnFirst);
 }
