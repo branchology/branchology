@@ -29,6 +29,7 @@ export default `
     id: ID!
     slug: String!
     sex: Sex
+    name: Name
     names: [Name]
     events: [PersonEvent]
     birth: PersonEvent

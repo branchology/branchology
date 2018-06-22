@@ -50,6 +50,14 @@ export function findPersonPrimaryEventsByPersonIdAndType(pairs) {
     .whereIn(db.raw('(person_id, e.type)'), pairs);
 }
 
+export function findPersonPreferredNameByIds(ids) {
+  return db
+    .select(['*'])
+    .from(PERSON_NAME_TABLE)
+    .where('is_preferred', true)
+    .whereIn('person_id', ids);
+}
+
 export function createPersonName(personId, nameData) {
   const nameId = generateUuid();
 

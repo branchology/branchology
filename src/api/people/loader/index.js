@@ -3,6 +3,7 @@ import personEventLoader from './personEventLoader';
 import personNameCitationLoader from './personNameCitationLoader';
 import personNameLoader from './personNameLoader';
 import personPreferredEventLoader from './personPreferredEventLoader';
+import personPreferredNameLoader from './personPreferredNameLoader';
 
 export {
   personCitationLoader,
@@ -10,4 +11,5 @@ export {
   personNameCitationLoader,
   personNameLoader,
   personPreferredEventLoader,
+  personPreferredNameLoader,
 };
