@@ -10,6 +10,13 @@ export function findAllPeople(filter, sorting) {
   return db.select(['*']).from(PEOPLE_TABLE);
 }
 
+export function findPersonNamesByPersonIds(ids) {
+  return db
+    .select(['*'])
+    .from(PERSON_NAME_TABLE)
+    .whereIn('person_id', ids);
+}
+
 export function createPersonName(personId, nameData) {
   const nameId = generateUuid();
 
