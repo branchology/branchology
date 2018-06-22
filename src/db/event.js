@@ -4,7 +4,7 @@ import { generateUuid, returnFirst } from '../lib';
 export const EVENT_TABLE = 'events';
 
 export async function createEvent(type, data) {
-  const { date, place, placeId } = data;
+  const { date, place, placeId, isPreferred = true } = data;
 
   let dbPlaceId;
   if (place || placeId) {
@@ -26,6 +26,7 @@ export async function createEvent(type, data) {
         type,
         date,
         place_id: dbPlaceId,
+        is_preferred: isPreferred,
       },
       '*',
     )

@@ -26,6 +26,14 @@ export function findPersonNamesByPersonIds(ids) {
     .whereIn('person_id', ids);
 }
 
+export function findPersonPrimaryEventsByPersonIdAndType(pairs) {
+  return db
+    .select(['e.*', 'pe.person_id'])
+    .from(`${PERSON_EVENT_TABLE} as pe`)
+    .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
+    .whereIn(db.raw('(person_id, e.type)'), pairs);
+}
+
 export function createPersonName(personId, nameData) {
   const nameId = generateUuid();
 

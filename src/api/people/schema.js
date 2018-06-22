@@ -30,6 +30,8 @@ export default `
     sex: Sex
     names: [Name]
     events: [PersonEvent]
+    birth: PersonEvent
+    death: PersonEvent
   }
 
   type PeopleCollection {
