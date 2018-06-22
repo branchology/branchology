@@ -2,6 +2,10 @@ const {
   addPersonEventSourceCitation,
   addPersonNameSourceCitation,
   addPersonSourceCitation,
+  attachPersonEventNote,
+  attachPersonNameNote,
+  attachPersonNote,
+  createNote,
   createPerson,
   createPlace,
   createSource,
@@ -83,5 +87,18 @@ exports.seed = async db => {
       citation:
         'Name: Abraham Lincoln\n\nBirth: 12 Feb 1809 in Hodgenville, IL',
     },
+  );
+
+  const note1 = await createNote({ text: 'Freed the slaves' });
+  const note2 = await createNote({ text: 'Sometimes called "Honest Abe"' });
+  const note3 = await createNote({
+    text: "Was assassinated by John Wilkes Booth at Ford's Theatre",
+  });
+
+  await attachPersonNote(abe.id, note1.id);
+  await attachPersonNameNote(names[0].id, note2.id);
+  await attachPersonEventNote(
+    events.find(e => e.type === 'deat').person_event_id,
+    note3.id,
   );
 };

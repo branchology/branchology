@@ -9,6 +9,7 @@ export default `
     given: String
     surname: String
     sourceCitations: [SourceCitation]
+    notes: [Note]
   }
 
   enum PersonEventType {
@@ -24,6 +25,7 @@ export default `
     date: String
     place: Place
     sourceCitations: [SourceCitation]
+    notes: [Note]
   }
 
   type Person {
@@ -36,6 +38,7 @@ export default `
     birth: PersonEvent
     death: PersonEvent
     sourceCitations: [SourceCitation]
+    notes: [Note]
   }
 
   type PeopleCollection {

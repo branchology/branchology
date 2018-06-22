@@ -1,6 +1,7 @@
 import db from './conn';
 import { generateUuid, returnFirst } from '../lib';
 import { createEvent, EVENT_TABLE } from './event';
+import { NOTE_TABLE } from './note';
 
 export const PEOPLE_TABLE = 'people';
 export const PERSON_CITATION_TABLE = 'person_sources';
@@ -8,6 +9,9 @@ export const PERSON_EVENT_CITATION_TABLE = 'person_event_sources';
 export const PERSON_EVENT_TABLE = 'person_events';
 export const PERSON_NAME_CITATION_TABLE = 'person_name_sources';
 export const PERSON_NAME_TABLE = 'person_names';
+export const PERSON_NOTE_TABLE = 'person_notes';
+export const PERSON_EVENT_NOTE_TABLE = 'person_event_notes';
+export const PERSON_NAME_NOTE_TABLE = 'person_name_notes';
 
 export function findAllPeople(filter, sorting) {
   // TODO: Sorting + filtering
@@ -47,6 +51,29 @@ export function findPersonNamesByPersonIds(ids) {
   return db
     .select(['*'])
     .from(PERSON_NAME_TABLE)
+    .whereIn('person_id', ids);
+}
+
+export function findPersonEventNotesByPersonEventIds(ids) {
+  return db
+    .select(['n.*', 'pen.person_event_id'])
+    .from(`${PERSON_EVENT_NOTE_TABLE} AS pen`)
+    .join(`${NOTE_TABLE} as n`, 'n.id', 'pen.note_id')
+    .whereIn('person_event_id', ids);
+}
+export function findPersonNameNotesByPersonNameIds(ids) {
+  return db
+    .select(['n.*', 'pnn.person_name_id'])
+    .from(`${PERSON_NAME_NOTE_TABLE} AS pnn`)
+    .join(`${NOTE_TABLE} as n`, 'n.id', 'pnn.note_id')
+    .whereIn('person_name_id', ids);
+}
+
+export function findPersonNotesByPersonIds(ids) {
+  return db
+    .select(['n.*', 'pn.person_id'])
+    .from(`${PERSON_NOTE_TABLE} AS pn`)
+    .join(`${NOTE_TABLE} as n`, 'n.id', 'pn.note_id')
     .whereIn('person_id', ids);
 }
 
@@ -185,5 +212,29 @@ export function attachPersonEvent(personId, eventId) {
 
   return db(PERSON_EVENT_TABLE)
     .insert({ id, person_id: personId, event_id: eventId }, '*')
+    .then(returnFirst);
+}
+
+export function attachPersonNote(personId, noteId) {
+  const id = generateUuid();
+
+  return db(PERSON_NOTE_TABLE)
+    .insert({ id, person_id: personId, note_id: noteId }, '*')
+    .then(returnFirst);
+}
+
+export function attachPersonEventNote(personEventId, noteId) {
+  const id = generateUuid();
+
+  return db(PERSON_EVENT_NOTE_TABLE)
+    .insert({ id, person_event_id: personEventId, note_id: noteId }, '*')
+    .then(returnFirst);
+}
+
+export function attachPersonNameNote(personNameId, noteId) {
+  const id = generateUuid();
+
+  return db(PERSON_NAME_NOTE_TABLE)
+    .insert({ id, person_name_id: personNameId, note_id: noteId }, '*')
     .then(returnFirst);
 }

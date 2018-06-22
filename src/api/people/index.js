@@ -1,9 +1,12 @@
 import {
   personCitationLoader,
   personEventCitationLoader,
+  personEventNoteLoader,
   personEventLoader,
   personNameCitationLoader,
   personNameLoader,
+  personNameNoteLoader,
+  personNoteLoader,
   personPreferredEventLoader,
   personPreferredNameLoader,
 } from './loader';
@@ -17,6 +20,9 @@ const resolvers = {
     people,
   },
   Name: {
+    notes({ id }) {
+      return personNameNoteLoader.load(id);
+    },
     sourceCitations({ id }) {
       return personNameCitationLoader.load(id);
     },
@@ -37,6 +43,9 @@ const resolvers = {
     names({ id }) {
       return personNameLoader.load(id);
     },
+    notes({ id }) {
+      return personNoteLoader.load(id);
+    },
     sourceCitations({ id }) {
       return personCitationLoader.load(id);
     },
@@ -47,6 +56,9 @@ const resolvers = {
     },
     place({ place_id }) {
       return placeLoader.load(place_id);
+    },
+    notes({ person_event_id: id }) {
+      return personEventNoteLoader.load(id);
     },
     sourceCitations({ person_event_id }) {
       return personEventCitationLoader.load(person_event_id);
