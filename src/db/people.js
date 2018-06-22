@@ -5,8 +5,8 @@ import { createEvent, EVENT_TABLE } from './event';
 export const PEOPLE_TABLE = 'people';
 export const PERSON_CITATION_TABLE = 'person_sources';
 export const PERSON_EVENT_TABLE = 'person_events';
+export const PERSON_NAME_CITATION_TABLE = 'person_name_sources';
 export const PERSON_NAME_TABLE = 'person_names';
-export const PERSON_SOURCE_TABLE = 'person_sources';
 
 export function findAllPeople(filter, sorting) {
   // TODO: Sorting + filtering
@@ -26,6 +26,13 @@ export function findPersonEventsByPersonIds(ids) {
     .from(`${PERSON_EVENT_TABLE} as pe`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
     .whereIn('person_id', ids);
+}
+
+export function findPersonNameCitationsByPersonIds(ids) {
+  return db
+    .select('*')
+    .from(PERSON_NAME_CITATION_TABLE)
+    .whereIn('person_name_id', ids);
 }
 
 export function findPersonNamesByPersonIds(ids) {
@@ -110,11 +117,28 @@ export function addPersonSourceCitation(personId, sourceId, data) {
   const id = generateUuid();
   const { citation } = data;
 
-  return db(PERSON_SOURCE_TABLE)
+  return db(PERSON_CITATION_TABLE)
     .insert(
       {
         id,
         person_id: personId,
+        source_id: sourceId,
+        citation,
+      },
+      '*',
+    )
+    .then(returnFirst);
+}
+
+export function addPersonNameSourceCitation(personNameId, sourceId, data) {
+  const id = generateUuid();
+  const { citation } = data;
+
+  return db(PERSON_NAME_CITATION_TABLE)
+    .insert(
+      {
+        id,
+        person_name_id: personNameId,
         source_id: sourceId,
         citation,
       },

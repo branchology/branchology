@@ -1,6 +1,7 @@
 import {
   personCitationLoader,
   personEventLoader,
+  personNameCitationLoader,
   personNameLoader,
   personPreferredEventLoader,
 } from './loader';
@@ -12,6 +13,11 @@ const resolvers = {
   Query: {
     person,
     people,
+  },
+  Name: {
+    sourceCitations({ id }) {
+      return personNameCitationLoader.load(id);
+    },
   },
   Person: {
     birth({ id }) {

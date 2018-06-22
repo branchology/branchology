@@ -1,8 +1,10 @@
 const {
+  addPersonNameSourceCitation,
   addPersonSourceCitation,
   createPerson,
   createPlace,
   createSource,
+  findPersonNamesByPersonIds,
 } = require('../');
 
 function truncateCascade(db, table) {
@@ -55,7 +57,17 @@ exports.seed = async db => {
     title: 'Abraham Lincoln Presidential Library',
   });
 
+  const ilBirthCertificates = await createSource({
+    title: 'Illinois Birth Certificates',
+  });
+
   await addPersonSourceCitation(abe.id, presidentialLibrary.id, {
     citation: 'This guy was a president',
+  });
+
+  const names = await findPersonNamesByPersonIds([abe.id]);
+
+  await addPersonNameSourceCitation(names[0].id, ilBirthCertificates.id, {
+    citation: 'Name: Abraham Lincoln\n\nBirth: 12 Feb 1809 in Hodgenville, IL',
   });
 };

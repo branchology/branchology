@@ -8,6 +8,7 @@ export default `
     id: ID!
     given: String
     surname: String
+    sourceCitations: [SourceCitation]
   }
 
   enum PersonEventType {
