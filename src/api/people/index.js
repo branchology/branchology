@@ -1,4 +1,5 @@
 import {
+  personCitationLoader,
   personEventLoader,
   personNameLoader,
   personPreferredEventLoader,
@@ -24,6 +25,9 @@ const resolvers = {
     },
     names({ id }) {
       return personNameLoader.load(id);
+    },
+    sourceCitations({ id }) {
+      return personCitationLoader.load(id);
     },
   },
   PersonEvent: {

@@ -3,12 +3,21 @@ import { generateUuid, returnFirst } from '../lib';
 import { createEvent, EVENT_TABLE } from './event';
 
 export const PEOPLE_TABLE = 'people';
+export const PERSON_CITATION_TABLE = 'person_sources';
 export const PERSON_EVENT_TABLE = 'person_events';
 export const PERSON_NAME_TABLE = 'person_names';
+export const PERSON_SOURCE_TABLE = 'person_sources';
 
 export function findAllPeople(filter, sorting) {
   // TODO: Sorting + filtering
   return db.select(['*']).from(PEOPLE_TABLE);
+}
+
+export function findPersonCitationsByPersonIds(ids) {
+  return db
+    .select('*')
+    .from(PERSON_CITATION_TABLE)
+    .whereIn('person_id', ids);
 }
 
 export function findPersonEventsByPersonIds(ids) {
@@ -95,6 +104,23 @@ export async function createPerson(data) {
   }
 
   return Promise.all(bagOfPromises).then(() => person);
+}
+
+export function addPersonSourceCitation(personId, sourceId, data) {
+  const id = generateUuid();
+  const { citation } = data;
+
+  return db(PERSON_SOURCE_TABLE)
+    .insert(
+      {
+        id,
+        person_id: personId,
+        source_id: sourceId,
+        citation,
+      },
+      '*',
+    )
+    .then(returnFirst);
 }
 
 export function attachPersonEvent(personId, eventId) {

@@ -1,10 +1,16 @@
-const { createPerson, createPlace } = require('../');
+const {
+  addPersonSourceCitation,
+  createPerson,
+  createPlace,
+  createSource,
+} = require('../');
 
 function truncateCascade(db, table) {
   return db.raw(`TRUNCATE ${table} CASCADE`);
 }
 
 exports.seed = async db => {
+  // TRUNCATE
   await Promise.all([
     truncateCascade(db, 'event_notes'),
     truncateCascade(db, 'event_sources'),
@@ -43,5 +49,13 @@ exports.seed = async db => {
     birthPlaceId: hodgenville.id,
     deathDate: '15 Apr 1865',
     deathPlaceId: dc.id,
+  });
+
+  const presidentialLibrary = await createSource({
+    title: 'Abraham Lincoln Presidential Library',
+  });
+
+  await addPersonSourceCitation(abe.id, presidentialLibrary.id, {
+    citation: 'This guy was a president',
   });
 };

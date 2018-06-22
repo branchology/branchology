@@ -77,6 +77,7 @@ exports.up = async db => {
         .notNullable()
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
+      table.text('citation');
       table
         .dateTime('created')
         .notNullable()
@@ -148,6 +149,7 @@ exports.up = async db => {
         .notNullable()
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
+      table.text('citation');
       table
         .dateTime('created')
         .notNullable()

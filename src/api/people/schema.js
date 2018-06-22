@@ -32,6 +32,7 @@ export default `
     events: [PersonEvent]
     birth: PersonEvent
     death: PersonEvent
+    sourceCitations: [SourceCitation]
   }
 
   type PeopleCollection {
