@@ -156,11 +156,36 @@ exports.up = async db => {
         .defaultTo(db.raw('CURRENT_TIMESTAMP'))
         .notNullable();
     }),
+
+    db.schema.createTable('person_event_sources', table => {
+      table.uuid('id').primary();
+      table
+        .uuid('person_event_id')
+        .references('id')
+        .inTable('person_events')
+        .notNullable()
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
+      table
+        .uuid('source_id')
+        .references('id')
+        .inTable('sources')
+        .notNullable()
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
+      table.text('citation');
+      table
+        .dateTime('created')
+        .notNullable()
+        .defaultTo(db.raw('CURRENT_TIMESTAMP'))
+        .notNullable();
+    }),
   ]);
 };
 
 exports.down = async db => {
   await Promise.all([
+    db.schema.dropTable('person_event_sources'),
     db.schema.dropTable('person_name_sources'),
     db.schema.dropTable('person_name_notes'),
   ]);

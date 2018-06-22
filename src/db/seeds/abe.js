@@ -1,9 +1,11 @@
 const {
+  addPersonEventSourceCitation,
   addPersonNameSourceCitation,
   addPersonSourceCitation,
   createPerson,
   createPlace,
   createSource,
+  findPersonEventsByPersonIds,
   findPersonNamesByPersonIds,
 } = require('../');
 
@@ -18,6 +20,7 @@ exports.seed = async db => {
     truncateCascade(db, 'event_sources'),
     truncateCascade(db, 'person_name_notes'),
     truncateCascade(db, 'person_name_sources'),
+    truncateCascade(db, 'person_event_sources'),
     truncateCascade(db, 'person_notes'),
     truncateCascade(db, 'person_parents'),
     truncateCascade(db, 'person_relationships'),
@@ -70,4 +73,15 @@ exports.seed = async db => {
   await addPersonNameSourceCitation(names[0].id, ilBirthCertificates.id, {
     citation: 'Name: Abraham Lincoln\n\nBirth: 12 Feb 1809 in Hodgenville, IL',
   });
+
+  const events = await findPersonEventsByPersonIds([abe.id]);
+
+  await addPersonEventSourceCitation(
+    events.find(e => e.type === 'birt').person_event_id,
+    ilBirthCertificates.id,
+    {
+      citation:
+        'Name: Abraham Lincoln\n\nBirth: 12 Feb 1809 in Hodgenville, IL',
+    },
+  );
 };

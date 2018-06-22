@@ -4,6 +4,7 @@ import { createEvent, EVENT_TABLE } from './event';
 
 export const PEOPLE_TABLE = 'people';
 export const PERSON_CITATION_TABLE = 'person_sources';
+export const PERSON_EVENT_CITATION_TABLE = 'person_event_sources';
 export const PERSON_EVENT_TABLE = 'person_events';
 export const PERSON_NAME_CITATION_TABLE = 'person_name_sources';
 export const PERSON_NAME_TABLE = 'person_names';
@@ -22,10 +23,17 @@ export function findPersonCitationsByPersonIds(ids) {
 
 export function findPersonEventsByPersonIds(ids) {
   return db
-    .select(['e.*', 'pe.person_id'])
+    .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
     .from(`${PERSON_EVENT_TABLE} as pe`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
     .whereIn('person_id', ids);
+}
+
+export function findPersonEventCitationsByPersonIds(ids) {
+  return db
+    .select('*')
+    .from(PERSON_EVENT_CITATION_TABLE)
+    .whereIn('person_event_id', ids);
 }
 
 export function findPersonNameCitationsByPersonIds(ids) {
@@ -44,7 +52,7 @@ export function findPersonNamesByPersonIds(ids) {
 
 export function findPersonPrimaryEventsByPersonIdAndType(pairs) {
   return db
-    .select(['e.*', 'pe.person_id'])
+    .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
     .from(`${PERSON_EVENT_TABLE} as pe`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
     .whereIn(db.raw('(person_id, e.type)'), pairs);
@@ -119,6 +127,23 @@ export async function createPerson(data) {
   }
 
   return Promise.all(bagOfPromises).then(() => person);
+}
+
+export function addPersonEventSourceCitation(personEventId, sourceId, data) {
+  const id = generateUuid();
+  const { citation } = data;
+
+  return db(PERSON_EVENT_CITATION_TABLE)
+    .insert(
+      {
+        id,
+        person_event_id: personEventId,
+        source_id: sourceId,
+        citation,
+      },
+      '*',
+    )
+    .then(returnFirst);
 }
 
 export function addPersonSourceCitation(personId, sourceId, data) {

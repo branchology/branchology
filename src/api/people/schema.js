@@ -23,6 +23,7 @@ export default `
     type: PersonEventType!
     date: String
     place: Place
+    sourceCitations: [SourceCitation]
   }
 
   type Person {

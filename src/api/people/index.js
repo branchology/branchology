@@ -1,5 +1,6 @@
 import {
   personCitationLoader,
+  personEventCitationLoader,
   personEventLoader,
   personNameCitationLoader,
   personNameLoader,
@@ -46,6 +47,9 @@ const resolvers = {
     },
     place({ place_id }) {
       return placeLoader.load(place_id);
+    },
+    sourceCitations({ person_event_id }) {
+      return personEventCitationLoader.load(person_event_id);
     },
   },
 };

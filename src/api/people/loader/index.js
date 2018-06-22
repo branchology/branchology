@@ -1,4 +1,5 @@
 import personCitationLoader from './personCitationLoader';
+import personEventCitationLoader from './personEventCitationLoader';
 import personEventLoader from './personEventLoader';
 import personNameCitationLoader from './personNameCitationLoader';
 import personNameLoader from './personNameLoader';
@@ -7,6 +8,7 @@ import personPreferredNameLoader from './personPreferredNameLoader';
 
 export {
   personCitationLoader,
+  personEventCitationLoader,
   personEventLoader,
   personNameCitationLoader,
   personNameLoader,
