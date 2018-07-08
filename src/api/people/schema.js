@@ -39,6 +39,8 @@ export default `
     death: PersonEvent
     sourceCitations: [SourceCitation]
     notes: [Note]
+    parents: [Parents]
+    relationships: [Relationship]
   }
 
   type PeopleCollection {

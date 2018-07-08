@@ -1,17 +1,31 @@
 import db from './conn';
 import { generateUuid, returnFirst } from '../lib';
+import {
+  PEOPLE_TABLE,
+  PERSON_CITATION_TABLE,
+  PERSON_EVENT_CITATION_TABLE,
+  PERSON_EVENT_TABLE,
+  PERSON_NAME_CITATION_TABLE,
+  PERSON_NAME_TABLE,
+  PERSON_NOTE_TABLE,
+  PERSON_EVENT_NOTE_TABLE,
+  PERSON_NAME_NOTE_TABLE,
+  PERSON_RELATIONSHIPS_TABLE,
+  RELATIONSHIP_TABLE,
+} from './constants';
 import { createEvent, EVENT_TABLE } from './event';
 import { NOTE_TABLE } from './note';
 
-export const PEOPLE_TABLE = 'people';
-export const PERSON_CITATION_TABLE = 'person_sources';
-export const PERSON_EVENT_CITATION_TABLE = 'person_event_sources';
-export const PERSON_EVENT_TABLE = 'person_events';
-export const PERSON_NAME_CITATION_TABLE = 'person_name_sources';
-export const PERSON_NAME_TABLE = 'person_names';
-export const PERSON_NOTE_TABLE = 'person_notes';
-export const PERSON_EVENT_NOTE_TABLE = 'person_event_notes';
-export const PERSON_NAME_NOTE_TABLE = 'person_name_notes';
+function createIdLoader(tableName, idColumn = 'id') {
+  return id =>
+    db
+      .select('*')
+      .from(tableName)
+      .where(idColumn, id)
+      .then(returnFirst);
+}
+
+export const findPersonById = createIdLoader(PEOPLE_TABLE);
 
 export function findAllPeople(filter, sorting) {
   // TODO: Sorting + filtering
@@ -91,6 +105,18 @@ export function findPersonPreferredNameByIds(ids) {
     .from(PERSON_NAME_TABLE)
     .where('is_preferred', true)
     .whereIn('person_id', ids);
+}
+
+export function findPersonRelationshipsByPersonIds(ids) {
+  return db
+    .select(['pr.person_id', 'r.*'])
+    .from(`${PERSON_RELATIONSHIPS_TABLE} AS pr`)
+    .join(`${RELATIONSHIP_TABLE} as r`, 'r.id', 'pr.relationship_id')
+    .whereIn('person_id', ids)
+    .then(data => {
+      console.log({ data });
+      return data;
+    });
 }
 
 export function createPersonName(personId, nameData) {
@@ -236,5 +262,13 @@ export function attachPersonNameNote(personNameId, noteId) {
 
   return db(PERSON_NAME_NOTE_TABLE)
     .insert({ id, person_name_id: personNameId, note_id: noteId }, '*')
+    .then(returnFirst);
+}
+
+export function attachPersonRelationship(personId, relationshipId) {
+  const id = generateUuid();
+
+  return db(PERSON_RELATIONSHIPS_TABLE)
+    .insert({ id, person_id: personId, relationship_id: relationshipId }, '*')
     .then(returnFirst);
 }

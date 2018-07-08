@@ -9,6 +9,7 @@ import {
   personNoteLoader,
   personPreferredEventLoader,
   personPreferredNameLoader,
+  personRelationshipLoader,
 } from './loader';
 import { person, people } from './query';
 import schema from './schema';
@@ -45,6 +46,9 @@ const resolvers = {
     },
     notes({ id }) {
       return personNoteLoader.load(id);
+    },
+    relationships({ id }) {
+      return personRelationshipLoader.load(id);
     },
     sourceCitations({ id }) {
       return personCitationLoader.load(id);

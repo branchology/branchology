@@ -8,6 +8,7 @@ const {
   createNote,
   createPerson,
   createPlace,
+  createRelationship,
   createSource,
   findPersonEventsByPersonIds,
   findPersonNamesByPersonIds,
@@ -47,8 +48,12 @@ exports.seed = async db => {
     truncateCascade(db, 'places'),
   ]);
 
-  const hodgenville = await createPlace({ description: 'Hodgenville, KY' });
-  const dc = await createPlace({ description: 'Washington, DC' });
+  const [hodgenville, lexington, dc, springfield] = await Promise.all([
+    createPlace({ description: 'Hodgenville, KY' }),
+    createPlace({ description: 'Lexington, KY' }),
+    createPlace({ description: 'Washington, DC' }),
+    createPlace({ description: 'Springfield, IL' }),
+  ]);
 
   const abe = await createPerson({
     given: 'Abraham',
@@ -58,6 +63,16 @@ exports.seed = async db => {
     birthPlaceId: hodgenville.id,
     deathDate: '15 Apr 1865',
     deathPlaceId: dc.id,
+  });
+
+  const mary = await createPerson({
+    given: 'Mary Ann',
+    surname: 'Todd',
+    sex: 'F',
+    birthDate: '13 Dec 1818',
+    birthPlaceId: lexington.id,
+    deathDate: '16 Jul 1882',
+    deathPlaceId: springfield.id,
   });
 
   const presidentialLibrary = await createSource({
@@ -101,4 +116,10 @@ exports.seed = async db => {
     events.find(e => e.type === 'deat').person_event_id,
     note3.id,
   );
+
+  // relationship
+  const relationship = await createRelationship(abe.id, mary.id, {
+    marriageDate: '4 Nov 1842',
+    marriagePlaceId: springfield.id,
+  });
 };
