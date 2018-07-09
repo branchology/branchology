@@ -35,7 +35,7 @@ export function findAllPeople(filter, sorting) {
 
 export function findPersonCitationsByPersonIds(ids) {
   return db
-    .select('sc.*')
+    .select(['sc.*', 'person_id'])
     .from(`${PERSON_SOURCE_CITATION_TABLE} AS psc`)
     .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'psc.source_citation_id')
     .whereIn('person_id', ids);
@@ -51,7 +51,7 @@ export function findPersonEventsByPersonIds(ids) {
 
 export function findPersonNameCitationsByPersonIds(ids) {
   return db
-    .select('sc.*')
+    .select(['sc.*', 'person_name_id'])
     .from(`${PERSON_NAME_SOURCE_CITATION_TABLE} AS nsc`)
     .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'nsc.source_citation_id')
     .whereIn('person_name_id', ids);

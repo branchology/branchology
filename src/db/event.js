@@ -11,7 +11,7 @@ import { generateUuid, returnFirst } from '../lib';
 
 export function findEventCitationsByEventIds(ids) {
   return db
-    .select('sc.*')
+    .select(['sc.*', 'event_id'])
     .from(`${EVENT_SOURCE_CITATION_TABLE} AS esc`)
     .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'esc.source_citation_id')
     .whereIn('event_id', ids);
