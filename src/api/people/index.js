@@ -1,7 +1,5 @@
 import {
   personCitationLoader,
-  personEventCitationLoader,
-  personEventNoteLoader,
   personEventLoader,
   personNameCitationLoader,
   personNameLoader,
@@ -13,7 +11,6 @@ import {
 } from './loader';
 import { person, people } from './query';
 import schema from './schema';
-import { placeLoader } from '../place/loader';
 
 const resolvers = {
   Query: {
@@ -52,20 +49,6 @@ const resolvers = {
     },
     sourceCitations({ id }) {
       return personCitationLoader.load(id);
-    },
-  },
-  PersonEvent: {
-    type({ type }) {
-      return type.toUpperCase();
-    },
-    place({ place_id }) {
-      return placeLoader.load(place_id);
-    },
-    notes({ person_event_id: id }) {
-      return personEventNoteLoader.load(id);
-    },
-    sourceCitations({ person_event_id }) {
-      return personEventCitationLoader.load(person_event_id);
     },
   },
 };

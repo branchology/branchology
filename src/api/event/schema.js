@@ -8,4 +8,13 @@ export default `
     stateProvince: String
     country: String
   }
+
+  type Event {
+    id: ID!
+    type: String!
+    date: String
+    place: Place
+    sourceCitations: [SourceCitation]
+    notes: [Note]
+  }
 `;

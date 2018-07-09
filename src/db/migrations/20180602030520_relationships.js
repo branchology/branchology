@@ -60,7 +60,7 @@ exports.up = async db => {
         .notNullable();
     }),
 
-    db.schema.createTable('relationship_sources', table => {
+    db.schema.createTable('relationship_source_citations', table => {
       table.uuid('id').primary();
       table
         .uuid('relationship_id')
@@ -70,9 +70,9 @@ exports.up = async db => {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       table
-        .uuid('source_id')
+        .uuid('source_citation_id')
         .references('id')
-        .inTable('sources')
+        .inTable('source_citations')
         .notNullable()
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
@@ -150,7 +150,7 @@ exports.down = async db => {
   await Promise.all([
     db.schema.dropTable('person_parents'),
     db.schema.dropTable('relationship_notes'),
-    db.schema.dropTable('relationship_sources'),
+    db.schema.dropTable('relationship_source_citations'),
     db.schema.dropTable('relationship_events'),
     db.schema.dropTable('person_relationships'),
   ]);

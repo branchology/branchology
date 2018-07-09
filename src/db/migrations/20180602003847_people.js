@@ -61,7 +61,7 @@ exports.up = async db => {
         .notNullable();
     }),
 
-    db.schema.createTable('person_sources', table => {
+    db.schema.createTable('person_source_citations', table => {
       table.uuid('id').primary();
       table
         .uuid('person_id')
@@ -71,13 +71,12 @@ exports.up = async db => {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       table
-        .uuid('source_id')
+        .uuid('source_citation_id')
         .references('id')
-        .inTable('sources')
+        .inTable('source_citations')
         .notNullable()
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
-      table.text('citation');
       table
         .dateTime('created')
         .notNullable()
@@ -133,30 +132,7 @@ exports.up = async db => {
         .notNullable();
     }),
 
-    db.schema.createTable('person_event_notes', table => {
-      table.uuid('id').primary();
-      table
-        .uuid('person_event_id')
-        .references('id')
-        .inTable('person_events')
-        .notNullable()
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-      table
-        .uuid('note_id')
-        .references('id')
-        .inTable('notes')
-        .notNullable()
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-      table
-        .dateTime('created')
-        .notNullable()
-        .defaultTo(db.raw('CURRENT_TIMESTAMP'))
-        .notNullable();
-    }),
-
-    db.schema.createTable('person_name_sources', table => {
+    db.schema.createTable('person_name_source_citations', table => {
       table.uuid('id').primary();
       table
         .uuid('person_name_id')
@@ -166,37 +142,12 @@ exports.up = async db => {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       table
-        .uuid('source_id')
+        .uuid('source_citation_id')
         .references('id')
-        .inTable('sources')
+        .inTable('source_citations')
         .notNullable()
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
-      table.text('citation');
-      table
-        .dateTime('created')
-        .notNullable()
-        .defaultTo(db.raw('CURRENT_TIMESTAMP'))
-        .notNullable();
-    }),
-
-    db.schema.createTable('person_event_sources', table => {
-      table.uuid('id').primary();
-      table
-        .uuid('person_event_id')
-        .references('id')
-        .inTable('person_events')
-        .notNullable()
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-      table
-        .uuid('source_id')
-        .references('id')
-        .inTable('sources')
-        .notNullable()
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-      table.text('citation');
       table
         .dateTime('created')
         .notNullable()
@@ -208,15 +159,13 @@ exports.up = async db => {
 
 exports.down = async db => {
   await Promise.all([
-    db.schema.dropTable('person_event_notes'),
-    db.schema.dropTable('person_event_sources'),
-    db.schema.dropTable('person_name_sources'),
+    db.schema.dropTable('person_name_source_citations'),
     db.schema.dropTable('person_name_notes'),
   ]);
 
   await Promise.all([
     db.schema.dropTable('person_notes'),
-    db.schema.dropTable('person_sources'),
+    db.schema.dropTable('person_source_citations'),
     db.schema.dropTable('person_events'),
     db.schema.dropTable('person_names'),
   ]);

@@ -1,7 +1,6 @@
 import db from './conn';
+import { SOURCE_CITATION_TABLE, SOURCE_TABLE } from './constants';
 import { generateUuid, returnFirst } from '../lib';
-
-export const SOURCE_TABLE = 'sources';
 
 export function findSourceByIds(ids) {
   return db(SOURCE_TABLE)
@@ -9,12 +8,22 @@ export function findSourceByIds(ids) {
     .whereIn('id', ids);
 }
 
-export async function createSource(data) {
+export function createSource(data) {
   const { title } = data;
 
   const sourceId = generateUuid();
 
   return db(SOURCE_TABLE)
     .insert({ id: sourceId, title }, '*')
+    .then(returnFirst);
+}
+
+export function createSourceCitation(sourceId, data) {
+  const { citation, page } = data;
+
+  const citationId = generateUuid();
+
+  return db(SOURCE_CITATION_TABLE)
+    .insert({ id: citationId, source_id: sourceId, citation, page }, '*')
     .then(returnFirst);
 }

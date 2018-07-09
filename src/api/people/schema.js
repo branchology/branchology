@@ -12,31 +12,15 @@ export default `
     notes: [Note]
   }
 
-  enum PersonEventType {
-    BIRT
-    BAPM
-    DEAT
-    BURI
-  }
-
-  type PersonEvent {
-    id: ID!
-    type: PersonEventType!
-    date: String
-    place: Place
-    sourceCitations: [SourceCitation]
-    notes: [Note]
-  }
-
   type Person {
     id: ID!
     slug: String!
     sex: Sex
     name: Name
     names: [Name]
-    events: [PersonEvent]
-    birth: PersonEvent
-    death: PersonEvent
+    events: [Event]
+    birth: Event
+    death: Event
     sourceCitations: [SourceCitation]
     notes: [Note]
     parents: [Parents]

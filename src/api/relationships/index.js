@@ -4,7 +4,6 @@ import {
   relationshipPreferredEventLoader,
 } from './loader';
 import schema from './schema';
-import { placeLoader } from '../place/loader';
 
 const resolvers = {
   Relationship: {
@@ -16,14 +15,6 @@ const resolvers = {
     },
     people({ id }) {
       return relationshipPeopleLoader.load(id);
-    },
-  },
-  RelationshipEvent: {
-    place({ place_id }) {
-      return placeLoader.load(place_id);
-    },
-    type({ type }) {
-      return type.toUpperCase();
     },
   },
 };

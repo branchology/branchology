@@ -6,29 +6,11 @@ export default `
     SEALING
   }
 
-  enum RelationshipEventType {
-    ANUL
-    ENGA
-    DIV
-    DIVF
-    MARL
-    MARR
-  }
-
-  type RelationshipEvent {
-    id: ID!
-    type: RelationshipEventType!
-    date: String
-    place: Place
-    sourceCitations: [SourceCitation]
-    notes: [Note]
-  }
-
   type Relationship {
     id: ID!
     people: [Person]
-    events: [RelationshipEvent]
-    marriage: RelationshipEvent
+    events: [Event]
+    marriage: Event
     children: [Person]
   }
 

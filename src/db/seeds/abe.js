@@ -1,8 +1,8 @@
 const {
-  addPersonEventSourceCitation,
+  addEventSourceCitation,
   addPersonNameSourceCitation,
   addPersonSourceCitation,
-  attachPersonEventNote,
+  attachEventNote,
   attachPersonNameNote,
   attachPersonNote,
   createNote,
@@ -22,16 +22,15 @@ exports.seed = async db => {
   // TRUNCATE
   await Promise.all([
     truncateCascade(db, 'event_notes'),
-    truncateCascade(db, 'event_sources'),
+    truncateCascade(db, 'event_source_citations'),
     truncateCascade(db, 'person_name_notes'),
-    truncateCascade(db, 'person_name_sources'),
-    truncateCascade(db, 'person_event_sources'),
+    truncateCascade(db, 'person_name_source_citations'),
     truncateCascade(db, 'person_notes'),
     truncateCascade(db, 'person_parents'),
     truncateCascade(db, 'person_relationships'),
-    truncateCascade(db, 'person_sources'),
+    truncateCascade(db, 'person_source_citations'),
     truncateCascade(db, 'relationship_notes'),
-    truncateCascade(db, 'relationship_sources'),
+    truncateCascade(db, 'relationship_source_citations'),
     truncateCascade(db, 'source_citations'),
   ]);
 
@@ -95,8 +94,8 @@ exports.seed = async db => {
 
   const events = await findPersonEventsByPersonIds([abe.id]);
 
-  await addPersonEventSourceCitation(
-    events.find(e => e.type === 'birt').person_event_id,
+  await addEventSourceCitation(
+    events.find(e => e.type === 'birt').id,
     ilBirthCertificates.id,
     {
       citation:
@@ -112,10 +111,7 @@ exports.seed = async db => {
 
   await attachPersonNote(abe.id, note1.id);
   await attachPersonNameNote(names[0].id, note2.id);
-  await attachPersonEventNote(
-    events.find(e => e.type === 'deat').person_event_id,
-    note3.id,
-  );
+  await attachEventNote(events.find(e => e.type === 'deat').id, note3.id);
 
   // relationship
   const relationship = await createRelationship(abe.id, mary.id, {
