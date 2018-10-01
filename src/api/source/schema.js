@@ -7,6 +7,7 @@ export default `
   type SourceCitation {
     id: ID!
     source: Source!
-    citation: String!
+    citation: String
+    page: String
   }
 `;

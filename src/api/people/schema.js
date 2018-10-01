@@ -12,12 +12,18 @@ export default `
     notes: [Note]
   }
 
+  type Attribute {
+    id: ID!
+    data: String
+    event: Event
+  }
+
   type Person {
     id: ID!
-    slug: String!
     sex: Sex
     name: Name
     names: [Name]
+    attributes: [Attribute]
     events: [Event]
     birth: Event
     death: Event
