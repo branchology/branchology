@@ -31,7 +31,7 @@ export function findRelationshipPrimaryEventsByRelationshipIdAndType(pairs) {
     .select(['e.*', 're.id AS relationship_event_id', 're.relationship_id'])
     .from(`${RELATIONSHIP_EVENT_TABLE} as re`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 're.event_id')
-    .whereIn(db.raw('(relationship_id, e.type)'), pairs);
+    .whereIn(db.raw('(relationship_id, LOWER(e.type))'), pairs);
 }
 
 export async function createRelationship(spouse1, spouse2, data) {

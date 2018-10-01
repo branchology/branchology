@@ -5,7 +5,9 @@ export default new DataLoader(pairs =>
   findRelationshipPrimaryEventsByRelationshipIdAndType(pairs).then(events => {
     return pairs.map(([id, type]) => {
       return events.find(
-        result => result.relationship_id === id && result.type === type,
+        result =>
+          result.relationship_id === id &&
+          result.type.toLowerCase() === type.toLowerCase(),
       );
     });
   }),
