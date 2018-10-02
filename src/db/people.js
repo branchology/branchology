@@ -107,11 +107,7 @@ export function findPersonRelationshipsByPersonIds(ids) {
     .select(['pr.person_id', 'r.*'])
     .from(`${PERSON_RELATIONSHIPS_TABLE} AS pr`)
     .join(`${RELATIONSHIP_TABLE} as r`, 'r.id', 'pr.relationship_id')
-    .whereIn('person_id', ids)
-    .then(data => {
-      console.log({ data });
-      return data;
-    });
+    .whereIn('person_id', ids);
 }
 
 export async function createPersonName(personId, nameData) {

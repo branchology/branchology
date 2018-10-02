@@ -2,8 +2,6 @@ import { findAllPeople } from 'db';
 import { applyPaging } from 'lib';
 
 function applySorting(query, sorting) {
-  // console.log({ sorting });
-
   sorting.forEach(({ field, order }) => {
     query.orderBy(field, order);
   });

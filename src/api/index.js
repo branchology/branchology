@@ -1,4 +1,3 @@
-import { makeExecutableSchema } from 'graphql-tools';
 import { schema as baseSchema } from './base';
 import { resolvers as eventResolvers, schema as eventSchema } from './event';
 import { resolvers as noteResolvers, schema as noteSchema } from './note';
@@ -18,13 +17,12 @@ const typeDefs = [
   relationshipSchema,
 ];
 
-export default makeExecutableSchema({
-  typeDefs,
-  resolvers: {
-    ...eventResolvers,
-    ...noteResolvers,
-    ...sourceResolvers,
-    ...peopleResolvers,
-    ...relationshipResolvers,
-  },
-});
+const resolvers = {
+  ...eventResolvers,
+  ...noteResolvers,
+  ...sourceResolvers,
+  ...peopleResolvers,
+  ...relationshipResolvers,
+};
+
+export { typeDefs, resolvers };

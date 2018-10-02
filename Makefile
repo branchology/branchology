@@ -1,34 +1,34 @@
-YARN = docker-compose run api yarn
+CLI = docker-compose run api npm
 
 docker-lint:
-	${YARN} run lint
+	${CLI} run lint
 
 docker-migrate-latest:
-	${YARN} migrate:latest
+	${CLI} migrate:latest
 
 docker-migrate-rollback:
-	${YARN} migrate:rollback
+	${CLI} migrate:rollback
 
 docker-migration-make:
-	${YARN} migrations:make ${name}
+	${CLI} migrations:make ${name}
 
 docker-packages-add:
-	$(YARN) add ${name}
+	$(CLI) add ${name}
 
 docker-packages-add-dev:
-	$(YARN) add --dev ${name}
+	$(CLI) add --dev ${name}
 
 docker-packages-install:
-	$(YARN) install
+	$(CLI) install
 
 docker-packages-remove:
-	$(YARN) remove ${name}
+	$(CLI) remove ${name}
 
 docker-seed-create:
-	${YARN} seed:create name ${name}
+	${CLI} seed:create name ${name}
 
 docker-seed-run:
-	${YARN} seed:run
+	${CLI} seed:run
 
 docker-test:
-	$(YARN) test
+	$(CLI) test
