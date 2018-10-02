@@ -1,3 +1,4 @@
+import { findEventById, findPersonAttributesByPerson } from 'db';
 import {
   personCitationLoader,
   personEventLoader,
@@ -5,6 +6,7 @@ import {
   personNameLoader,
   personNameNoteLoader,
   personNoteLoader,
+  personParentsLoader,
   personPreferredEventLoader,
   personPreferredNameLoader,
   personRelationshipLoader,
@@ -25,7 +27,15 @@ const resolvers = {
       return personNameCitationLoader.load(id);
     },
   },
+  Attribute: {
+    event({ event_id }) {
+      return findEventById(event_id);
+    },
+  },
   Person: {
+    attributes({ id }) {
+      return findPersonAttributesByPerson(id);
+    },
     birth({ id }) {
       return personPreferredEventLoader.load([id, 'birt']);
     },
@@ -43,6 +53,9 @@ const resolvers = {
     },
     notes({ id }) {
       return personNoteLoader.load(id);
+    },
+    parents({ id }) {
+      return personParentsLoader.load(id);
     },
     relationships({ id }) {
       return personRelationshipLoader.load(id);

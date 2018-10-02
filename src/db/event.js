@@ -5,9 +5,11 @@ import {
   EVENT_SOURCE_CITATION_TABLE,
   NOTE_TABLE,
   SOURCE_CITATION_TABLE,
+  PERSON_ATTRIBUTE_TABLE,
 } from './constants';
-import { createSourceCitation } from './source';
 import { generateUuid, returnFirst } from '../lib';
+import { createPlace } from './place';
+import { createSourceCitation } from './source';
 
 export function findEventCitationsByEventIds(ids) {
   return db
@@ -25,14 +27,45 @@ export function findEventNotesByEventIds(ids) {
     .whereIn('event_id', ids);
 }
 
+export function findPersonAttributesByPerson(personId) {
+  return db(PERSON_ATTRIBUTE_TABLE)
+    .select('*')
+    .where('person_id', personId);
+}
+
+export function findEventById(id) {
+  return db(EVENT_TABLE)
+    .select('*')
+    .where('id', id)
+    .then(returnFirst);
+}
+
+export async function createAttribute(personId, type, attrData) {
+  const { data, ...eventData } = attrData;
+
+  const event = await createEvent(type, eventData);
+
+  return db(PERSON_ATTRIBUTE_TABLE)
+    .insert(
+      {
+        id: generateUuid(),
+        event_id: event.id,
+        person_id: personId,
+        data,
+      },
+      '*',
+    )
+    .then(returnFirst);
+}
+
 export async function createEvent(type, data) {
-  const { date, place, placeId, isPreferred = true } = data;
+  const { date, place, placeId, isPreferred = true, sources = [] } = data;
 
   let dbPlaceId;
   if (place || placeId) {
     dbPlaceId = placeId;
     if (place) {
-      const newPlace = await createPlace({ description: birthPlace });
+      const newPlace = await createPlace({ description: place });
       dbPlaceId = newPlace.id;
     }
   }
@@ -41,7 +74,7 @@ export async function createEvent(type, data) {
 
   const eventId = generateUuid();
 
-  return db(EVENT_TABLE)
+  const event = await db(EVENT_TABLE)
     .insert(
       {
         id: eventId,
@@ -53,6 +86,12 @@ export async function createEvent(type, data) {
       '*',
     )
     .then(returnFirst);
+
+  return Promise.all(
+    sources.map(({ sourceId, ...data }) => {
+      return addEventSourceCitation(event.id, sourceId, data);
+    }),
+  ).then(() => event);
 }
 
 export function attachEventNote(eventId, noteId) {

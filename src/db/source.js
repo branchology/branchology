@@ -11,7 +11,7 @@ export function findSourceByIds(ids) {
 export function createSource(data) {
   const { title } = data;
 
-  const sourceId = generateUuid();
+  const sourceId = data.id || generateUuid();
 
   return db(SOURCE_TABLE)
     .insert({ id: sourceId, title }, '*')

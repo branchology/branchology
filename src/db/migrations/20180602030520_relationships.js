@@ -123,13 +123,6 @@ exports.up = async db => {
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
       table
-        .uuid('child_id')
-        .references('id')
-        .inTable('people')
-        .notNullable()
-        .onDelete('CASCADE')
-        .onUpdate('CASCADE');
-      table
         .string('type', 20)
         .defaultTo(true)
         .notNullable();

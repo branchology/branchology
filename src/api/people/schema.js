@@ -46,7 +46,7 @@ export default `
     person(id: ID!): Person
     people(
       filter: PersonFilter
-      sorting: SortingInput
+      sorting: [SortingInput]
       paging: PagingInput
     ): PeopleCollection
   }

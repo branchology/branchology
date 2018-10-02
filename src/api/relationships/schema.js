@@ -6,17 +6,23 @@ export default `
     SEALING
   }
 
+  type Parents {
+    id: ID!
+    type: LineageType!
+    relationship: Relationship
+  }
+
+  type Child {
+    id: ID!
+    type: LineageType!
+    person: Person
+  }
+
   type Relationship {
     id: ID!
     people: [Person]
     events: [Event]
     marriage: Event
-    children: [Person]
-  }
-
-  type Parents {
-    id: ID!
-    type: LineageType!
-    relationship: Relationship!
+    children: [Child]
   }
 `;

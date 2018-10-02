@@ -33,6 +33,12 @@ export function findAllPeople(filter, sorting) {
   return db.select(['*']).from(PEOPLE_TABLE);
 }
 
+export function findPeopleByIds(ids) {
+  return db(PEOPLE_TABLE)
+    .select('*')
+    .whereIn('id', ids);
+}
+
 export function findPersonCitationsByPersonIds(ids) {
   return db
     .select(['sc.*', 'person_id'])
@@ -108,23 +114,33 @@ export function findPersonRelationshipsByPersonIds(ids) {
     });
 }
 
-export function createPersonName(personId, nameData) {
+export async function createPersonName(personId, nameData) {
   const nameId = generateUuid();
 
-  return db(PERSON_NAME_TABLE)
+  // TODO: FIXME: Implement
+  const { sources, notes, ...data } = nameData;
+
+  const name = await db(PERSON_NAME_TABLE)
     .insert(
       {
         id: nameId,
         person_id: personId,
-        ...nameData,
+        ...data,
       },
       '*',
     )
     .then(returnFirst);
+
+  return Promise.all(
+    sources.map(({ sourceId, ...data }) => {
+      return addPersonNameSourceCitation(name.id, sourceId, data);
+    }),
+  ).then(() => name);
 }
 
 export async function createPerson(data) {
   const {
+    id,
     sex,
     given,
     surname,
@@ -136,17 +152,16 @@ export async function createPerson(data) {
     deathPlaceId,
   } = data;
 
-  const personId = generateUuid();
+  const personId = id || generateUuid();
 
   // create a person...
   const person = await db(PEOPLE_TABLE)
-    .insert({ id: personId, sex, slug: `${given}-${surname}` }, '*')
+    .insert({ id: personId, sex }, '*')
     .then(returnFirst);
 
   const bagOfPromises = [];
 
   if (given || surname) {
-    const nameId = generateUuid();
     bagOfPromises.push(createPersonName(personId, { given, surname }));
   }
 
@@ -185,6 +200,13 @@ export async function addPersonSourceCitation(personId, sourceId, data) {
       },
       '*',
     )
+    .then(returnFirst);
+}
+
+export function addPersonName(personId, { given, surname }) {
+  // TODO: FIXME: other name parts
+  return db(PERSON_NAME_TABLE)
+    .insert({ id: generateUuid(), person_id: personId, given, surname }, '*')
     .then(returnFirst);
 }
 

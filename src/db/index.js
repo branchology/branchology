@@ -4,3 +4,7 @@ export * from './people';
 export * from './place';
 export * from './relationship';
 export * from './source';
+
+import conn from './conn';
+
+export { conn };

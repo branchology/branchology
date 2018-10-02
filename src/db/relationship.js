@@ -1,6 +1,7 @@
 import db from './conn';
 import {
   EVENT_TABLE,
+  PARENTS_TABLE,
   PEOPLE_TABLE,
   PERSON_RELATIONSHIPS_TABLE,
   RELATIONSHIP_TABLE,
@@ -9,6 +10,12 @@ import {
 import { createEvent } from './event';
 import { attachPersonRelationship } from './people';
 import { generateUuid, returnFirst } from '../lib';
+
+export function findRelationshipsByIds(ids) {
+  return db(RELATIONSHIP_TABLE)
+    .select('*')
+    .whereIn('id', ids);
+}
 
 export function findRelationshipPersons(ids) {
   return db
@@ -32,6 +39,18 @@ export function findRelationshipPrimaryEventsByRelationshipIdAndType(pairs) {
     .from(`${RELATIONSHIP_EVENT_TABLE} as re`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 're.event_id')
     .whereIn(db.raw('(relationship_id, LOWER(e.type))'), pairs);
+}
+
+export function findPersonParentsByIds(ids) {
+  return db(PARENTS_TABLE)
+    .select('*')
+    .whereIn('person_id', ids);
+}
+
+export function findChildrenByRelationshipIds(ids) {
+  return db(PARENTS_TABLE)
+    .select('*')
+    .whereIn('relationship_id', ids);
 }
 
 export async function createRelationship(spouse1, spouse2, data) {
@@ -68,5 +87,19 @@ export function attachRelationshipEvent(relationshipId, eventId) {
 
   return db(RELATIONSHIP_EVENT_TABLE)
     .insert({ id, relationship_id: relationshipId, event_id: eventId }, '*')
+    .then(returnFirst);
+}
+
+export function attachChild(relationshipId, personId, type = 'BIRTH') {
+  return db(PARENTS_TABLE)
+    .insert(
+      {
+        id: generateUuid(),
+        relationship_id: relationshipId,
+        person_id: personId,
+        type,
+      },
+      '*',
+    )
     .then(returnFirst);
 }
