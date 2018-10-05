@@ -11,10 +11,14 @@ import {
   personPreferredNameLoader,
   personRelationshipLoader,
 } from './loader';
+import { updateAttribute } from './mutation';
 import { person, people } from './query';
 import schema from './schema';
 
 const resolvers = {
+  Mutation: {
+    updateAttribute,
+  },
   Query: {
     person,
     people,

@@ -114,7 +114,7 @@ export async function createPersonName(personId, nameData) {
   const nameId = generateUuid();
 
   // TODO: FIXME: Implement
-  const { sources, notes, ...data } = nameData;
+  const { sources = [], notes = [], ...data } = nameData;
 
   const name = await db(PERSON_NAME_TABLE)
     .insert(

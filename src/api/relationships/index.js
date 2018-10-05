@@ -5,10 +5,12 @@ import {
   relationshipPeopleLoader,
   relationshipPreferredEventLoader,
 } from './loader';
+import { createChild, createSpouse } from './mutation';
 import schema from './schema';
 import { personLoader } from '../people/loader';
 
 const resolvers = {
+  Mutation: { createChild, createSpouse },
   Child: {
     person({ person_id }) {
       return personLoader.load(person_id);

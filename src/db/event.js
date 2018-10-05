@@ -7,7 +7,12 @@ import {
   SOURCE_CITATION_TABLE,
   PERSON_ATTRIBUTE_TABLE,
 } from './constants';
-import { generateUuid, returnFirst } from '../lib';
+import {
+  calculateDateStamp,
+  formatDbValues,
+  generateUuid,
+  returnFirst,
+} from '../lib';
 import { createPlace } from './place';
 import { createSourceCitation } from './source';
 
@@ -58,6 +63,39 @@ export async function createAttribute(personId, type, attrData) {
     .then(returnFirst);
 }
 
+export async function updateAttribute(id, attrData) {
+  const { event, ...data } = attrData;
+
+  const attribute = await db(PERSON_ATTRIBUTE_TABLE)
+    .update(formatDbValues(data), '*')
+    .where('id', id)
+    .then(returnFirst);
+
+  const { id: eventId, ...eventData } = event;
+
+  return updateEvent(eventId, eventData).then(() => attribute);
+}
+
+export async function updateEvent(id, event) {
+  const { place, ...eventData } = event;
+
+  if (place) {
+    const newPlace = await createPlace({ description: place });
+    eventData.placeId = newPlace.id;
+  }
+
+  console.log({ eventData: formatDbValues(eventData) });
+
+  if (eventData.date) {
+    eventData.dateStamp = calculateDateStamp(eventData.date);
+  }
+
+  return db(EVENT_TABLE)
+    .update(formatDbValues(eventData), '*')
+    .where('id', id)
+    .then(returnFirst);
+}
+
 export async function createEvent(type, data) {
   const { date, place, placeId, isPreferred = true, sources = [] } = data;
 
@@ -74,17 +112,20 @@ export async function createEvent(type, data) {
 
   const eventId = generateUuid();
 
+  const eventData = {
+    id: eventId,
+    type,
+    date,
+    placeId: dbPlaceId,
+    isPreferred,
+  };
+
+  if (eventData.date) {
+    eventData.dateStamp = calculateDateStamp(eventData.date);
+  }
+
   const event = await db(EVENT_TABLE)
-    .insert(
-      {
-        id: eventId,
-        type,
-        date,
-        place_id: dbPlaceId,
-        is_preferred: isPreferred,
-      },
-      '*',
-    )
+    .insert(formatDbValues(eventData), '*')
     .then(returnFirst);
 
   return Promise.all(

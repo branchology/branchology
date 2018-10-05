@@ -42,6 +42,38 @@ export default `
     nameContains: String
   }
 
+  input UpdateAttributeInput {
+    data: String
+    event: UpdateEventInput
+  }
+
+  type AttributePayload {
+    attribute: Attribute
+    error: JSON
+  }
+
+  input NameInput {
+    given: String
+    surname: String
+  }
+
+  # TODO: FIXME: move this to events...
+  input EventInput {
+    type: String!
+    date: String
+    placeId: ID
+    place: String
+  }
+
+  input UpdateEventInput {
+    id: ID!
+  }
+
+  type PersonPayload {
+    error: JSON
+    person: Person
+  }
+
   extend type Query {
     person(id: ID!): Person
     people(
@@ -49,5 +81,10 @@ export default `
       sorting: [SortingInput]
       paging: PagingInput
     ): PeopleCollection
+  }
+
+  extend type Mutation {
+    createPerson(name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): PersonPayload
+    updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
   }
 `;

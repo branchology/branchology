@@ -53,7 +53,7 @@ export function findChildrenByRelationshipIds(ids) {
     .whereIn('relationship_id', ids);
 }
 
-export async function createRelationship(spouse1, spouse2, data) {
+export async function createRelationship(spouse1, spouse2, data = {}) {
   const { marriageDate, marriagePlace, marriagePlaceId } = data;
 
   const relationshipId = generateUuid();

@@ -1,4 +1,6 @@
 const schema = `
+  scalar JSON
+
   type PagingInfo {
     perPage: Int
     page: Int

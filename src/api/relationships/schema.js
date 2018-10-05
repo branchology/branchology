@@ -25,4 +25,14 @@ export default `
     marriage: Event
     children: [Child]
   }
+
+  type RelationshipPayload {
+    error: JSON
+    relationship: Relationship
+  }
+
+  extend type Mutation {
+    createChild(relationshipId: ID!, name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): PersonPayload
+    createSpouse(personId:  ID!, name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): RelationshipPayload
+  }
 `;
