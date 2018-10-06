@@ -45,8 +45,11 @@ export function findEventById(id) {
     .then(returnFirst);
 }
 
-export async function createAttribute(personId, type, attrData) {
-  const { data, ...eventData } = attrData;
+export async function createAttribute(personId, attrData) {
+  const {
+    data,
+    event: { type, ...eventData },
+  } = attrData;
 
   const event = await createEvent(type, eventData);
 
@@ -83,8 +86,6 @@ export async function updateEvent(id, event) {
     const newPlace = await createPlace({ description: place });
     eventData.placeId = newPlace.id;
   }
-
-  console.log({ eventData: formatDbValues(eventData) });
 
   if (eventData.date) {
     eventData.dateStamp = calculateDateStamp(eventData.date);
