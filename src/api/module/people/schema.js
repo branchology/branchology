@@ -42,14 +42,19 @@ export default `
     nameContains: String
   }
 
+  input CreateAttributeInput {
+    data: String!
+    event: CreateEventInput!
+  }
+
   input UpdateAttributeInput {
     data: String
     event: UpdateEventInput
   }
 
-  type AttributePayload {
-    attribute: Attribute
-    error: JSON
+  input CreateNameInput {
+    given: String
+    surname: String
   }
 
   input NameInput {
@@ -69,8 +74,23 @@ export default `
     id: ID!
   }
 
+  type AttributePayload {
+    attribute: Attribute
+    error: ErrorDetails
+  }
+
+  type EventPayload {
+    error: ErrorDetails
+    event: Event
+  }
+
+  type NamePayload {
+    error: ErrorDetails
+    name: Name
+  }
+
   type PersonPayload {
-    error: JSON
+    error: ErrorDetails
     person: Person
   }
 
@@ -84,7 +104,13 @@ export default `
   }
 
   extend type Mutation {
-    createPerson(name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): PersonPayload
+    addPersonAttribute(personId: ID!, attribute: CreateAttributeInput!, citations: [CreateSourceCitationInput]): AttributePayload
+    addPersonEvent(personId: ID!, event: CreateEventInput!, citations: [CreateSourceCitationInput]): EventPayload
+    addPersonName(personId: ID!, name: CreateNameInput!, citations: [CreateSourceCitationInput]): NamePayload
+    createPerson(name: CreateNameInput!, birth: CreateEventInput, death: CreateEventInput, sex: Sex!): PersonPayload
+
+    removePersonName(personNameId: ID): Boolean
+
     updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
   }
 `;

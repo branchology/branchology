@@ -10,4 +10,11 @@ export default `
     citation: String
     page: String
   }
+
+  input CreateSourceCitationInput {
+    sourceId: ID
+    source: String
+    citation: String
+    page: String
+  }
 `;

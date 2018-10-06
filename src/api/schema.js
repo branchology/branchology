@@ -1,5 +1,10 @@
-const schema = `
+export default `
   scalar JSON
+
+  type ErrorDetails {
+    message: String!
+    details: [String!]
+  }
 
   type PagingInfo {
     perPage: Int
@@ -31,5 +36,3 @@ const schema = `
     noop: Boolean
   }
 `;
-
-export { schema };

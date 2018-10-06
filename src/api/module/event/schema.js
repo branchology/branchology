@@ -17,4 +17,11 @@ export default `
     sourceCitations: [SourceCitation]
     notes: [Note]
   }
+
+  input CreateEventInput {
+    type: String!
+    date: String
+    placeId: ID
+    place: String
+  }
 `;
