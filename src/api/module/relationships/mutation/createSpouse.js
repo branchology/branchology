@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import { createPerson, createRelationship } from 'db';
 
 export default {
-  // TODO: FIXME:
+  // TODO: FIXME: validation
   validationSchema: yup.object(),
   resolve: function createSpouseMutation(
     root,
