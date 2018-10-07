@@ -1,5 +1,10 @@
-import addPersonAttribute from './addPersonAttribute';
-import addPersonEvent from './addPersonEvent';
-import updateAttribute from './updateAttribute';
+import requireDir from 'require-dir';
+const mutations = requireDir('./');
 
-export { addPersonAttribute, addPersonEvent, updateAttribute };
+const deDefaulted = {};
+
+Object.keys(mutations).forEach(mutationName => {
+  deDefaulted[mutationName] = mutations[mutationName].default;
+});
+
+module.exports = { ...deDefaulted };

@@ -1,4 +1,10 @@
-import person from './person';
-import people from './people';
+import requireDir from 'require-dir';
+const queries = requireDir('./');
 
-export { person, people };
+const deDefaulted = {};
+
+Object.keys(queries).forEach(queryName => {
+  deDefaulted[queryName] = queries[queryName].default;
+});
+
+module.exports = { ...deDefaulted };

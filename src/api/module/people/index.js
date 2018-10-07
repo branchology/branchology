@@ -11,24 +11,13 @@ import {
   personPreferredNameLoader,
   personRelationshipLoader,
 } from './loader';
-import {
-  addPersonAttribute,
-  addPersonEvent,
-  updateAttribute,
-} from './mutation';
-import { person, people } from './query';
+import Mutation from './mutation';
+import Query from './query';
 import schema from './schema';
 
 const resolvers = {
-  Mutation: {
-    addPersonAttribute,
-    addPersonEvent,
-    updateAttribute,
-  },
-  Query: {
-    person,
-    people,
-  },
+  Mutation,
+  Query,
   Name: {
     notes({ id }) {
       return personNameNoteLoader.load(id);

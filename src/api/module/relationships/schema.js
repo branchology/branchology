@@ -31,8 +31,21 @@ export default `
     relationship: Relationship
   }
 
+  type ParentsPayload {
+    error: ErrorDetails
+    parents: Parents
+  }
+
+  input ParentInput {
+    name: NameInput!
+    birth: EventInput
+    death: EventInput
+    sex: Sex!
+  }
+
   extend type Mutation {
     createChild(relationshipId: ID!, name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): PersonPayload
+    createParents(personId: ID!, parents: [ParentInput]!, lineage: LineageType, citations: [CreateSourceCitationInput]): ParentsPayload
     createSpouse(personId:  ID!, name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): RelationshipPayload
   }
 `;

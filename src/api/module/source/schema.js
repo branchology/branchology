@@ -17,4 +17,9 @@ export default `
     citation: String
     page: String
   }
+
+  input UpdateSourceCitationInput {
+    citation: String
+    page: String
+  }
 `;
