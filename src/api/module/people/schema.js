@@ -77,6 +77,10 @@ export default `
 
   input UpdateEventInput {
     id: ID!
+    type: String!
+    date: String
+    placeId: ID
+    place: String
   }
 
   type AttributePayload {

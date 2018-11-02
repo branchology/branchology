@@ -1,38 +1,36 @@
-import {
-  childrenLoader,
-  relationshipEventLoader,
-  relationshipLoader,
-  relationshipPeopleLoader,
-  relationshipPreferredEventLoader,
-} from './loader';
 import Mutation from './mutation';
 import schema from './schema';
-import { personLoader } from '../people/loader';
 
 const resolvers = {
   Mutation,
   Child: {
-    person({ person_id }) {
-      return personLoader.load(person_id);
+    person({ person_id }, params, context) {
+      return context.dataLoaders.people.personLoader.load(person_id);
     },
   },
   Parents: {
-    relationship({ relationship_id }) {
-      return relationshipLoader.load(relationship_id);
+    relationship({ relationship_id }, params, context) {
+      return context.dataLoaders.relationships.relationshipLoader.load(
+        relationship_id,
+      );
     },
   },
   Relationship: {
-    children({ id }) {
-      return childrenLoader.load(id);
+    children({ id }, params, context) {
+      return context.dataLoaders.relationships.childrenLoader.load(id);
     },
-    events({ id }) {
-      return relationshipEventLoader.load(id);
+    events({ id }, params, context) {
+      return context.dataLoaders.relationships.relationshipEventLoader.load(id);
     },
-    marriage({ id }) {
-      return relationshipPreferredEventLoader.load([id, 'marr']);
+    marriage({ id }, params, context) {
+      return context.dataLoaders.relationships.relationshipPreferredEventLoader.load(
+        [id, 'marr'],
+      );
     },
-    people({ id }) {
-      return relationshipPeopleLoader.load(id);
+    people({ id }, params, context) {
+      return context.dataLoaders.relationships.relationshipPeopleLoader.load(
+        id,
+      );
     },
   },
 };

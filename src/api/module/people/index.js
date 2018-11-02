@@ -1,16 +1,3 @@
-import { findEventById, findPersonAttributesByPerson } from 'db';
-import {
-  personCitationLoader,
-  personEventLoader,
-  personNameCitationLoader,
-  personNameLoader,
-  personNameNoteLoader,
-  personNoteLoader,
-  personParentsLoader,
-  personPreferredEventLoader,
-  personPreferredNameLoader,
-  personRelationshipLoader,
-} from './loader';
 import Mutation from './mutation';
 import Query from './query';
 import schema from './schema';
@@ -19,48 +6,54 @@ const resolvers = {
   Mutation,
   Query,
   Name: {
-    notes({ id }) {
-      return personNameNoteLoader.load(id);
+    notes({ id }, params, context) {
+      return context.dataLoaders.people.personNameNoteLoader.load(id);
     },
-    sourceCitations({ id }) {
-      return personNameCitationLoader.load(id);
+    sourceCitations({ id }, params, context) {
+      return context.dataLoaders.people.personNameCitationLoader.load(id);
     },
   },
   Attribute: {
-    event({ event_id }) {
-      return findEventById(event_id);
+    event({ event_id }, params, context) {
+      return context.dataLoaders.event.eventsById.load(event_id);
     },
   },
   Person: {
-    attributes({ id }) {
-      return findPersonAttributesByPerson(id);
+    attributes({ id }, params, context) {
+      return context.dataLoaders.event.attributesById.load(id);
     },
-    birth({ id }) {
-      return personPreferredEventLoader.load([id, 'birt']);
+    birth({ id }, params, context) {
+      return context.dataLoaders.people.personPreferredEventLoader.load([
+        id,
+        'birt',
+      ]);
     },
-    death({ id }) {
-      return personPreferredEventLoader.load([id, 'deat']);
+    death({ id }, params, context) {
+      return context.dataLoaders.people.personPreferredEventLoader.load([
+        id,
+        'deat',
+      ]);
     },
-    events({ id }) {
-      return personEventLoader.load(id);
+    events({ id }, params, context) {
+      return context.dataLoaders.people.personEventLoader.load(id);
     },
-    name({ id }) {
-      return personPreferredNameLoader.load(id);
+    name({ id }, params, context) {
+      return context.dataLoaders.people.personPreferredNameLoader.load(id);
     },
-    names({ id }) {
-      return personNameLoader.load(id);
+    names({ id }, params, context) {
+      return context.dataLoaders.people.personNameLoader.load(id);
     },
-    notes({ id }) {
-      return personNoteLoader.load(id);
+    notes({ id }, params, context) {
+      return context.dataLoaders.people.personNoteLoader.load(id);
     },
-    parents({ id }) {
-      return personParentsLoader.load(id);
+    parents({ id }, params, context) {
+      return context.dataLoaders.people.personParentsLoader.load(id);
     },
-    relationships({ id }) {
-      return personRelationshipLoader.load(id);
+    relationships({ id }, params, context) {
+      return context.dataLoaders.people.personRelationshipLoader.load(id);
     },
-    sourceCitations({ id }) {
-      return personCitationLoader.load(id);
+    sourceCitations({ id }, params, context) {
+      return context.dataLoaders.people.personCitationLoader.load(id);
     },
   },
 };

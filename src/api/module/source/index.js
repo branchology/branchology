@@ -1,10 +1,9 @@
-import { sourceLoader } from './loader';
 import schema from './schema';
 
 const resolvers = {
   SourceCitation: {
-    source({ source_id }) {
-      return sourceLoader.load(source_id);
+    source({ source_id }, params, context) {
+      return context.dataLoaders.source.sourceLoader.load(source_id);
     },
   },
 };

@@ -1,4 +1,3 @@
-import { noteLoader } from './loader';
 import schema from './schema';
 
 const resolvers = {

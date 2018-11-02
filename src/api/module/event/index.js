@@ -1,20 +1,17 @@
-import {
-  eventSourceCitationLoader,
-  eventNoteLoader,
-  placeLoader,
-} from './loader';
 import schema from './schema';
 
 const resolvers = {
   Event: {
-    place({ place_id }) {
-      return place_id ? placeLoader.load(place_id) : null;
+    place({ place_id }, params, context) {
+      return place_id
+        ? context.dataLoaders.event.placeLoader.load(place_id)
+        : null;
     },
-    notes({ id }) {
-      return eventNoteLoader.load(id);
+    notes({ id }, params, context) {
+      return context.dataLoaders.event.eventNoteLoader.load(id);
     },
-    sourceCitations({ id }) {
-      return eventSourceCitationLoader.load(id);
+    sourceCitations({ id }, params, context) {
+      return context.dataLoaders.event.eventSourceCitationLoader.load(id);
     },
   },
 };
