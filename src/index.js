@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { applyMiddleware } from 'graphql-middleware';
 import { resolvers, typeDefs } from 'api';
+import DataLoaders from 'api/DataLoaders';
 import 'config';
 
 import * as yup from 'yup';
@@ -22,7 +23,7 @@ const yupValidation = {
 
     if (mutationValidationSchema) {
       try {
-        const values = await mutationValidationSchema.validate(args, {
+        await mutationValidationSchema.validate(args, {
           abortEarly: false,
         });
       } catch (error) {
@@ -44,8 +45,16 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const schemaWithMiddleware = applyMiddleware(schema, yupValidation);
 
+class Context {
+  constructor(request) {
+    this.request = request;
+    this.dataLoaders = new DataLoaders();
+  }
+}
+
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
+  context: req => new Context(req),
 });
 
 server.applyMiddleware({ app }); // app is from an existing express app
