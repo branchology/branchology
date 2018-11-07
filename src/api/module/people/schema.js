@@ -94,7 +94,7 @@ export default `
   }
 
   type NamePayload {
-    error: ErrorDetails
+    errors: [ErrorDetails]
     name: Name
   }
 

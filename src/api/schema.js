@@ -2,8 +2,9 @@ export default `
   scalar JSON
 
   type ErrorDetails {
+    field: String!
     message: String!
-    details: [String!]
+    details: JSON
   }
 
   type PagingInfo {
