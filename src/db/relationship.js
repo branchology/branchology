@@ -8,8 +8,11 @@ import {
   RELATIONSHIP_EVENT_TABLE,
 } from './constants';
 import { createEvent } from './event';
-import { attachPersonRelationship } from './people';
+import Person from './Person';
 import { generateUuid, returnFirst } from '../lib';
+
+// TODO: FIXME:
+const person = new Person(db);
 
 export function findRelationshipsByIds(ids) {
   return db(RELATIONSHIP_TABLE)
@@ -72,11 +75,11 @@ export async function createRelationship(spouse1, spouse2, data = {}) {
   }
 
   if (spouse1) {
-    await attachPersonRelationship(spouse1, relationshipId);
+    await person.attachPersonRelationship(spouse1, relationshipId);
   }
 
   if (spouse2) {
-    await attachPersonRelationship(spouse2, relationshipId);
+    await person.attachPersonRelationship(spouse2, relationshipId);
   }
 
   return relationship;
