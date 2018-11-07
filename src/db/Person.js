@@ -110,7 +110,7 @@ export default class Person {
       .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
       .from(`${PERSON_EVENT_TABLE} as pe`)
       .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
-      .whereIn(this.db.raw('(person_id, e.type)'), pairs);
+      .whereIn(this.db.raw('(person_id, LOWER(e.type))'), pairs);
   }
 
   findPreferredNameByIds(ids) {
