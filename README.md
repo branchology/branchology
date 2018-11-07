@@ -1,6 +1,6 @@
-# branchology-api
+# branchology
 
-The API for the Branchology project.
+Family tree management software. WIP.
 
 ## Installation
 
