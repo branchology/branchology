@@ -68,13 +68,16 @@ export default class PeopleLoader {
       ),
     );
     this.personPreferredEventLoader = new DataLoader(pairs =>
-      person.findPrimaryEventsByPersonIdAndType(pairs).then(events => {
-        return pairs.map(([id, type]) => {
-          return events.find(
-            result => result.person_id === id && result.type === type,
-          );
-        });
-      }),
+      person
+        .findPrimaryEventsByPersonIdAndType(pairs)
+        .then(events =>
+          pairs.map(([id, type]) =>
+            events.find(
+              result =>
+                result.person_id === id && result.type.toLowerCase() === type,
+            ),
+          ),
+        ),
     );
 
     this.personPreferredNameLoader = new DataLoader(ids =>
