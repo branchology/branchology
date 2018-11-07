@@ -4,46 +4,16 @@ import express from 'express';
 import { applyMiddleware } from 'graphql-middleware';
 import { resolvers, typeDefs } from 'api';
 import DataLoaders from 'api/DataLoaders';
+import ValidationMiddleware from 'api/middleware/ValidationMiddleware';
 import 'config';
-
-import * as yup from 'yup';
 
 const { APP_PORT } = process.env;
 
 const app = express();
 app.use(cors());
 
-const yupValidation = {
-  async Mutation(resolve, root, args, context, info) {
-    const mutationField = info.schema.getMutationType().getFields()[
-      info.fieldName
-    ];
-
-    const mutationValidationSchema = mutationField.validationSchema;
-
-    if (mutationValidationSchema) {
-      try {
-        await mutationValidationSchema.validate(args, {
-          abortEarly: false,
-        });
-      } catch (error) {
-        if (error instanceof yup.ValidationError) {
-          return {
-            error: { message: error.message, details: error.errors },
-          };
-        } else {
-          throw error;
-        }
-      }
-    }
-
-    return resolve(root, args, context, info);
-  },
-};
-
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-const schemaWithMiddleware = applyMiddleware(schema, yupValidation);
+const schemaWithMiddleware = applyMiddleware(schema, ValidationMiddleware);
 
 class Context {
   constructor(request) {
