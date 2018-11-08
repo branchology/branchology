@@ -15,11 +15,19 @@ export default styled.table`
   }
 
   thead tr {
-    background-color: #eee;
+    background-color: #e0e0e0;
   }
 
   .actions {
     text-align: right;
     white-space: nowrap;
+  }
+
+  tr.alt td {
+    background-color: #f7f7f7;
+  }
+
+  td.citations {
+    padding: 0 8px 8px 0;
   }
 `;

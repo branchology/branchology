@@ -49,9 +49,9 @@ class AttributeList extends Component {
             </tr>
           </thead>
           <tbody>
-            {attributes.map(attribute => (
+            {attributes.map((attribute, index) => (
               <>
-                <tr key={attribute.id}>
+                <tr key={attribute.id} className={index % 2 === 1 ? 'alt' : ''}>
                   <td> </td>
                   <td>{attribute.event.type}</td>
                   <td>{attribute.event.date}</td>
@@ -72,8 +72,9 @@ class AttributeList extends Component {
                     </IconButton>
                   </td>
                 </tr>
-                <tr>
-                  <td colSpan="6">
+                <tr className={index % 2 === 1 ? 'alt' : ''}>
+                  <td className="citations"> </td>
+                  <td colSpan="5" className="citations">
                     <SourceCitationList
                       citations={attribute.event.sourceCitations}
                     />

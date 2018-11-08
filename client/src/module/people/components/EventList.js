@@ -16,9 +16,9 @@ export default ({ events }) => (
         </tr>
       </thead>
       <tbody>
-        {events.map(event => (
+        {events.map((event, index) => (
           <>
-            <tr key={event.id}>
+            <tr key={event.id} className={index % 2 === 1 ? 'alt' : ''}>
               <td> </td>
               <td>{event.type}</td>
               <td>{event.date}</td>
@@ -32,8 +32,9 @@ export default ({ events }) => (
                 </IconButton>
               </td>
             </tr>
-            <tr>
-              <td colSpan="6">
+            <tr className={index % 2 === 1 ? 'alt' : ''}>
+              <td className="citations"> </td>
+              <td colSpan="5" className="citations">
                 <SourceCitationList citations={event.sourceCitations} />
               </td>
             </tr>
