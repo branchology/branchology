@@ -82,6 +82,12 @@ export default class Person {
       .whereIn('person_name_id', ids);
   }
 
+  findNameByIds(ids) {
+    return this.db(PERSON_NAME_TABLE)
+      .select('*')
+      .whereIn('id', ids);
+  }
+
   findNamesByPersonIds(ids) {
     return this.db
       .select(['*'])
@@ -230,6 +236,12 @@ export default class Person {
       .update({ given, surname }, '*')
       .where('id', personId)
       .then(returnFirst);
+  }
+
+  removeName(personNameId) {
+    return this.db(PERSON_NAME_TABLE)
+      .delete()
+      .where('id', personNameId);
   }
 
   async addNameSourceCitation(personNameId, sourceId, data) {

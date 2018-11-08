@@ -112,6 +112,11 @@ export default `
     ): PeopleCollection
   }
 
+  type RemoveRecordPayload {
+    errors: [ErrorDetails]
+    removed: Boolean
+  }
+
   extend type Mutation {
     addPersonAttribute(personId: ID!, attribute: CreateAttributeInput!, citations: [CreateSourceCitationInput]): AttributePayload
     addPersonAttributeCitation(attributeId: ID!, citation: CreateSourceCitationInput!): AttributePayload
@@ -128,7 +133,7 @@ export default `
     removePersonCitation(citationId: ID!): Boolean
     removePersonEvent(eventId: ID!): Boolean
     removePersonEventCitation(citationId: ID!): Boolean
-    removePersonName(personNameId: ID): Boolean
+    removePersonName(personNameId: ID): RemoveRecordPayload!
     removePersonNameCitation(citationId: ID!): Boolean
 
     updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
