@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import NameEdit from './NameEdit';
-import SourceCitationList from './SourceCitationList';
-import Icon from 'module/common/Icon';
 import { IconButton } from 'module/common/Buttons';
-import SimpleDataTable from 'module/common/SimpleDataTable';
+import SimpleDataTable, { Cell } from 'module/common/SimpleDataTable';
+import NameDelete from './NameDelete';
+import NameEdit from './NameEdit';
+import PreferredRecord from './PreferredRecord';
+import SourceCitationList from './SourceCitationList';
 
 export default function NameList({ names }) {
-  const [editName, toggle] = useState();
+  const [editName, toggleEdit] = useState();
 
   return (
     <div>
-      {editName && <NameEdit name={editName} onClose={() => toggle(null)} />}
+      {editName && (
+        <NameEdit name={editName} onClose={() => toggleEdit(null)} />
+      )}
       <SimpleDataTable>
         <thead>
           <tr>
@@ -25,26 +28,28 @@ export default function NameList({ names }) {
         <tbody>
           {names.map(name => [
             <tr key={name.id}>
-              <td>
-                <Icon icon="key" title="Default/preferred name" />
-              </td>
-              <td>{name.prefix}</td>
-              <td>{name.given}</td>
-              <td>{name.surname}</td>
-              <td>{name.suffix}</td>
-              <td className="actions">
-                <IconButton primary icon="pencil" onClick={() => toggle(name)}>
+              <Cell center middle>
+                <PreferredRecord isPreferred={name.isPreferred} />
+              </Cell>
+              <Cell>{name.prefix}</Cell>
+              <Cell>{name.given}</Cell>
+              <Cell>{name.surname}</Cell>
+              <Cell>{name.suffix}</Cell>
+              <Cell className="actions">
+                <IconButton
+                  primary
+                  icon="pencil"
+                  onClick={() => toggleEdit(name)}
+                >
                   Edit
                 </IconButton>
-                <IconButton danger icon="trash" onClick={() => null}>
-                  Delete
-                </IconButton>
-              </td>
+                <NameDelete name={name} />
+              </Cell>
             </tr>,
-            <tr>
-              <td colSpan="3">
+            <tr key={`sources-${name.id}`}>
+              <Cell colSpan="3">
                 <SourceCitationList citations={name.sourceCitations} />
-              </td>
+              </Cell>
             </tr>,
           ])}
         </tbody>

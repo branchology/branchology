@@ -65,7 +65,7 @@ const ButtonContainer = styled.button`
   }
 
   .icon {
-    opacity: 0.4;
+    color: #fff;
   }
 `;
 

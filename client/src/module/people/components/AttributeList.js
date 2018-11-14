@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
+import { IconButton } from 'module/common/Buttons';
+import SimpleDataTable from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeEdit from './AttributeEdit';
 import SourceCitationList from './SourceCitationList';
 import attributeUpdateMutation from '../query/attributeUpdateMutation';
 import { NotificationContext } from '../../common/notifications';
-import { IconButton } from 'module/common/Buttons';
-import SimpleDataTable from 'module/common/SimpleDataTable';
 
 class AttributeList extends Component {
   static contextType = NotificationContext;
@@ -40,7 +40,6 @@ class AttributeList extends Component {
         <SimpleDataTable>
           <thead>
             <tr>
-              <th> </th>
               <th>Attribute</th>
               <th>Date</th>
               <th>Details</th>
@@ -49,39 +48,38 @@ class AttributeList extends Component {
             </tr>
           </thead>
           <tbody>
-            {attributes.map((attribute, index) => (
-              <>
-                <tr key={attribute.id} className={index % 2 === 1 ? 'alt' : ''}>
-                  <td> </td>
-                  <td>{attribute.event.type}</td>
-                  <td>{attribute.event.date}</td>
-                  <td>{attribute.data}</td>
-                  <td>
-                    {attribute.event.place && attribute.event.place.description}
-                  </td>
-                  <td className="actions">
-                    <IconButton
-                      primary
-                      icon="pencil"
-                      onClick={() => this.selectEditAttribute(attribute)}
-                    >
-                      Edit
-                    </IconButton>
-                    <IconButton danger icon="trash" onClick={() => null}>
-                      Delete
-                    </IconButton>
-                  </td>
-                </tr>
-                <tr className={index % 2 === 1 ? 'alt' : ''}>
-                  <td className="citations"> </td>
-                  <td colSpan="5" className="citations">
-                    <SourceCitationList
-                      citations={attribute.event.sourceCitations}
-                    />
-                  </td>
-                </tr>
-              </>
-            ))}
+            {attributes.map((attribute, index) => [
+              <tr className={index % 2 === 1 ? 'alt' : ''} key={attribute.id}>
+                <td>{attribute.event.type}</td>
+                <td>{attribute.event.date}</td>
+                <td>{attribute.data}</td>
+                <td>
+                  {attribute.event.place && attribute.event.place.description}
+                </td>
+                <td className="actions">
+                  <IconButton
+                    primary
+                    icon="pencil"
+                    onClick={() => this.selectEditAttribute(attribute)}
+                  >
+                    Edit
+                  </IconButton>
+                  <IconButton danger icon="trash" onClick={() => null}>
+                    Delete
+                  </IconButton>
+                </td>
+              </tr>,
+              <tr
+                className={index % 2 === 1 ? 'alt' : ''}
+                key={`sources-${attribute.id}`}
+              >
+                <td colSpan="5" className="citations">
+                  <SourceCitationList
+                    citations={attribute.event.sourceCitations}
+                  />
+                </td>
+              </tr>,
+            ])}
           </tbody>
         </SimpleDataTable>
 

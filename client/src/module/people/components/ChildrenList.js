@@ -17,20 +17,18 @@ export default ({ children }) => (
       </thead>
       <tbody>
         {children.map(({ id, person }) => (
-          <>
-            <tr key={id}>
-              <td> </td>
-              <td>
-                <Link to={`/people/${person.id}`}>{person.name.given}</Link>
-              </td>
-              <td>
-                <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
-              </td>
-              <td>{person.birth && person.birth.date}</td>
-              <td>{person.death && person.death.date}</td>
-              <td> </td>
-            </tr>
-          </>
+          <tr key={id}>
+            <td> </td>
+            <td>
+              <Link to={`/people/${person.id}`}>{person.name.given}</Link>
+            </td>
+            <td>
+              <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
+            </td>
+            <td>{person.birth && person.birth.date}</td>
+            <td>{person.death && person.death.date}</td>
+            <td> </td>
+          </tr>
         ))}
       </tbody>
     </SimpleDataTable>

@@ -1,4 +1,15 @@
 import styled from 'styled-components';
+import styledMap from 'styled-map';
+
+const Cell = styled.td`
+  text-align: ${styledMap`
+    center: center;
+    right: right;
+    default: left;
+  `};
+`;
+
+export { Cell };
 
 export default styled.table`
   border-collapse: collapse;

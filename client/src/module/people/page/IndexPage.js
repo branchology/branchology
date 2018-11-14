@@ -4,7 +4,6 @@ import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import { debounce } from 'throttle-debounce';
 import SimpleDataTable from 'module/common/SimpleDataTable';
-import Icon from 'module/common/Icon';
 
 const filterPeople = gql`
   query filterPeople($filter: PersonFilter) {

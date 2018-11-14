@@ -7,10 +7,7 @@ import UiBlock from './UiBlock';
 
 const Heading = styled.div`
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #f0f0f0;
-  border-radius: 3px;
-  color: #1aaa54;
+  color: #333;
   display: flex;
   margin-bottom: 10px;
   padding: 20px;
@@ -49,7 +46,8 @@ export default () => (
   <UiBlock>
     <Heading>
       <h1>
-        <Icon icon={['fal', 'leaf']} flip="horizontal" /> Branchology
+        <Icon icon={['fal', 'leaf']} flip="horizontal" color="#333" />{' '}
+        Branchology
       </h1>
 
       <div className="menu">
