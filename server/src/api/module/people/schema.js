@@ -8,6 +8,7 @@ export default `
     id: ID!
     given: String
     surname: String
+    isPreferred: Boolean
     sourceCitations: [SourceCitation]
     notes: [Note]
   }
@@ -55,11 +56,13 @@ export default `
   input CreateNameInput {
     given: String
     surname: String
+    isPreferred: Boolean = False
   }
 
   input UpdateNameInput {
     given: String
     surname: String
+    isPreferred: Boolean
   }
 
   input NameInput {
@@ -117,6 +120,11 @@ export default `
     removed: Boolean
   }
 
+  type PrimaryPersonNamePayload {
+    errors: [ErrorDetails]
+    person: Person
+  }
+
   extend type Mutation {
     addPersonAttribute(personId: ID!, attribute: CreateAttributeInput!, citations: [CreateSourceCitationInput]): AttributePayload
     addPersonAttributeCitation(attributeId: ID!, citation: CreateSourceCitationInput!): AttributePayload
@@ -126,6 +134,8 @@ export default `
     addPersonName(personId: ID!, name: CreateNameInput!, citations: [CreateSourceCitationInput]): NamePayload
     addPersonNameCitation(nameId: ID!, citation: CreateSourceCitationInput!): NamePayload
     createPerson(name: CreateNameInput!, birth: CreateEventInput, death: CreateEventInput, sex: Sex!): PersonPayload
+
+    makePersonNamePreferred(personNameId: ID): PrimaryPersonNamePayload
 
     removePerson(personId: ID): Boolean
     removePersonAttribute(attributeId: ID!): Boolean

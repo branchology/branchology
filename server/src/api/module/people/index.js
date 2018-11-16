@@ -6,6 +6,10 @@ const resolvers = {
   Mutation,
   Query,
   Name: {
+    isPreferred({ is_preferred }) {
+      // TODO: FIXME:
+      return is_preferred;
+    },
     notes({ id }, params, context) {
       return context.dataLoaders.people.personNameNoteLoader.load(id);
     },

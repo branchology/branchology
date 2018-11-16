@@ -13,6 +13,7 @@ import {
   SOURCE_CITATION_TABLE,
 } from './constants';
 import { createEvent } from './event';
+import formatForDb from './lib/formatForDb';
 import { NOTE_TABLE } from './note';
 import { createSourceCitation } from './source';
 
