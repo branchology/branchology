@@ -224,17 +224,26 @@ export default class Person {
       .then(returnFirst);
   }
 
-  addName(personId, { given, surname }) {
+  addName(personId, { given, surname, isPreferred = false }) {
     // TODO: FIXME: other name parts
     return this.db(PERSON_NAME_TABLE)
-      .insert({ id: generateUuid(), person_id: personId, given, surname }, '*')
+      .insert(
+        formatForDb({
+          id: generateUuid(),
+          person_id: personId,
+          given,
+          surname,
+          isPreferred,
+        }),
+        '*',
+      )
       .then(returnFirst);
   }
 
-  updateName(personId, { given, surname }) {
+  updateName(personNameId, nameData) {
     return this.db(PERSON_NAME_TABLE)
-      .update({ given, surname }, '*')
-      .where('id', personId)
+      .update(nameData, '*')
+      .where('id', personNameId)
       .then(returnFirst);
   }
 
@@ -242,6 +251,23 @@ export default class Person {
     return this.db(PERSON_NAME_TABLE)
       .delete()
       .where('id', personNameId);
+  }
+
+  async setPersonNamePreferred(personNameId) {
+    const personNames = await this.findNameByIds([personNameId]);
+    if (!personNames.length) {
+      throw `Cannot find personName`;
+    }
+
+    const allPersonNames = await this.findNamesByPersonIds([
+      personNames[0].person_id,
+    ]);
+
+    await Promise.all(
+      allPersonNames.map(pn => this.updateName(pn.id, { is_preferred: false })),
+    );
+
+    return this.updateName(personNames[0].id, { is_preferred: true });
   }
 
   async addNameSourceCitation(personNameId, sourceId, data) {

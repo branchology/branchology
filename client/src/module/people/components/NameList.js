@@ -3,7 +3,7 @@ import { IconButton } from 'module/common/Buttons';
 import SimpleDataTable, { Cell } from 'module/common/SimpleDataTable';
 import NameDelete from './NameDelete';
 import NameEdit from './NameEdit';
-import PreferredRecord from './PreferredRecord';
+import NamePreferredToggle from './NamePreferredToggle';
 import SourceCitationList from './SourceCitationList';
 
 export default function NameList({ names, person }) {
@@ -29,7 +29,7 @@ export default function NameList({ names, person }) {
           {names.map(name => [
             <tr key={name.id}>
               <Cell center middle>
-                <PreferredRecord isPreferred={name.isPreferred} />
+                <NamePreferredToggle name={name} />
               </Cell>
               <Cell>{name.prefix}</Cell>
               <Cell>{name.given}</Cell>
