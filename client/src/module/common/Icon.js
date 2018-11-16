@@ -18,6 +18,7 @@ import {
   faPlusCircle,
   faRing,
   faScarecrow,
+  faSpinner,
   faStickyNote,
   faTombstone,
   faTrash,
@@ -45,6 +46,7 @@ library.add(
   faPencil,
   faPlusCircle,
   faRing,
+  faSpinner,
   faScarecrow,
   faStickyNote,
   faTombstone,
@@ -77,11 +79,13 @@ const IconContainer = styled.span`
   font-size: ${sizeMap};
 `;
 
-export default ({ icon, ...props }) => (
+export default ({ icon, color, spin, ...props }) => (
   <IconContainer {...props}>
     <FontAwesomeIcon
       icon={Array.isArray(icon) ? icon : ['fas', icon]}
       style={{ fontWeight: 300 }}
+      color={color}
+      spin={spin}
     />
   </IconContainer>
 );
