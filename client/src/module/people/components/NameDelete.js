@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { graphql } from 'react-apollo';
 import { IconButton } from 'module/common/Buttons';
 import Confirm from 'module/common/Confirm';
 import nameDeleteMutation from '../query/nameDeleteMutation';
@@ -15,11 +14,7 @@ const RemovePersonName = ({ name, removePersonName }) => {
           title="Warning"
           icon="exclamation-triangle"
           message="Are you sure you want to permanently remove this name?"
-          onConfirm={() =>
-            removePersonName({ variables: { personNameId: name.id } }).then(
-              () => toggleConfirm(),
-            )
-          }
+          onConfirm={() => removePersonName(name.id)}
           onCancel={toggleConfirm}
         />
       )}
@@ -30,8 +25,4 @@ const RemovePersonName = ({ name, removePersonName }) => {
   );
 };
 
-const withGraphql = graphql(nameDeleteMutation, {
-  name: 'removePersonName',
-});
-
-export default withGraphql(RemovePersonName);
+export default nameDeleteMutation(RemovePersonName);

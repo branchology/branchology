@@ -83,7 +83,7 @@ export default class DetailsPage extends React.Component {
                     Add Name
                   </IconButton>
                 </div>
-                <NameList names={data.person.names} />
+                <NameList person={data.person} names={data.person.names} />
               </DataContainer>
 
               <DataContainer>

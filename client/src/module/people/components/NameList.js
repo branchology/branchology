@@ -6,7 +6,7 @@ import NameEdit from './NameEdit';
 import PreferredRecord from './PreferredRecord';
 import SourceCitationList from './SourceCitationList';
 
-export default function NameList({ names }) {
+export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();
 
   return (
@@ -43,7 +43,7 @@ export default function NameList({ names }) {
                 >
                   Edit
                 </IconButton>
-                <NameDelete name={name} />
+                <NameDelete person={person} name={name} />
               </Cell>
             </tr>,
             <tr key={`sources-${name.id}`}>
