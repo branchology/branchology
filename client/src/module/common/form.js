@@ -66,7 +66,7 @@ const FieldError = styled.div`
   padding: 4px;
 `;
 
-const InputText = ({ name, label }) => (
+const InputText = ({ name, label, ...props }) => (
   <Field name={name} format={value => (!value ? '' : value)}>
     {({ input, meta }) => {
       const fieldErrors = meta.error || meta.submitError;
@@ -79,15 +79,15 @@ const InputText = ({ name, label }) => (
             allowNull={true}
             id={name}
             type="text"
+            {...props}
           />
-          {meta.touched &&
-            (meta.error || meta.submitError) && (
-              <FieldError>
-                {Array.isArray(fieldErrors)
-                  ? fieldErrors.map(e => <div key={e}>{e}</div>)
-                  : fieldErrors}
-              </FieldError>
-            )}
+          {meta.touched && (meta.error || meta.submitError) && (
+            <FieldError>
+              {Array.isArray(fieldErrors)
+                ? fieldErrors.map(e => <div key={e}>{e}</div>)
+                : fieldErrors}
+            </FieldError>
+          )}
         </div>
       );
     }}

@@ -180,7 +180,7 @@ export default class AttributeEdit extends PureComponent {
               }
             >
               <form>
-                <InputText name="data" label="Data: " />
+                <InputText name="data" label="Data: " autoFocus />
                 <InputText name="event.date" label="Date: " />
                 <InputText name="event.place.description" label="Place: " />
                 <pre>{JSON.stringify(values, 0, 2)}</pre>

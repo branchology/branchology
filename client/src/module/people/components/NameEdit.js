@@ -93,7 +93,7 @@ class NameEdit extends PureComponent {
               }
             >
               <form>
-                <InputText name="given" label="Given: " />
+                <InputText name="given" label="Given: " autoFocus />
                 <InputText name="surname" label="Surname: " />
 
                 {submitError && <div className="error">{submitError}</div>}
