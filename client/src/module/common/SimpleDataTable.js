@@ -1,25 +1,27 @@
 import styled from 'styled-components';
 import styledMap from 'styled-map';
 
-const Cell = styled.td`
-  text-align: ${styledMap`
-    center: center;
-    right: right;
-    default: left;
-  `};
+const textAlign = styledMap`
+  center: center;
+  right: right;
+  default: left;
 `;
 
-export { Cell };
+const Cell = styled.td`
+  text-align: ${textAlign};
+`;
+
+const Heading = styled.td`
+  font-weight: 500;
+  padding: 8px;
+  text-align: ${textAlign};
+`;
+
+export { Cell, Heading };
 
 export default styled.table`
   border-collapse: collapse;
   width: 100%;
-
-  th {
-    font-weight: 500;
-    padding: 8px;
-    text-align: left;
-  }
 
   td {
     padding: 8px;

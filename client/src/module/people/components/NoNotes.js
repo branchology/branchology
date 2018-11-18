@@ -12,7 +12,7 @@ export default () => (
     message={message}
     actions={
       <IconButton success icon="plus-circle" onClick={() => null}>
-        Add Attribute
+        Add Note
       </IconButton>
     }
   />

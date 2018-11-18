@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
 import { IconButton } from 'module/common/Buttons';
-import SimpleDataTable from 'module/common/SimpleDataTable';
+import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeEdit from './AttributeEdit';
+import NoAttributes from './NoAttributes';
 import SourceCitationList from './SourceCitationList';
 import attributeUpdateMutation from '../query/attributeUpdateMutation';
 import { NotificationContext } from '../../common/notifications';
@@ -27,6 +28,10 @@ class AttributeList extends Component {
   render() {
     const { attributes } = this.props;
 
+    if (attributes.length === 0) {
+      return <NoAttributes />;
+    }
+
     return (
       <div>
         {this.state.editAttribute && (
@@ -40,11 +45,11 @@ class AttributeList extends Component {
         <SimpleDataTable>
           <thead>
             <tr>
-              <th>Attribute</th>
-              <th>Date</th>
-              <th>Details</th>
-              <th>Place</th>
-              <th> </th>
+              <Heading>Attribute</Heading>
+              <Heading>Date</Heading>
+              <Heading>Details</Heading>
+              <Heading>Place</Heading>
+              <Heading> </Heading>
             </tr>
           </thead>
           <tbody>

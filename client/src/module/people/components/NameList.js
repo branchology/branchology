@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/Buttons';
-import SimpleDataTable, { Cell } from 'module/common/SimpleDataTable';
+import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import NameDelete from './NameDelete';
 import NameEdit from './NameEdit';
 import NamePreferredToggle from './NamePreferredToggle';
@@ -17,12 +17,12 @@ export default function NameList({ names, person }) {
       <SimpleDataTable>
         <thead>
           <tr>
-            <th>&nbsp;</th>
-            <th>Prefix</th>
-            <th>Given</th>
-            <th>Surname</th>
-            <th>Suffix</th>
-            <th>&nbsp;</th>
+            <Heading>&nbsp;</Heading>
+            <Heading>Prefix</Heading>
+            <Heading>Given</Heading>
+            <Heading>Surname</Heading>
+            <Heading>Suffix</Heading>
+            <Heading as="th" right>&nbsp;</Heading>
           </tr>
         </thead>
         <tbody>

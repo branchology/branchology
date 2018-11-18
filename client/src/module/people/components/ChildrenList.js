@@ -1,33 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SimpleDataTable from 'module/common/SimpleDataTable';
+import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 
 export default ({ children }) => (
   <div>
     <SimpleDataTable>
       <thead>
         <tr>
-          <th> </th>
-          <th>Given</th>
-          <th>Surname</th>
-          <th>Birth</th>
-          <th>Death</th>
-          <th> </th>
+          <Heading> </Heading>
+          <Heading>Given</Heading>
+          <Heading>Surname</Heading>
+          <Heading>Birth</Heading>
+          <Heading>Death</Heading>
+          <Heading> </Heading>
         </tr>
       </thead>
       <tbody>
         {children.map(({ id, person }) => (
           <tr key={id}>
-            <td> </td>
-            <td>
+            <Cell> </Cell>
+            <Cell>
               <Link to={`/people/${person.id}`}>{person.name.given}</Link>
-            </td>
-            <td>
+            </Cell>
+            <Cell>
               <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
-            </td>
-            <td>{person.birth && person.birth.date}</td>
-            <td>{person.death && person.death.date}</td>
-            <td> </td>
+            </Cell>
+            <Cell>{person.birth && person.birth.date}</Cell>
+            <Cell>{person.death && person.death.date}</Cell>
+            <Cell> </Cell>
           </tr>
         ))}
       </tbody>
