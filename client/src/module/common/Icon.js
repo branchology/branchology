@@ -6,6 +6,7 @@ import {
   faBat,
   faBible,
   faBirthdayCake,
+  faBook,
   faBookOpen,
   faCalendar,
   faCat,
@@ -18,8 +19,11 @@ import {
   faPlusCircle,
   faRing,
   faScarecrow,
+  faSearch,
   faSpinner,
+  faSquare,
   faStickyNote,
+  faTimes,
   faTombstone,
   faTrash,
   faUserAstronaut,
@@ -34,6 +38,7 @@ library.add(
   faBat,
   faBible,
   faBirthdayCake,
+  faBook,
   faBookOpen,
   faCalendar,
   faCat,
@@ -46,9 +51,12 @@ library.add(
   faPencil,
   faPlusCircle,
   faRing,
+  faSearch,
   faSpinner,
+  faSquare,
   faScarecrow,
   faStickyNote,
+  faTimes,
   faTombstone,
   faTrash,
   faUserAstronaut,
@@ -79,13 +87,14 @@ const IconContainer = styled.span`
   font-size: ${sizeMap};
 `;
 
-export default ({ icon, color, spin, ...props }) => (
+export default ({ icon, color, spin, transform, ...props }) => (
   <IconContainer {...props}>
     <FontAwesomeIcon
       icon={Array.isArray(icon) ? icon : ['fas', icon]}
       style={{ fontWeight: 300 }}
       color={color}
       spin={spin}
+      transform={transform}
     />
   </IconContainer>
 );

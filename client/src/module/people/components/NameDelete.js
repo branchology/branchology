@@ -18,9 +18,7 @@ const RemovePersonName = ({ name, removePersonName }) => {
           onCancel={toggleConfirm}
         />
       )}
-      <IconButton danger icon="trash" onClick={() => toggleConfirm(true)}>
-        Delete
-      </IconButton>
+      <IconButton danger icon="trash" onClick={() => toggleConfirm(true)} />
     </>
   );
 };
