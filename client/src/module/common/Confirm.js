@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from 'module/common/form';
-
+// TODO: FIXME:
+import { Button } from 'module/common/component/Form';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 
 export default ({ onCancel, onConfirm, message, title }) => (

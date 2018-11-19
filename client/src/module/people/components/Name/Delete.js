@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/Buttons';
 import Confirm from 'module/common/Confirm';
-import nameDeleteMutation from '../query/nameDeleteMutation';
+import nameDeleteMutation from '../../query/nameDeleteMutation';
 
 const RemovePersonName = ({ name, removePersonName }) => {
   const [confirmOpen, toggle] = useState(false);

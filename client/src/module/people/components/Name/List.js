@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/Buttons';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
-import NameAdd from '../components/NameAdd';
-import NameDelete from './NameDelete';
-import NameEdit from './NameEdit';
-import NamePreferredToggle from './NamePreferredToggle';
-import NameCitationManagement from './NameCitationManagent';
+import NameAdd from './Add';
+import NameDelete from './Delete';
+import NameEdit from './Edit';
+import NamePreferredToggle from './PreferredToggle';
+import NameCitationManagement from './CitationManagement';
 
 export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();

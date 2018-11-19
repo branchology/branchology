@@ -34,6 +34,10 @@ const connect = graphql(nameCreateMutation, {
   options: function({ name: { personId } }) {
     return {
       update: function(cache, { data: { addPersonName } }) {
+        if (!addPersonName.name) {
+          return;
+        }
+
         const cachedPerson = cache.readFragment({
           id: `Person:${personId}`,
           fragment: gql`

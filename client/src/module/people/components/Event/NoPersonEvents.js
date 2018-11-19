@@ -1,7 +1,7 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
 import { IconButton } from 'module/common/Buttons';
-import NoResults from './NoResults';
+import NoResults from '../NoResults';
 
 const eventIcons = ['bible', 'birthday-cake', 'calendar', 'tombstone'];
 

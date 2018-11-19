@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import NoResults from 'component/NoResults';
 import ChildrenList from './ChildrenList';
-import EventList from './EventList';
+import RelationshipEventList from './RelationshipEventList';
 import NoRelationshipEvents from './NoRelationshipEvents';
 import { IconButton } from '../../common/Buttons';
 
@@ -31,7 +31,7 @@ export default ({ person, relationships }) => (
           </div>
 
           {relationship.events.length ? (
-            <EventList events={relationship.events} />
+            <RelationshipEventList events={relationship.events} />
           ) : (
             <NoRelationshipEvents />
           )}

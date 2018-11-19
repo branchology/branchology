@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import PreferredRecord from './PreferredRecord';
-import nameBasics from '../query/fragment/nameBasics';
+import PreferredRecord from '../PreferredRecord';
+import nameBasics from '../../query/fragment/nameBasics';
 
 const makePersonNamePreferredMutation = gql`
   mutation makePersonNamePreferred($personNameId: ID!) {

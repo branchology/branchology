@@ -1,0 +1,60 @@
+import React, { PureComponent } from 'react';
+
+class Form extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = { values: {}, errors: {} };
+  }
+
+  getValue = field => {
+    return this.state.values[field];
+  };
+
+  mergeState = newState => {
+    this.setState({ values: { ...this.state.values, ...newState } });
+  };
+
+  submit = () => {
+    const { onSubmit, prepareValuesForSubmit, validate } = this.props;
+
+    if (validate) {
+      const errors = validate(this.state.values);
+      if (errors && Object.keys(errors).length > 0) {
+        this.setState({ errors });
+        return;
+      }
+    }
+
+    const submitValues = prepareValuesForSubmit
+      ? prepareValuesForSubmit(this.state.values)
+      : this.state.values;
+
+    return onSubmit(submitValues).catch(e => {
+      if (e.validationErrors) {
+        this.setState({ errors: e.validationErrors });
+      }
+    });
+  };
+
+  render() {
+    const { render, debug = false } = this.props;
+
+    return (
+      <div>
+        <div>
+          {render({
+            submit: this.submit,
+            container: {
+              errors: this.state.errors,
+              getValue: this.getValue,
+              mergeState: this.mergeState,
+            },
+          })}
+        </div>
+        {debug && <pre>{JSON.stringify(this.state.values, null, 2)}</pre>}
+      </div>
+    );
+  }
+}
+
+export default Form;
