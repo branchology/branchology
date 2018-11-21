@@ -7,12 +7,13 @@ import {
   RELATIONSHIP_TABLE,
   RELATIONSHIP_EVENT_TABLE,
 } from './constants';
-import { createEvent } from './event';
+import Event from './Event';
 import Person from './Person';
 import { generateUuid, returnFirst } from '../lib';
 
 // TODO: FIXME:
 const person = new Person(db);
+const event = new Event(db);
 
 export function findRelationshipsByIds(ids) {
   return db(RELATIONSHIP_TABLE)
@@ -66,7 +67,7 @@ export async function createRelationship(spouse1, spouse2, data = {}) {
     .then(returnFirst);
 
   if (marriageDate || marriagePlace || marriagePlaceId) {
-    const marriage = await createEvent('marr', {
+    const marriage = await event.createEvent('marr', {
       date: marriageDate,
       place: marriagePlace,
       placeId: marriagePlaceId,

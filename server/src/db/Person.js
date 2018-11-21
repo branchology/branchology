@@ -12,7 +12,7 @@ import {
   RELATIONSHIP_TABLE,
   SOURCE_CITATION_TABLE,
 } from './constants';
-import { createEvent } from './event';
+import Event from './Event';
 import formatForDb from './lib/formatForDb';
 import { NOTE_TABLE } from './note';
 import { createSourceCitation } from './source';
@@ -29,6 +29,9 @@ function createIdLoader(db, tableName, idColumn = 'id') {
 export default class Person {
   constructor(db) {
     this.db = db;
+
+    // TODO: FIXME: 
+    this.event = new Event(db);
   }
 
   createIdLoader(tableName, idColumn = 'id') {
@@ -188,7 +191,7 @@ export default class Person {
     }
 
     if (birthDate || birthPlace || birthPlaceId) {
-      const birth = await createEvent('birt', {
+      const birth = await this.event.createEvent('birt', {
         date: birthDate,
         place: birthPlace,
         placeId: birthPlaceId,
@@ -197,7 +200,7 @@ export default class Person {
     }
 
     if (deathDate || deathPlace || deathPlaceId) {
-      const death = await createEvent('deat', {
+      const death = await this.event.createEvent('deat', {
         date: deathDate,
         place: deathPlace,
         placeId: deathPlaceId,

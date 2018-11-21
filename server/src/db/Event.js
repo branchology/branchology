@@ -12,12 +12,13 @@ import {
   generateUuid,
   returnFirst,
 } from '../lib';
-import { createPlace } from './place';
+import Place from './Place';
 import { createSourceCitation } from './source';
 
 export default class Event {
   constructor(db) {
     this.db = db;
+    this.place = new Place(db);
   }
 
   findCitationsByEventIds(ids) {
@@ -61,7 +62,7 @@ export default class Event {
       event: { type, ...eventData },
     } = attrData;
 
-    const event = await createEvent(type, eventData);
+    const event = await this.createEvent(type, eventData);
 
     return this.db(PERSON_ATTRIBUTE_TABLE)
       .insert(
