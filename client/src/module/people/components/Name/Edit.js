@@ -1,4 +1,3 @@
-import { isNil } from 'lodash';
 import React, { PureComponent } from 'react';
 import { graphql } from 'react-apollo';
 import { createApiValidationError, translateApiErrors } from 'lib';
@@ -13,30 +12,12 @@ function initialValues(initialValue) {
   return { id, given, surname };
 }
 
-function normalize(submit, formData) {
-  const { id, ...name } = formData;
-
-  const opts = {
-    variables: { id, name },
-  };
-
-  if (isNil(opts.variables.name.given)) {
-    opts.variables.name.given = '';
-  }
-
-  if (isNil(opts.variables.name.surname)) {
-    opts.variables.name.surname = '';
-  }
-
-  return submit(opts);
-}
-
 class NameEdit extends PureComponent {
   static contextType = NotificationContext;
 
   submit = values => {
     return this.props
-      .updatePersonName(values)
+      .updatePersonName({ variables: values })
       .then(({ data: { updatePersonName: { errors, name } } }) => {
         if (errors) {
           throw createApiValidationError(translateApiErrors(errors));
@@ -53,11 +34,11 @@ class NameEdit extends PureComponent {
 
     return (
       <Form
-        onSubmit={data => normalize(this.submit, data)}
+        onSubmit={this.submit}
         initialValues={initialValues(name)}
         validate={values => {
           const errors = {};
-          // TODO FIXME
+          // TODO: FIXME:
           return errors;
         }}
         prepareValuesForSubmit={({ given, surname }) => {

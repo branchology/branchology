@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 class Form extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { values: {}, errors: {} };
+    this.state = { values: props.initialValues || {}, errors: {} };
   }
 
   getValue = field => {
