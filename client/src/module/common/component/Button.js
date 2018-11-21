@@ -47,7 +47,7 @@ export const Button = styled.button`
     color: #fff;
   }
 
-  .svg-inline--fa + label {
+  .icon + .label {
     padding-left: 5px;
   }
 
