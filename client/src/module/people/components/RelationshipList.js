@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NoResults from 'component/NoResults';
+import { IconButton } from 'module/common/component/Button';
 import ChildrenList from './ChildrenList';
 import RelationshipEventList from './RelationshipEventList';
 import NoRelationshipEvents from './NoRelationshipEvents';
-import { IconButton } from '../../common/Buttons';
 
 export default ({ person, relationships }) => (
   <div>

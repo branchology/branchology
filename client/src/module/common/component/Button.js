@@ -2,11 +2,11 @@ import React from 'react';
 import { darken } from 'polished';
 import styled from 'styled-components';
 import styledMap from 'styled-map';
-import Icon from './Icon';
+import Icon from '../Icon';
 
 const danger = '#dd3245';
 const primary = '#0077fa';
-const success = '#22A94D';
+const success = '#22a94d';
 
 const statusBackgroundColors = styledMap`
   danger: ${danger};
@@ -15,12 +15,13 @@ const statusBackgroundColors = styledMap`
 `;
 
 const darkerStatusBackgroundColors = styledMap`
-  danger: ${darken(0.2, danger)};
-  primary: ${darken(0.2, primary)}
-  success: ${darken(0.2, success)};
+  danger: ${darken(0.15, danger)};
+  primary: ${darken(0.15, primary)};
+  success: ${darken(0.15, success)};
 `;
 
 const fontSizes = styledMap`
+  xs: 7pt;
   sm: 9pt;
   md: 10pt;
   lg: 11pt;
@@ -28,56 +29,45 @@ const fontSizes = styledMap`
 `;
 
 const padding = styledMap`
+  xs: 2px 3px;
   sm: 3px 6px;
   default: 5px 10px;
 `;
 
-const ButtonContainer = styled.button`
+export const Button = styled.button`
   background-color: ${statusBackgroundColors};
   border: 1px solid ${statusBackgroundColors};
   border-radius: 2px;
   color: #fff;
   cursor: pointer;
   font-size: ${fontSizes};
+  margin-left: 5px;
   padding: ${padding};
-
-  & + & {
-    margin-left: 4px;
+  .svg-inline--fa {
+    color: #fff;
   }
 
-  span {
+  .svg-inline--fa + label {
     padding-left: 5px;
-    text-shadow: ${darkerStatusBackgroundColors} 1px 1px 1px;
-  }
-
-  &:focus {
-    outline: none;
   }
 
   &:active,
+  &:focus,
   &:hover {
     background-color: ${darkerStatusBackgroundColors};
     border: 1px solid ${darkerStatusBackgroundColors};
-
-    .icon {
-      color: #fff;
-    }
+    outline: none;
   }
 
-  .icon {
-    color: #fff;
+  &:disabled {
+    background-color: #bbb;
+    cursor: default;
   }
 `;
 
-export const Button = ({ children, ...props }) => (
-  <ButtonContainer {...props}>
-    <span>{children}</span>
-  </ButtonContainer>
-);
-
 export const IconButton = ({ children, icon, ...props }) => (
-  <ButtonContainer {...props}>
+  <Button {...props}>
     <Icon className="icon" icon={icon} />
-    <span>{children}</span>
-  </ButtonContainer>
+    {children && <span className="label">{children}</span>}
+  </Button>
 );

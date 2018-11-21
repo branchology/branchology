@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/Buttons';
+import { IconButton } from 'module/common/component/Button';
 import Confirm from 'module/common/Confirm';
 import nameDeleteMutation from '../../query/nameDeleteMutation';
 

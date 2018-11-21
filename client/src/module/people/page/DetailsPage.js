@@ -1,6 +1,8 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import DataContainer from 'module/common/DataContainer';
+import { IconButton } from 'module/common/component/Button';
+import { TabContainer } from 'module/common/component/Tabs';
 import AttributeList from '../components/AttributeList';
 import EventList from '../components/Event/List';
 import Heading from '../components/Heading';
@@ -9,8 +11,6 @@ import NoRelationships from '../components/NoRelationships';
 import NoteList from '../components/NoteList';
 import RelationshipList from '../components/RelationshipList';
 import fetchPerson from '../query/fetchPerson';
-import { IconButton } from '../../common/Buttons';
-import { TabContainer } from 'module/common/component/Tabs';
 
 export default class DetailsPage extends React.Component {
   render() {

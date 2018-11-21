@@ -1,6 +1,6 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
-import { IconButton } from 'module/common/Buttons';
+import { IconButton } from 'module/common/component/Button';
 import NoResults from './NoResults';
 
 const noteIcons = ['book-open', 'sticky-note'];

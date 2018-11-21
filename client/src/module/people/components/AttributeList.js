@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
-import { IconButton } from 'module/common/Buttons';
+import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeEdit from './AttributeEdit';

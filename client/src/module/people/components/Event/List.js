@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton } from 'module/common/Buttons';
+import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import NoPersonEvents from './NoPersonEvents';
 import PreferredRecord from '../PreferredRecord';

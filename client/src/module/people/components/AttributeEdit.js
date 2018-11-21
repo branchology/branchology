@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Button, Form, InputText } from 'module/common/component/Form';
+import { Button } from 'module/common/component/Button';
+import { Form, InputText } from 'module/common/component/Form';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 
 function initialValues(attribute) {

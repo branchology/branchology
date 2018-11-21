@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-// TODO: FIXME: consolidate buttons and don't use this one...
-import { Button, Form, InputText } from 'module/common/component/Form';
+import { Button } from 'module/common/component/Button';
+import { Form, InputText } from 'module/common/component/Form';
 import { NotificationContext } from 'module/common/notifications';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import nameCreateMutation from '../../query/nameCreateMutation';
