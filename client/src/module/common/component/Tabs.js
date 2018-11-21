@@ -1,5 +1,7 @@
+import { isNil } from 'lodash';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Badge from './Badge';
 
 const ContainerStyles = styled.div`
   margin-bottom: 10px;
@@ -23,6 +25,10 @@ const TabStyles = styled.div`
   &:hover {
     background-color: #fff;
     border-top-color: #1b7bf7;
+
+    ${Badge} {
+      background-color: #1b7bf7;
+    }
   }
 `;
 
@@ -50,8 +56,10 @@ const TabContainer = ({ tabs = [], contents = [] }) => {
   );
 };
 
-const Tab = ({ label, count, ...props }) => (
-  <TabStyles {...props}>{label}</TabStyles>
+const Tab = ({ count, label, ...props }) => (
+  <TabStyles {...props}>
+    {label} {!isNil(count) && <Badge>{count}</Badge>}
+  </TabStyles>
 );
 
 export { TabContainer, Tab };
