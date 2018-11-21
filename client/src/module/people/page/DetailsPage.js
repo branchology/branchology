@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import DataContainer from 'module/common/DataContainer';
 import { IconButton } from 'module/common/component/Button';
 import { TabContainer } from 'module/common/component/Tabs';
-import AttributeList from '../components/AttributeList';
+import AttributeList from '../components/Attribute/List';
 import EventList from '../components/Event/List';
 import Heading from '../components/Heading';
 import NameList from '../components/Name/List';

@@ -3,11 +3,11 @@ import { compose, graphql } from 'react-apollo';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
-import AttributeEdit from './AttributeEdit';
+import AttributeEdit from './Edit';
 import NoAttributes from './NoAttributes';
-import SourceCitationList from './SourceCitationList';
-import attributeUpdateMutation from '../query/attributeUpdateMutation';
-import { NotificationContext } from '../../common/notifications';
+import SourceCitationList from '../SourceCitationList';
+import attributeUpdateMutation from '../../query/attributeUpdateMutation';
+import { NotificationContext } from '../../../common/notifications';
 
 class AttributeList extends Component {
   static contextType = NotificationContext;
