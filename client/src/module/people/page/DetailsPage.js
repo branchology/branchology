@@ -10,7 +10,7 @@ import NoteList from '../components/NoteList';
 import RelationshipList from '../components/RelationshipList';
 import fetchPerson from '../query/fetchPerson';
 import { IconButton } from '../../common/Buttons';
-import { TabContainer } from 'module/common/components/Tabs';
+import { TabContainer } from 'module/common/component/Tabs';
 
 export default class DetailsPage extends React.Component {
   render() {
