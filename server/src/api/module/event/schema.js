@@ -14,6 +14,7 @@ export default `
     type: String!
     date: String
     place: Place
+    isPreferred: Boolean
     sourceCitations: [SourceCitation]
     notes: [Note]
   }
@@ -23,5 +24,18 @@ export default `
     date: String
     placeId: ID
     place: String
+  }
+
+  type PlaceCollection {
+    items: [Place]
+    paging: PagingInfo
+  }
+
+  extend type Query {
+    places(
+      search: String
+      sorting: [SortingInput]
+      paging: PagingInput
+    ): PlaceCollection
   }
 `;

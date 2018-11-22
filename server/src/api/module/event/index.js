@@ -1,3 +1,4 @@
+import Query from './query';
 import schema from './schema';
 
 const resolvers = {
@@ -14,6 +15,7 @@ const resolvers = {
       return context.dataLoaders.event.eventSourceCitationLoader.load(id);
     },
   },
+  Query,
 };
 
 export { schema, resolvers };

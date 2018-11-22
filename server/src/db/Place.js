@@ -11,6 +11,13 @@ export default class Place {
       .whereIn('id', ids);
   }
 
+  findAll(search) {
+    return this.db
+      .select(['*'])
+      .from('places')
+      .where('description', '~*', search);
+  }
+
   async create(data) {
     const { postalCode, stateProvince, ...otherPlaceData } = data;
 
