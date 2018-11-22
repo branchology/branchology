@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Query } from 'react-apollo';
 import { AutoComplete } from 'module/common/component/Form';
 
+// TODO: FIXME: Shoudl we extract this into a wrapper/container?
 const searchSources = gql`
   query fetchSources(
     $search: String
