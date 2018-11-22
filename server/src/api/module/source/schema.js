@@ -22,4 +22,17 @@ export default `
     citation: String
     page: String
   }
+
+  type SourceCollection {
+    items: [Source]
+    paging: PagingInfo
+  }
+
+  extend type Query {
+    sources(
+      search: String
+      sorting: [SortingInput]
+      paging: PagingInput
+    ): SourceCollection
+  }
 `;

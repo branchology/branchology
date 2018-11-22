@@ -1,11 +1,15 @@
 import DataLoader from 'dataloader';
-import { findSourceByIds } from 'db';
+import Source from 'db/Source';
 import { organizeResultsById } from 'lib';
 
 export default class SourceLoader {
   constructor(db) {
+    const source = new Source(db); // TODO: FIXME:
+
     this.sourceLoader = new DataLoader(ids =>
-      findSourceByIds(ids).then(sources => organizeResultsById(sources, ids)),
+      source
+        .findSourceByIds(ids)
+        .then(sources => organizeResultsById(sources, ids)),
     );
   }
 }
