@@ -6,7 +6,7 @@ import Label from './Label';
 const SelectWrapper = ({
   name,
   label,
-  container: { errors, getValue, mergeState },
+  container: { errors, mergeState },
   ...props
 }) => (
   <React.Fragment>
@@ -17,7 +17,6 @@ const SelectWrapper = ({
       onChange={selected => {
         mergeState({ [name]: selected.value });
       }}
-      value={getValue(name)}
       styles={{ control: styles => ({ ...styles, marginLeft: 5 }) }}
       {...props}
     />
