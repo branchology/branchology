@@ -39,6 +39,7 @@ const AutoComplete = ({
   onSearch,
   values,
   container: { errors, getValue, mergeState },
+  ...props
 }) => (
   <>
     <Label htmlFor={name}>{label}</Label>
@@ -47,23 +48,13 @@ const AutoComplete = ({
       <ReactAutocomplete
         getItemValue={item => item.label}
         items={values}
+        onSearch={onSearch}
         renderItem={(item, highlighted) => (
           <Result highlighted={highlighted === true} key={item.id}>
             {item.label}
           </Result>
         )}
-        value={getValue('__source__')}
-        onChange={e => {
-          onSearch(e.target.value);
-          mergeState({
-            __source__: e.target.value,
-            source: e.target.value,
-            sourceId: null,
-          });
-        }}
-        onSelect={(value, item) =>
-          mergeState({ sourceId: item.id, __source__: value, source: null })
-        }
+        {...props}
         wrapperStyle={{}}
         renderMenu={items => {
           return <Results children={items} />;
