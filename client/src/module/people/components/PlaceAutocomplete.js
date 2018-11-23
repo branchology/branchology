@@ -26,8 +26,10 @@ function mapData(places) {
   }));
 }
 
-export default ({ container, ...props }) => {
+export default ({ container, hardValues = [], name, ...props }) => {
   const [search, onSearch] = useState('');
+
+  const value = container.getValue(name) || {};
 
   return (
     <Query
@@ -42,8 +44,11 @@ export default ({ container, ...props }) => {
         return (
           <AutoComplete
             {...props}
+            name={name}
             container={container}
-            values={mapData(loading ? [] : data.places.items)}
+            values={mapData(
+              loading ? [] : [...data.places.items, ...hardValues],
+            )}
             onChange={e => {
               onSearch(e.target.value);
               container.mergeState({
@@ -59,7 +64,7 @@ export default ({ container, ...props }) => {
                 place: null,
               })
             }
-            value={container.getValue('__place__')}
+            value={value.__place__}
           />
         );
       }}
