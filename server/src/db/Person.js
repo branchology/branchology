@@ -30,7 +30,7 @@ export default class Person {
   constructor(db) {
     this.db = db;
 
-    // TODO: FIXME: 
+    // TODO: FIXME:
     this.event = new Event(db);
   }
 
@@ -158,7 +158,7 @@ export default class Person {
 
     return Promise.all(
       sources.map(({ sourceId, ...data }) => {
-        return addPersonNameSourceCitation(name.id, sourceId, data);
+        return this.addNameSourceCitation(name.id, sourceId, data);
       }),
     ).then(() => name);
   }
@@ -187,7 +187,7 @@ export default class Person {
     const bagOfPromises = [];
 
     if (given || surname) {
-      bagOfPromises.push(createPersonName(personId, { given, surname }));
+      bagOfPromises.push(this.createName(personId, { given, surname }));
     }
 
     if (birthDate || birthPlace || birthPlaceId) {
@@ -196,7 +196,7 @@ export default class Person {
         place: birthPlace,
         placeId: birthPlaceId,
       });
-      await attachPersonEvent(personId, birth.id);
+      await this.attachEvent(personId, birth.id);
     }
 
     if (deathDate || deathPlace || deathPlaceId) {
@@ -205,7 +205,7 @@ export default class Person {
         place: deathPlace,
         placeId: deathPlaceId,
       });
-      await attachPersonEvent(personId, death.id);
+      await this.attachEvent(personId, death.id);
     }
 
     return Promise.all(bagOfPromises).then(() => person);
@@ -214,6 +214,7 @@ export default class Person {
   async addSourceCitation(personId, sourceId, data) {
     const id = generateUuid();
 
+    // TODO: FIXME:
     const citation = await createSourceCitation(sourceId, data);
 
     return this.db(PERSON_SOURCE_CITATION_TABLE)
@@ -277,6 +278,7 @@ export default class Person {
   async addNameSourceCitation(personNameId, sourceId, data) {
     const id = generateUuid();
 
+    // TODO: FIXME:
     const citation = await createSourceCitation(sourceId, data);
 
     return this.db(PERSON_NAME_SOURCE_CITATION_TABLE)

@@ -5,7 +5,7 @@ import { organizeMultipleResultsById, organizeResultsById } from 'lib';
 
 export default class PeopleLoader {
   constructor(db) {
-    const person = new Person(db);
+    const person = new Person(db); // TODO: FIXME:
 
     this.personCitationLoader = new DataLoader(ids =>
       person

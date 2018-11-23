@@ -7,6 +7,12 @@ import DataLoaders from 'api/DataLoaders';
 import ValidationMiddleware from 'api/middleware/ValidationMiddleware';
 import 'config';
 
+// TODO: FIXME:
+import db from 'db/conn';
+import Event from 'db/Event';
+import Person from 'db/Person';
+import Source from 'db/Source';
+
 const { APP_PORT } = process.env;
 
 const app = express();
@@ -19,6 +25,11 @@ class Context {
   constructor(request) {
     this.request = request;
     this.dataLoaders = new DataLoaders();
+    this.dbal = {
+      event: new Event(db),
+      person: new Person(db),
+      source: new Source(db),
+    };
   }
 }
 
@@ -27,7 +38,7 @@ const server = new ApolloServer({
   context: req => new Context(req),
 });
 
-server.applyMiddleware({ app }); // app is from an existing express app
+server.applyMiddleware({ app });
 
 app.listen({ port: APP_PORT }, () =>
   console.log(

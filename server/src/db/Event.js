@@ -94,7 +94,7 @@ export default class Event {
     const { place, ...eventData } = event;
 
     if (place) {
-      const newPlace = await createPlace({ description: place });
+      const newPlace = await this.place.create({ description: place });
       eventData.placeId = newPlace.id;
     }
 
@@ -115,7 +115,7 @@ export default class Event {
     if (place || placeId) {
       dbPlaceId = placeId;
       if (place) {
-        const newPlace = await createPlace({ description: place });
+        const newPlace = await this.place.create({ description: place });
         dbPlaceId = newPlace.id;
       }
     }

@@ -1,30 +1,34 @@
 import * as yup from 'yup';
-import {
-  addEventSourceCitation,
-  attachPersonEvent,
-  createEvent,
-  createSource,
-} from 'db';
+import validateEvent from 'service/validator/validateEvent';
 
 export default {
-  // TODO: FIXME:
-  validationSchema: yup.object(),
+  validationSchema: yup.object().shape({
+    personId: yup.string().required(),
+    event: validateEvent().required(),
+  }),
   resolve: function addPersonEventMutation(
     root,
     { personId, event: { type, ...eventData }, citations = [] },
+    context,
   ) {
-    return createEvent(type, eventData).then(event => {
+    return context.dbal.event.createEvent(type, eventData).then(event => {
       return Promise.all([
-        attachPersonEvent(personId, event.id),
+        context.dbal.person.attachEvent(personId, event.id),
         ...citations.map(async ({ source, sourceId, ...citation }) => {
           let mySourceId = sourceId;
 
           if (source) {
-            const source = await createSource({ title: source });
+            const source = await context.dbal.source.createSource({
+              title: source,
+            });
             mySourceId = source.id;
           }
 
-          return addEventSourceCitation(event.id, mySourceId, citation);
+          return context.dbal.event.addSourceCitation(
+            event.id,
+            mySourceId,
+            citation,
+          );
         }),
       ]).then(() => ({ event }));
     });

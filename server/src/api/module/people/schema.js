@@ -79,7 +79,6 @@ export default `
   }
 
   input UpdateEventInput {
-    id: ID!
     type: String!
     date: String
     placeId: ID
@@ -88,11 +87,11 @@ export default `
 
   type AttributePayload {
     attribute: Attribute
-    error: ErrorDetails
+    errors: [ErrorDetails]
   }
 
   type EventPayload {
-    error: ErrorDetails
+    errors: [ErrorDetails]
     event: Event
   }
 
@@ -102,7 +101,7 @@ export default `
   }
 
   type PersonPayload {
-    error: ErrorDetails
+    errors: [ErrorDetails]
     person: Person
   }
 
