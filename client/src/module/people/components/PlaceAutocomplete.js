@@ -29,7 +29,7 @@ function mapData(places) {
 export default ({ container, hardValues = [], name, ...props }) => {
   const [search, onSearch] = useState('');
 
-  const value = container.getValue(name) || {};
+  const passedValue = container.getValue('__place__') || '';
 
   return (
     <Query
@@ -64,7 +64,7 @@ export default ({ container, hardValues = [], name, ...props }) => {
                 place: null,
               })
             }
-            value={value.__place__}
+            value={passedValue}
           />
         );
       }}

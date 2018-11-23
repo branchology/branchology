@@ -14,7 +14,7 @@ class NameEdit extends PureComponent {
       .addPersonName({ variables: values })
       .then(({ data: { addPersonName: { errors, name } } }) => {
         if (errors) {
-          throw createApiValidationError(translateApiErrors(errors));
+          throw createApiValidationError(translateApiErrors(errors), 'name');
         }
 
         this.props.onClose();

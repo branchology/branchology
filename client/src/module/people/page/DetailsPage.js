@@ -36,8 +36,14 @@ export default class DetailsPage extends React.Component {
                   { label: 'Notes', count: data.person.notes.length },
                 ]}
                 contents={[
-                  <EventList events={data.person.events} />,
-                  <AttributeList attributes={data.person.attributes} />,
+                  <EventList
+                    person={data.person}
+                    events={data.person.events}
+                  />,
+                  <AttributeList
+                    person={data.person}
+                    attributes={data.person.attributes}
+                  />,
                   <NameList person={data.person} names={data.person.names} />,
                   <NoteList notes={data.person.notes} />,
                 ]}

@@ -29,7 +29,7 @@ export default function NameList({ names, person }) {
             <Heading>Given</Heading>
             <Heading>Surname</Heading>
             <Heading>Suffix</Heading>
-            <Heading as="th" right>
+            <Heading right>
               <IconButton
                 icon="plus-circle"
                 success

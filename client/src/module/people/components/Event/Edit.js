@@ -5,8 +5,7 @@ import { Form, InputText, Select } from 'module/common/component/Form';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import eventTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocomplete';
-import EventCreateMutation from '../../query/eventCreateMutation';
-// import { validateEvent } from '../../../../../../shared/validator';
+import EventUpdateMutation from '../../query/eventUpdateMutation';
 
 function transfigureEventTypes() {
   return Object.keys(eventTypes).map(type => ({
@@ -15,31 +14,55 @@ function transfigureEventTypes() {
   }));
 }
 
-class AddEvent extends PureComponent {
+function initialValues(event) {
+  const { id, type, date, place } = event;
+
+  const initialValues = {
+    id,
+    type,
+    date,
+    place: null,
+    placeId: null,
+    __place__: null,
+  };
+
+  if (place) {
+    initialValues.place = null;
+    initialValues.__place__ = place.description;
+    initialValues.placeId = place.id;
+  }
+
+  return initialValues;
+}
+
+class EventEdit extends PureComponent {
   submit = values => {
     return this.props
-      .addPersonEvent({ variables: values })
-      .then(({ data: { addPersonEvent: { errors, event } } }) => {
+      .updateEvent({ variables: values })
+      .then(({ data: { updateEvent: { errors, event } } }) => {
         if (errors) {
           throw createApiValidationError(translateApiErrors(errors, 'event'));
         }
 
         this.props.onClose();
-        this.context.notify('Person Event Added!');
+        this.context.notify('Person Event Updated!');
         return event;
       });
   };
 
   render() {
-    const { onClose, person } = this.props;
+    const { event, onClose } = this.props;
 
     return (
       <Form
+        onSubmit={this.submit}
+        initialValues={initialValues(event)}
         prepareValuesForSubmit={data => {
           const prepared = {
-            personId: person.id,
+            id: event.id,
             event: { type: data.type, date: data.date },
           };
+
           if (data.placeId) {
             prepared.event.placeId = data.placeId;
           } else if (data.place) {
@@ -48,11 +71,11 @@ class AddEvent extends PureComponent {
 
           return prepared;
         }}
+        validate={() => null}
         onSubmit={this.submit}
-        validate={() => ({}) /*validateEvent*/}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Add Person Event" />}
+            header={<StandardDialogHeader title="Edit Person Event" />}
             footer={
               <div>
                 <Button type="button" onClick={onClose}>
@@ -77,6 +100,7 @@ class AddEvent extends PureComponent {
               label="Place: "
               autoFocus
               container={container}
+              hardValues={event.place ? [event.place] : []}
             />
           </Dialog>
         )}
@@ -85,4 +109,4 @@ class AddEvent extends PureComponent {
   }
 }
 
-export default EventCreateMutation(AddEvent);
+export default EventUpdateMutation(EventEdit);
