@@ -6,28 +6,34 @@ import Label from './Label';
 const SelectWrapper = ({
   name,
   label,
-  container: { errors, mergeState },
+  container: { errors, getValue, mergeState },
   ...props
-}) => (
-  <React.Fragment>
-    <Label htmlFor={name}>{label}</Label>
-    <Select
-      id={name}
-      name={name}
-      onChange={selected => {
-        mergeState({ [name]: selected.value });
-      }}
-      styles={{ control: styles => ({ ...styles, marginLeft: 5 }) }}
-      {...props}
-    />
-    {name in errors && (
-      <FieldError>
-        {Array.isArray(errors[name])
-          ? errors[name].map(e => <div key={e}>{e}</div>)
-          : errors[name]}
-      </FieldError>
-    )}
-  </React.Fragment>
-);
+}) => {
+  const value = getValue(name);
+  const selectedValue = props.options.find(o => o.value === value);
+
+  return (
+    <>
+      <Label htmlFor={name}>{label}</Label>
+      <Select
+        id={name}
+        name={name}
+        onChange={selected => {
+          mergeState({ [name]: selected.value });
+        }}
+        styles={{ control: styles => ({ ...styles, marginLeft: 5 }) }}
+        value={selectedValue}
+        {...props}
+      />
+      {name in errors && (
+        <FieldError>
+          {Array.isArray(errors[name])
+            ? errors[name].map(e => <div key={e}>{e}</div>)
+            : errors[name]}
+        </FieldError>
+      )}
+    </>
+  );
+};
 
 export default SelectWrapper;
