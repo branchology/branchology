@@ -7,6 +7,22 @@ export default class PeopleLoader {
   constructor(db) {
     const person = new Person(db); // TODO: FIXME:
 
+    this.attributeNoteLoader = new DataLoader(ids =>
+      person
+        .findNotesByAttributeIds(ids)
+        .then(notes =>
+          organizeMultipleResultsById(notes, ids, 'person_attribute_id'),
+        ),
+    );
+
+    this.attributeSourceCitationLoader = new DataLoader(ids =>
+      person
+        .findCitationsByAttributeIds(ids)
+        .then(citations =>
+          organizeMultipleResultsById(citations, ids, 'person_attribute_id'),
+        ),
+    );
+
     this.personCitationLoader = new DataLoader(ids =>
       person
         .findCitationsByPersonIds(ids)

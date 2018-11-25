@@ -33,12 +33,9 @@ export default `
     isPreferred
   }
   attributes {
-    id
+    ${eventFull}
     data
-    event {
-      ${eventFull}
-      isPreferred
-    }
+    isPreferred
   }
   names {
     ${nameBasics}

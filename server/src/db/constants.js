@@ -6,6 +6,11 @@ export const NOTE_TABLE = 'notes';
 
 export const PEOPLE_TABLE = 'people';
 export const PERSON_ATTRIBUTE_TABLE = 'person_attributes';
+
+export const PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE =
+  'person_attribute_source_citations';
+export const PERSON_ATTRIBUTE_NOTE_TABLE = 'person_attribute_notes';
+
 export const PERSON_EVENT_CITATION_TABLE = 'person_event_sources';
 export const PERSON_EVENT_TABLE = 'person_events';
 export const PERSON_NAME_TABLE = 'person_names';

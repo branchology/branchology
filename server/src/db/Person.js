@@ -11,6 +11,8 @@ import {
   PERSON_SOURCE_CITATION_TABLE,
   RELATIONSHIP_TABLE,
   SOURCE_CITATION_TABLE,
+  PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE,
+  PERSON_ATTRIBUTE_NOTE_TABLE,
 } from './constants';
 import Event from './Event';
 import formatForDb from './lib/formatForDb';
@@ -70,6 +72,14 @@ export default class Person {
       .whereIn('person_id', ids);
   }
 
+  findCitationsByAttributeIds(ids) {
+    return this.db
+      .select(['sc.*', 'pas.person_attribute_id'])
+      .from(`${PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE} AS pas`)
+      .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'pas.source_citation_id')
+      .whereIn('pas.person_attribute_id', ids);
+  }
+
   findEventsByPersonIds(ids) {
     return this.db
       .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
@@ -105,6 +115,14 @@ export default class Person {
       .from(`${PERSON_NAME_NOTE_TABLE} AS pnn`)
       .join(`${NOTE_TABLE} as n`, 'n.id', 'pnn.note_id')
       .whereIn('person_name_id', ids);
+  }
+
+  findNotesByAttributeIds(ids) {
+    return this.db
+      .select(['n.*', 'pan.person_attribute_id'])
+      .from(`${PERSON_ATTRIBUTE_NOTE_TABLE} AS pan`)
+      .join(`${NOTE_TABLE} as n`, 'n.id', 'pan.note_id')
+      .whereIn('pan.id', ids);
   }
 
   findNotesByPersonIds(ids) {

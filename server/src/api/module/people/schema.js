@@ -15,8 +15,13 @@ export default `
 
   type Attribute {
     id: ID!
+    type: String!
     data: String
-    event: Event
+    date: String
+    place: Place
+    isPreferred: Boolean
+    sourceCitations: [SourceCitation]
+    notes: [Note]
   }
 
   type Person {
@@ -44,13 +49,19 @@ export default `
   }
 
   input CreateAttributeInput {
-    data: String!
-    event: CreateEventInput!
+    type: String!
+    data: String
+    date: String
+    placeId: ID
+    place: String
   }
 
   input UpdateAttributeInput {
+    type: String!
     data: String
-    event: UpdateEventInput
+    date: String
+    placeId: ID
+    place: String
   }
 
   input CreateNameInput {

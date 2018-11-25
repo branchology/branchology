@@ -18,8 +18,16 @@ const resolvers = {
     },
   },
   Attribute: {
-    event({ event_id }, params, context) {
-      return context.dataLoaders.event.eventsById.load(event_id);
+    place({ place_id }, params, context) {
+      return place_id
+        ? context.dataLoaders.event.placeLoader.load(place_id)
+        : null;
+    },
+    notes({ id }, params, context) {
+      return context.dataLoaders.people.attributeNoteLoader.load(id);
+    },
+    sourceCitations({ id }, params, context) {
+      return context.dataLoaders.people.attributeSourceCitationLoader.load(id);
     },
   },
   Person: {
