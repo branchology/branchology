@@ -3,6 +3,7 @@ import { createApiValidationError, translateApiErrors } from 'lib';
 import { Button } from 'module/common/component/Button';
 import { Form, InputText, Select } from 'module/common/component/Form';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
+import { NotificationContext } from 'module/common/notifications';
 import eventTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocomplete';
 import EventUpdateMutation from '../../query/eventUpdateMutation';
@@ -36,6 +37,8 @@ function initialValues(event) {
 }
 
 class EventEdit extends PureComponent {
+  static contextType = NotificationContext;
+
   submit = values => {
     return this.props
       .updateEvent({ variables: values })
@@ -55,7 +58,6 @@ class EventEdit extends PureComponent {
 
     return (
       <Form
-        onSubmit={this.submit}
         initialValues={initialValues(event)}
         prepareValuesForSubmit={data => {
           const prepared = {

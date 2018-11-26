@@ -77,17 +77,11 @@ export default class Event {
       .then(returnFirst);
   }
 
-  async updateAttribute(id, attrData) {
-    const { event, ...data } = attrData;
-
-    const attribute = await this.db(PERSON_ATTRIBUTE_TABLE)
-      .update(formatDbValues(data), '*')
+  updateAttribute(id, attrData) {
+    return this.db(PERSON_ATTRIBUTE_TABLE)
+      .update(formatDbValues(attrData), '*')
       .where('id', id)
       .then(returnFirst);
-
-    const { id: eventId, ...eventData } = event;
-
-    return updateEvent(eventId, eventData).then(() => attribute);
   }
 
   async updateEvent(id, event) {

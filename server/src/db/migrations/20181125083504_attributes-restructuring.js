@@ -18,12 +18,6 @@ exports.up = function(db) {
 
 exports.down = function(db) {
   return db.schema.alterTable('person_attributes', table => {
-    table.removeColumns(
-      'place_id',
-      'type',
-      'date',
-      'date_stamp',
-      'is_preferred',
-    );
+    table.dropColumns('place_id', 'type', 'date', 'date_stamp', 'is_preferred');
   });
 };

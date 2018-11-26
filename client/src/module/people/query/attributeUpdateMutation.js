@@ -1,46 +1,28 @@
 import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import eventFull from './fragment/eventFull';
 
-export default gql`
-  fragment BasicEventDetailsFragment on Event {
-    id
-    type
-    date
-    place {
-      id
-      description
-    }
-  }
-
-  fragment SourceCitationFragment on SourceCitation {
-    id
-    citation
-    page
-    source {
-      id
-      title
-    }
-  }
-
-  fragment FullEventDetailsFragment on Event {
-    ...BasicEventDetailsFragment
-    sourceCitations {
-      ...SourceCitationFragment
-    }
-  }
-
+const attributeUpdateMutation = gql`
   mutation updateAttribute($id: ID!, $attribute: UpdateAttributeInput!) {
     updateAttribute(id: $id, attribute: $attribute) {
-      error {
+      errors {
+        field
         message
         details
       }
       attribute {
-        id
+        ${eventFull}
         data
-        event {
-          ...FullEventDetailsFragment
-        }
+        isPreferred
       }
     }
   }
 `;
+
+const connect = graphql(attributeUpdateMutation, {
+  name: 'updateAttribute',
+});
+
+export default function Wrapper(Component) {
+  return connect(Component);
+}

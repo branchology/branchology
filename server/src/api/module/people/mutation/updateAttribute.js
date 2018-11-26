@@ -12,6 +12,8 @@ export default {
     }),
   }),
   resolve: function updateAttributeMutation(root, { id, attribute }, context) {
-    return updateAttribute(id, attribute).then(attr => ({ attribute: attr }));
+    return context.dbal.event
+      .updateAttribute(id, attribute)
+      .then(attr => ({ attribute: attr }));
   },
 };

@@ -7,24 +7,29 @@ export default {
   resolve: function addPersonAttributeMutation(
     root,
     { personId, attribute: attributeData, citations = [] },
+    context,
   ) {
-    return createAttribute(personId, attributeData).then(attribute => {
-      return Promise.all(
-        citations.map(async ({ source, sourceId, ...citation }) => {
-          let mySourceId = sourceId;
+    return context.dbal.person
+      .createAttribute(personId, attributeData)
+      .then(attribute => {
+        return Promise.all(
+          citations.map(async ({ source, sourceId, ...citation }) => {
+            let mySourceId = sourceId;
 
-          if (source) {
-            const source = await createSource({ title: source });
-            mySourceId = source.id;
-          }
+            if (source) {
+              const source = await context.dbal.source.create({
+                title: source,
+              });
+              mySourceId = source.id;
+            }
 
-          return addEventSourceCitation(
-            attribute.event_id,
-            mySourceId,
-            citation,
-          );
-        }),
-      ).then(() => ({ attribute }));
-    });
+            return context.dbal.person.addPersonAttributeSourceCitation(
+              attribute.id,
+              mySourceId,
+              citation,
+            );
+          }),
+        ).then(() => ({ attribute }));
+      });
   },
 };

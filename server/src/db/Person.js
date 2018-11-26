@@ -1,7 +1,7 @@
-import { generateUuid, returnFirst } from '../lib';
 import {
   EVENT_TABLE,
   PEOPLE_TABLE,
+  PERSON_ATTRIBUTE_TABLE,
   PERSON_EVENT_TABLE,
   PERSON_NAME_TABLE,
   PERSON_NAME_SOURCE_CITATION_TABLE,
@@ -15,9 +15,11 @@ import {
   PERSON_ATTRIBUTE_NOTE_TABLE,
 } from './constants';
 import Event from './Event';
+import { formatDbValues, generateUuid, returnFirst } from '../lib';
 import formatForDb from './lib/formatForDb';
 import { NOTE_TABLE } from './note';
-import { createSourceCitation } from './source';
+import Place from './Place';
+import Source from './source';
 
 function createIdLoader(db, tableName, idColumn = 'id') {
   return id =>
@@ -34,6 +36,8 @@ export default class Person {
 
     // TODO: FIXME:
     this.event = new Event(db);
+    this.place = new Place(db);
+    this.source = new Source(db);
   }
 
   createIdLoader(tableName, idColumn = 'id') {
@@ -155,6 +159,59 @@ export default class Person {
       .from(`${PERSON_RELATIONSHIPS_TABLE} AS pr`)
       .join(`${RELATIONSHIP_TABLE} as r`, 'r.id', 'pr.relationship_id')
       .whereIn('person_id', ids);
+  }
+
+  async createAttribute(personId, attrData) {
+    const {
+      data,
+      date,
+      place,
+      placeId,
+      type,
+      isPreferred = true,
+      sources = [],
+    } = attrData;
+
+    let dbPlaceId;
+    if (place || placeId) {
+      dbPlaceId = placeId;
+      if (place) {
+        const newPlace = await this.place.create({ description: place });
+        dbPlaceId = newPlace.id;
+      }
+    }
+
+    return this.db(PERSON_ATTRIBUTE_TABLE)
+      .insert(
+        formatDbValues({
+          id: generateUuid(),
+          personId: personId,
+          type,
+          data,
+          date,
+          placeId: dbPlaceId,
+          isPreferred,
+        }),
+        '*',
+      )
+      .then(returnFirst);
+  }
+
+  async addPersonAttributeSourceCitation(attributeId, sourceId, data) {
+    const id = generateUuid();
+
+    const citation = await this.source.createCitation(sourceId, data);
+
+    return this.db(PERSON_NAME_SOURCE_CITATION_TABLE)
+      .insert(
+        {
+          id,
+          person_attribute_id: attributeId,
+          source_citation_id: citation.id,
+        },
+        '*',
+      )
+      .then(returnFirst);
   }
 
   async createName(personId, nameData) {
