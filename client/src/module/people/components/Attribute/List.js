@@ -3,6 +3,7 @@ import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeAdd from './Add';
+import AttributeDelete from './Delete';
 import AttributeEdit from './Edit';
 import NoAttributes from './NoAttributes';
 import SourceCitationList from '../SourceCitationList';
@@ -61,9 +62,7 @@ export default ({ person, attributes }) => {
                 >
                   Edit
                 </IconButton>
-                <IconButton danger icon="trash" onClick={() => null}>
-                  Delete
-                </IconButton>
+                <AttributeDelete person={person} data={attribute} />
               </td>
             </tr>,
             <tr

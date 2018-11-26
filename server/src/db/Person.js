@@ -197,6 +197,12 @@ export default class Person {
       .then(returnFirst);
   }
 
+  removeAttribute(attributeId) {
+    return this.db(PERSON_ATTRIBUTE_TABLE)
+      .delete()
+      .where('id', attributeId);
+  }
+
   async addPersonAttributeSourceCitation(attributeId, sourceId, data) {
     const id = generateUuid();
 
@@ -374,6 +380,17 @@ export default class Person {
     return this.db(PERSON_EVENT_TABLE)
       .insert({ id, person_id: personId, event_id: eventId }, '*')
       .then(returnFirst);
+  }
+
+  removeEvent(eventId) {
+    return this.db(PERSON_EVENT_TABLE)
+      .delete()
+      .where('event_id', eventId)
+      .then(() => {
+        return this.db(EVENT_TABLE)
+          .delete()
+          .where('id', eventId);
+      });
   }
 
   attachNote(personId, noteId) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import EventAdd from './Add';
+import EventDelete from './Delete';
 import EventEdit from './Edit';
 import NoPersonEvents from './NoPersonEvents';
 import eventTypes from './config';
@@ -70,9 +71,7 @@ export default ({ person, events }) => {
                 >
                   Edit
                 </IconButton>
-                <IconButton danger icon="trash" onClick={() => null}>
-                  Delete
-                </IconButton>
+                <EventDelete person={person} data={event} />
               </Cell>
             </tr>,
             <tr

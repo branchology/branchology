@@ -148,10 +148,10 @@ export default `
     makePersonNamePreferred(personNameId: ID): PrimaryPersonNamePayload
 
     removePerson(personId: ID): Boolean
-    removePersonAttribute(attributeId: ID!): Boolean
+    removePersonAttribute(attributeId: ID!): RemoveRecordPayload!
     removePersonAttributeCitation(citationId: ID!): Boolean
     removePersonCitation(citationId: ID!): Boolean
-    removePersonEvent(eventId: ID!): Boolean
+    removePersonEvent(eventId: ID!): RemoveRecordPayload!
     removePersonEventCitation(citationId: ID!): Boolean
     removePersonName(personNameId: ID): RemoveRecordPayload!
     removePersonNameCitation(citationId: ID!): Boolean
