@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import React, { PureComponent } from 'react';
 
 class Form extends PureComponent {
@@ -7,7 +8,7 @@ class Form extends PureComponent {
   }
 
   getValue = field => {
-    return this.state.values[field];
+    return get(this.state.values, field);
   };
 
   mergeState = newState => {
