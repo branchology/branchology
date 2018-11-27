@@ -356,6 +356,39 @@ export default class Person {
     return this.updateName(personNames[0].id, { is_preferred: true });
   }
 
+  async setPersonEventPreferred(eventId) {
+    const personEvent = await this.db(`${PERSON_EVENT_TABLE} AS pe`)
+      .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
+      .join(`${EVENT_TABLE} AS e`, 'e.id', 'pe.event_id')
+      .where('e.id', eventId)
+      .then(returnFirst);
+    if (!personEvent) {
+      throw `Cannot find personEvent`;
+    }
+
+    const allPersonEvents = await this.db(`${PERSON_EVENT_TABLE} AS pe`)
+      .select(['e.*', 'pe.id AS person_event_id'])
+      .join(`${EVENT_TABLE} AS e`, 'e.id', 'pe.event_id')
+      .where({
+        person_id: personEvent.person_id,
+        type: personEvent.type,
+        is_preferred: true,
+      });
+
+    await Promise.all(
+      allPersonEvents.map(pe =>
+        this.db(EVENT_TABLE)
+          .update({ is_preferred: false })
+          .where('id', pe.id),
+      ),
+    );
+
+    return this.db(EVENT_TABLE)
+      .update({ is_preferred: true })
+      .where('id', personEvent.id)
+      .then(() => personEvent);
+  }
+
   async addNameSourceCitation(personNameId, sourceId, data) {
     const id = generateUuid();
 

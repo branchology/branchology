@@ -135,6 +135,11 @@ export default `
     person: Person
   }
 
+  type PrimaryPersonEventPayload {
+    errors: [ErrorDetails]
+    person: Person
+  }
+
   extend type Mutation {
     addPersonAttribute(personId: ID!, attribute: CreateAttributeInput!, citations: [CreateSourceCitationInput]): AttributePayload
     addPersonAttributeCitation(attributeId: ID!, citation: CreateSourceCitationInput!): AttributePayload
@@ -145,7 +150,8 @@ export default `
     addPersonNameCitation(nameId: ID!, citation: CreateSourceCitationInput!): NamePayload
     createPerson(name: CreateNameInput!, birth: CreateEventInput, death: CreateEventInput, sex: Sex!): PersonPayload
 
-    makePersonNamePreferred(personNameId: ID): PrimaryPersonNamePayload
+    makePersonEventPreferred(eventId: ID!): PrimaryPersonEventPayload
+    makePersonNamePreferred(personNameId: ID!): PrimaryPersonNamePayload
 
     removePerson(personId: ID): Boolean
     removePersonAttribute(attributeId: ID!): RemoveRecordPayload!

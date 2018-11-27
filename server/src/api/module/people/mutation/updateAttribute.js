@@ -1,5 +1,4 @@
 import * as yup from 'yup';
-import { updateAttribute } from 'db';
 
 export default {
   // TODO: FIXME: validation

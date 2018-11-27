@@ -3,6 +3,9 @@ import schema from './schema';
 
 const resolvers = {
   Event: {
+    isPreferred({ is_preferred }) {
+      return is_preferred === true;
+    },
     place({ place_id }, params, context) {
       return place_id
         ? context.dataLoaders.event.placeLoader.load(place_id)

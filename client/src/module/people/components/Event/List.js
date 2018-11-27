@@ -5,8 +5,8 @@ import EventAdd from './Add';
 import EventDelete from './Delete';
 import EventEdit from './Edit';
 import NoPersonEvents from './NoPersonEvents';
+import EventPreferredToggle from './PreferredToggle';
 import eventTypes from './config';
-import PreferredRecord from '../PreferredRecord';
 import SourceCitationList from '../SourceCitationList';
 
 const eventsAllowingPrimary = Object.keys(eventTypes).filter(
@@ -55,9 +55,9 @@ export default ({ person, events }) => {
         <tbody>
           {events.map((event, index) => [
             <tr key={event.id} className={index % 2 === 1 ? 'alt' : ''}>
-              <Cell>
+              <Cell center middle>
                 {eventsAllowingPrimary.includes(event.type.toUpperCase()) && (
-                  <PreferredRecord isPreferred={event.isPreferred} />
+                  <EventPreferredToggle personEvent={event} />
                 )}
               </Cell>
               <Cell>{event.type}</Cell>
