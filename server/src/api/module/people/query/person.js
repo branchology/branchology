@@ -1,8 +1,3 @@
-import db from 'db/conn';
-import Person from 'db/Person';
-
-const person = new Person(db); // TODO: FIXME:
-
-export default function personQuery(root, { id }) {
-  return person.findById(id);
+export default function personQuery(root, { id }, context) {
+  return context.dbal.person.findById(id);
 }
