@@ -1,3 +1,4 @@
+import { isNil } from 'lodash';
 import * as yup from 'yup';
 import { validateGedcomDate } from './lib';
 
@@ -7,7 +8,7 @@ export default function validateEvent() {
     date: yup
       .string()
       .test('validate-date', 'Date is invalid', function(value) {
-        return validateGedcomDate(value);
+        return isNil(value) || validateGedcomDate(value);
       }),
     place: yup.string(),
     placeId: yup.string(),
