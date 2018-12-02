@@ -5,6 +5,7 @@ import { organizeMultipleResultsById, organizeResultsById } from 'lib';
 
 export default class EventLoader {
   constructor(db) {
+    // TODO: FIXME:
     const event = new Event(db);
     const place = new Place(db);
 

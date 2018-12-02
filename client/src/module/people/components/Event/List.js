@@ -57,7 +57,7 @@ export default ({ person, events }) => {
             <tr key={event.id} className={index % 2 === 1 ? 'alt' : ''}>
               <Cell center middle>
                 {eventsAllowingPrimary.includes(event.type.toUpperCase()) && (
-                  <EventPreferredToggle personEvent={event} />
+                  <EventPreferredToggle event={event} />
                 )}
               </Cell>
               <Cell>{event.type}</Cell>

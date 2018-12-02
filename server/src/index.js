@@ -11,6 +11,7 @@ import 'config';
 import db from 'db/conn';
 import Event from 'db/Event';
 import Person from 'db/Person';
+import Place from 'db/Place';
 import Source from 'db/Source';
 
 const { APP_PORT } = process.env;
@@ -28,6 +29,7 @@ class Context {
     this.dbal = {
       event: new Event(db),
       person: new Person(db),
+      place: new Place(db),
       source: new Source(db),
     };
   }

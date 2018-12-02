@@ -5,8 +5,8 @@ import PreferredRecord from '../PreferredRecord';
 import eventFull from '../../query/fragment/eventFull';
 
 const makePersonEventPreferredMutation = gql`
-  mutation makePersonEventPreferred($personEventId: ID!) {
-    makePersonEventPreferred(personEventId: $personEventId) {
+  mutation makePersonEventPreferred($eventId: ID!) {
+    makePersonEventPreferred(eventId: $eventId) {
       errors {
         field
         message
@@ -34,11 +34,11 @@ const MutationWrapper = Component => props => (
   </Mutation>
 );
 
-const EventPreferredToggle = ({ personEvent, makePersonEventPreferred }) => (
+const EventPreferredToggle = ({ event, makePersonEventPreferred }) => (
   <PreferredRecord
-    isPreferred={personEvent.isPreferred}
+    isPreferred={event.isPreferred}
     onClick={() =>
-      makePersonEventPreferred({ variables: { personEventId: personEvent.id } })
+      makePersonEventPreferred({ variables: { eventId: event.id } })
     }
   />
 );

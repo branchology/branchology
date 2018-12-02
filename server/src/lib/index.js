@@ -1,4 +1,5 @@
 import applyPaging from './applyPaging';
+import applySorting from './applySorting';
 import calculateDateStamp from './calculateDateStamp';
 import formatDbValues from './formatDbValues';
 import generateUuid from './generateUuid';
@@ -8,6 +9,7 @@ import returnFirst from './returnFirst';
 
 export {
   applyPaging,
+  applySorting,
   calculateDateStamp,
   formatDbValues,
   generateUuid,
