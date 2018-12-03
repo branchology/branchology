@@ -46,4 +46,11 @@ export default class Source {
       .where('id', id)
       .then(returnFirst);
   }
+
+  deleteCitation(id) {
+    return db(SOURCE_CITATION_TABLE)
+      .delete()
+      .where('id', id)
+      .then(() => true);
+  }
 }

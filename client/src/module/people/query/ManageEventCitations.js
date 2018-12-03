@@ -32,8 +32,8 @@ const updateEventCitation = gql`
 `;
 
 const removeEventCitation = gql`
-  mutation removeCitation($eventId: ID!, $citationId: ID!) {
-    removeEventCitation(id: $id, snoozedUntil: $snoozedUntil) {
+  mutation removeCitation($entityId: ID!, $citationId: ID!) {
+    removeCitation: removePersonEventCitation(eventId: $entityId, citationId: $citationId) {
       event {
         ${eventFull}
       }

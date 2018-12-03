@@ -158,7 +158,7 @@ export default `
     removePersonAttributeCitation(citationId: ID!): Boolean
     removePersonCitation(citationId: ID!): Boolean
     removePersonEvent(eventId: ID!): RemoveRecordPayload!
-    removePersonEventCitation(citationId: ID!): Boolean
+    removePersonEventCitation(eventId: ID!, citationId: ID!): EventPayload!
     removePersonName(personNameId: ID): RemoveRecordPayload!
     removePersonNameCitation(citationId: ID!): Boolean
 

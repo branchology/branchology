@@ -7,7 +7,6 @@ import { NotificationContext } from '../../common/notifications';
 import SourceAutocomplete from './SourceAutocomplete';
 
 function initialValues(record) {
-  console.log({ record });
   const { id, citation, page, source } = record;
 
   const initialValues = {
