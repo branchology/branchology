@@ -13,12 +13,13 @@ import {
   returnFirst,
 } from '../lib';
 import Place from './Place';
-import { createSourceCitation } from './source';
+import Source from './Source';
 
 export default class Event {
   constructor(db) {
     this.db = db;
     this.place = new Place(db);
+    this.source = new Source(db);
   }
 
   findCitationsByEventIds(ids) {
@@ -136,7 +137,7 @@ export default class Event {
 
     return Promise.all(
       sources.map(({ sourceId, ...data }) => {
-        return addEventSourceCitation(event.id, sourceId, data);
+        return this.addSourceCitation(event.id, sourceId, data);
       }),
     ).then(() => event);
   }
@@ -152,7 +153,7 @@ export default class Event {
   async addSourceCitation(eventId, sourceId, data) {
     const id = generateUuid();
 
-    const citation = await createSourceCitation(sourceId, data);
+    const citation = await this.source.createSourceCitation(sourceId, data);
 
     return this.db(EVENT_SOURCE_CITATION_TABLE)
       .insert(

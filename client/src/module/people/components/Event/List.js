@@ -7,7 +7,7 @@ import EventEdit from './Edit';
 import NoPersonEvents from './NoPersonEvents';
 import EventPreferredToggle from './PreferredToggle';
 import eventTypes from './config';
-import SourceCitationList from '../SourceCitationList';
+import CitationList from './CitationList';
 
 const eventsAllowingPrimary = Object.keys(eventTypes).filter(
   key => eventTypes[key].allowsPrimary,
@@ -80,7 +80,10 @@ export default ({ person, events }) => {
             >
               <Cell className="citations"> </Cell>
               <Cell colSpan="5" className="citations">
-                <SourceCitationList citations={event.sourceCitations} />
+                <CitationList
+                  citations={event.sourceCitations}
+                  entity={event}
+                />
               </Cell>
             </tr>,
           ])}
