@@ -49,6 +49,14 @@ export default class Person {
         .then(returnFirst);
   }
 
+  findAttributeById(id) {
+    return this.db
+      .select('*')
+      .from(PERSON_ATTRIBUTE_TABLE)
+      .where('id', id)
+      .then(returnFirst);
+  }
+
   findById(id) {
     return this.db
       .select('*')
@@ -203,12 +211,12 @@ export default class Person {
       .where('id', attributeId);
   }
 
-  async addPersonAttributeSourceCitation(attributeId, sourceId, data) {
+  async addAttributeSourceCitation(attributeId, sourceId, data) {
     const id = generateUuid();
 
-    const citation = await this.source.createCitation(sourceId, data);
+    const citation = await this.source.createSourceCitation(sourceId, data);
 
-    return this.db(PERSON_NAME_SOURCE_CITATION_TABLE)
+    return this.db(PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE)
       .insert(
         {
           id,

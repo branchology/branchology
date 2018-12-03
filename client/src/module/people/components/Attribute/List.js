@@ -3,10 +3,10 @@ import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeAdd from './Add';
+import CitationList from './CitationList';
 import AttributeDelete from './Delete';
 import AttributeEdit from './Edit';
 import NoAttributes from './NoAttributes';
-import SourceCitationList from '../SourceCitationList';
 
 export default ({ person, attributes }) => {
   const [editAttribute, toggleEdit] = useState();
@@ -70,7 +70,10 @@ export default ({ person, attributes }) => {
               key={`sources-${attribute.id}`}
             >
               <td colSpan="5" className="citations">
-                <SourceCitationList citations={attribute.sourceCitations} />
+                <CitationList
+                  citations={attribute.sourceCitations}
+                  entity={attribute}
+                />
               </td>
             </tr>,
           ])}

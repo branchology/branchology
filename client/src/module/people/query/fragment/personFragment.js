@@ -1,3 +1,4 @@
+import attributeFragment from './attribute';
 import citation from './citation';
 import eventBasics from './eventBasics';
 import eventFull from './eventFull';
@@ -33,9 +34,7 @@ export default `
     isPreferred
   }
   attributes {
-    ${eventFull}
-    data
-    isPreferred
+    ${attributeFragment}
   }
   names {
     ${nameBasics}
