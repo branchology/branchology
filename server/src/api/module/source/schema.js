@@ -19,6 +19,8 @@ export default `
   }
 
   input UpdateSourceCitationInput {
+    sourceId: ID
+    source: String
     citation: String
     page: String
   }
@@ -28,11 +30,20 @@ export default `
     paging: PagingInfo
   }
 
+  type CitationPayload {
+    errors: [ErrorDetails]
+    citation: SourceCitation
+  }
+
   extend type Query {
     sources(
       search: String
       sorting: [SortingInput]
       paging: PagingInput
     ): SourceCollection
+  }
+
+  extend type Mutation {
+    updateCitation(id: ID!, citation: UpdateSourceCitationInput!): CitationPayload
   }
 `;

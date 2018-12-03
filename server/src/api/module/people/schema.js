@@ -163,12 +163,8 @@ export default `
     removePersonNameCitation(citationId: ID!): Boolean
 
     updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
-    updateAttributeCitation(id: ID!, citation: UpdateSourceCitationInput!): AttributePayload
     updateEvent(id: ID!, event: UpdateEventInput!): EventPayload
-    updateEventCitation(id: ID!, citation: UpdateSourceCitationInput!): EventPayload
     updatePerson(id: ID!, sex: Sex!): PersonPayload
-    updatePersonCitation(id: ID!, citation: UpdateSourceCitationInput!): PersonPayload
     updatePersonName(id: ID!, name: UpdateNameInput!): NamePayload
-    updatePersonNameCitation(id: ID!, citation: UpdateSourceCitationInput!): NamePayload
   }
 `;
