@@ -35,7 +35,6 @@ class SourceCitationAdd extends PureComponent {
 
     return (
       <Form
-        debug
         validate={values => {
           const errors = {};
 
