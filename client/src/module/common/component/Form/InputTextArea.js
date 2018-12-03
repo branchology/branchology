@@ -3,7 +3,11 @@ import FieldError from './FieldError';
 import Input from './Input';
 import Label from './Label';
 
-const InputTextArea = ({ name, label, container: { errors, mergeState } }) => (
+const InputTextArea = ({
+  name,
+  label,
+  container: { errors, getValue, mergeState },
+}) => (
   <React.Fragment>
     <Label htmlFor={name}>{label}</Label>
     <Input
@@ -14,6 +18,7 @@ const InputTextArea = ({ name, label, container: { errors, mergeState } }) => (
       onChange={e => {
         mergeState({ [e.target.name]: e.target.value });
       }}
+      value={getValue(name)}
     />
     {name in errors && (
       <FieldError>
