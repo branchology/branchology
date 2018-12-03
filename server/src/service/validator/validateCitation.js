@@ -11,7 +11,7 @@ export default function validateCitation() {
         return true;
       }),
     sourceId: yup.string(),
-    page: yup.string(),
-    citation: yup.string(),
+    page: yup.string().nullable(),
+    citation: yup.string().nullable(),
   });
 }

@@ -4,6 +4,7 @@ import nl2br from 'lib/nl2br';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import SourceCitationAdd from './SourceCitationAdd';
+import SourceCitationEdit from './SourceCitationEdit';
 
 const ListContainer = styled.ol`
   font-size: 0.9em;
@@ -43,6 +44,7 @@ function useToggle(defaultValue = false) {
 export default ({ citations, entity, ...props }) => {
   const [expanded, setExpanded] = useState([]);
   const [addOpen, toggleAddOpen] = useToggle();
+  const [selectedForEdit, toggleEditOpen] = useState(null);
 
   const toggle = id =>
     expanded.includes(id)
@@ -56,6 +58,15 @@ export default ({ citations, entity, ...props }) => {
           entity={entity}
           onClose={toggleAddOpen}
           addCitation={props.addCitation}
+        />
+      )}
+
+      {selectedForEdit && (
+        <SourceCitationEdit
+          entity={entity}
+          citation={selectedForEdit}
+          onClose={() => toggleEditOpen(null)}
+          updateCitation={props.updateCitation}
         />
       )}
       <SimpleDataTable>
@@ -83,7 +94,12 @@ export default ({ citations, entity, ...props }) => {
                 {citation.citation ? (
                   <ToggleCitation onClick={() => toggle(citation.id)} />
                 ) : null}{' '}
-                <IconButton xs success icon="pencil" />
+                <IconButton
+                  xs
+                  success
+                  icon="pencil"
+                  onClick={() => toggleEditOpen(citation)}
+                />
                 <IconButton xs danger icon="times" />
               </Cell>
             </tr>

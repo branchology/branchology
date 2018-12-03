@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
+import citationFragment from './fragment/citation';
 import eventFull from './fragment/eventFull';
 
 const errors = `errors {
@@ -20,10 +21,10 @@ const addPersonEventCitationMutation = gql`
 `;
 
 const updateEventCitation = gql`
-  mutation updateCitation($citationId: ID!, $citation: UpdateSourceCitationInput!) {
-    updateEventCitation(citationId: $citationId, citation: $citation) {
-      event {
-        ${eventFull}
+  mutation updateCitation($id: ID!, $citation: UpdateSourceCitationInput!) {
+    updateCitation(id: $id, citation: $citation) {
+      citation {
+        ${citationFragment}
       }
       ${errors}
     }

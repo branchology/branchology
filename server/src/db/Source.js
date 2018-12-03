@@ -39,4 +39,11 @@ export default class Source {
       .insert({ id: citationId, source_id: sourceId, citation, page }, '*')
       .then(returnFirst);
   }
+
+  updateSourceCitation(id, data) {
+    return db(SOURCE_CITATION_TABLE)
+      .update({ ...data }, '*')
+      .where('id', id)
+      .then(returnFirst);
+  }
 }
