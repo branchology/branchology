@@ -1,8 +1,8 @@
 import attributeFragment from './attribute';
-import citation from './citation';
 import eventBasics from './eventBasics';
 import eventFull from './eventFull';
 import nameBasics from './nameBasics';
+import name from './name';
 
 export default `
   id
@@ -37,11 +37,7 @@ export default `
     ${attributeFragment}
   }
   names {
-    ${nameBasics}
-    isPreferred
-    sourceCitations {
-      ${citation}
-    }
+    ${name}
   }
   relationships {
     id

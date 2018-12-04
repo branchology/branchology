@@ -160,7 +160,7 @@ export default `
     removePersonEvent(eventId: ID!): RemoveRecordPayload!
     removePersonEventCitation(eventId: ID!, citationId: ID!): EventPayload!
     removePersonName(personNameId: ID): RemoveRecordPayload!
-    removePersonNameCitation(citationId: ID!): Boolean
+    removePersonNameCitation(nameId: ID!, citationId: ID!): NamePayload
 
     updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
     updateEvent(id: ID!, event: UpdateEventInput!): EventPayload

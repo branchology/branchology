@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import NameAdd from './Add';
+import CitationList from './CitationList';
 import NameDelete from './Delete';
 import NameEdit from './Edit';
 import NamePreferredToggle from './PreferredToggle';
-import NameCitationManagement from './CitationManagement';
 
 export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();
@@ -68,8 +68,8 @@ export default function NameList({ names, person }) {
               </Cell>
             </tr>,
             <tr key={`sources-${name.id}`}>
-              <Cell colSpan="3">
-                <NameCitationManagement citations={name.sourceCitations} />
+              <Cell colSpan="3" className="citations">
+                <CitationList citations={name.sourceCitations} entity={name} />
               </Cell>
             </tr>,
           ])}

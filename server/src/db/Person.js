@@ -65,6 +65,14 @@ export default class Person {
       .then(returnFirst);
   }
 
+  findNameById(id) {
+    return this.db
+      .select('*')
+      .from(PERSON_NAME_TABLE)
+      .where('id', id)
+      .then(returnFirst);
+  }
+
   findAll(filter, sorting) {
     // TODO: Sorting + filtering
     return this.db.select(['*']).from(PEOPLE_TABLE);
@@ -400,8 +408,7 @@ export default class Person {
   async addNameSourceCitation(personNameId, sourceId, data) {
     const id = generateUuid();
 
-    // TODO: FIXME:
-    const citation = await createSourceCitation(sourceId, data);
+    const citation = await this.source.createSourceCitation(sourceId, data);
 
     return this.db(PERSON_NAME_SOURCE_CITATION_TABLE)
       .insert(
