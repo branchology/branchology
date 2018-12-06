@@ -2,8 +2,8 @@ import React from 'react';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import NoRelationshipEvents from './NoRelationshipEvents';
-import PreferredRecord from './PreferredRecord';
-import SourceCitationList from './SourceCitationList';
+import PreferredRecord from '../PreferredRecord';
+import SourceCitationList from '../SourceCitationList';
 
 const eventsAllowingPrimary = [
   'birt',

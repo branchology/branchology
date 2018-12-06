@@ -1,15 +1,12 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import DataContainer from 'module/common/DataContainer';
-import { IconButton } from 'module/common/component/Button';
 import { TabContainer } from 'module/common/component/Tabs';
 import AttributeList from '../components/Attribute/List';
 import EventList from '../components/Event/List';
 import Heading from '../components/Heading';
 import NameList from '../components/Name/List';
-import NoRelationships from '../components/NoRelationships';
 import NoteList from '../components/NoteList';
-import RelationshipList from '../components/RelationshipList';
+import Relationships from '../components/Relationship';
 import fetchPerson from '../query/fetchPerson';
 
 export default class DetailsPage extends React.Component {
@@ -49,22 +46,7 @@ export default class DetailsPage extends React.Component {
                 ]}
               />
 
-              <DataContainer>
-                <div className="header">
-                  <h3 className="sectionTitle">Relationships</h3>
-                  <IconButton icon="plus-circle" success sm>
-                    Add Relationship
-                  </IconButton>
-                </div>
-                {data.person.relationships.length ? (
-                  <RelationshipList
-                    person={data.person}
-                    relationships={data.person.relationships}
-                  />
-                ) : (
-                  <NoRelationships />
-                )}
-              </DataContainer>
+              <Relationships person={data.person} />
             </div>
           );
         }}

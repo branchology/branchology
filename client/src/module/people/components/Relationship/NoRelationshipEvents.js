@@ -1,20 +1,20 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
 import { IconButton } from 'module/common/component/Button';
-import NoResults from './NoResults';
+import NoResults from '../NoResults';
 
-const icons = ['ring'];
+const eventIcons = ['calendar', 'ring'];
 
-const message = `There are currently no relationships for this person. 
+const message = `There are currently no events for this relationship. 
 Do you want to add the first one?`;
 
 export default () => (
   <NoResults
-    icon={pickRandom(icons)}
+    icon={pickRandom(eventIcons)}
     message={message}
     actions={
       <IconButton success icon="plus-circle" onClick={() => null}>
-        Add Relationship
+        Add Event
       </IconButton>
     }
   />
