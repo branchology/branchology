@@ -13,6 +13,7 @@ import Event from 'db/Event';
 import Person from 'db/Person';
 import Place from 'db/Place';
 import Source from 'db/Source';
+import Relationship from 'db/Relationship';
 
 const { APP_PORT } = process.env;
 
@@ -31,6 +32,7 @@ class Context {
       person: new Person(db),
       place: new Place(db),
       source: new Source(db),
+      relationship: new Relationship(db),
     };
   }
 }

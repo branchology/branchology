@@ -11,10 +11,6 @@ import Event from './Event';
 import Person from './Person';
 import { generateUuid, returnFirst } from '../lib';
 
-// TODO: FIXME:
-const person = new Person(db);
-const event = new Event(db);
-
 export function findRelationshipsByIds(ids) {
   return db(RELATIONSHIP_TABLE)
     .select('*')
@@ -57,43 +53,6 @@ export function findChildrenByRelationshipIds(ids) {
     .whereIn('relationship_id', ids);
 }
 
-export async function createRelationship(spouse1, spouse2, data = {}) {
-  const { marriageDate, marriagePlace, marriagePlaceId } = data;
-
-  const relationshipId = generateUuid();
-
-  const relationship = await db(RELATIONSHIP_TABLE)
-    .insert({ id: relationshipId }, '*')
-    .then(returnFirst);
-
-  if (marriageDate || marriagePlace || marriagePlaceId) {
-    const marriage = await event.createEvent('marr', {
-      date: marriageDate,
-      place: marriagePlace,
-      placeId: marriagePlaceId,
-    });
-    await attachRelationshipEvent(relationshipId, marriage.id);
-  }
-
-  if (spouse1) {
-    await person.attachPersonRelationship(spouse1, relationshipId);
-  }
-
-  if (spouse2) {
-    await person.attachPersonRelationship(spouse2, relationshipId);
-  }
-
-  return relationship;
-}
-
-export function attachRelationshipEvent(relationshipId, eventId) {
-  const id = generateUuid();
-
-  return db(RELATIONSHIP_EVENT_TABLE)
-    .insert({ id, relationship_id: relationshipId, event_id: eventId }, '*')
-    .then(returnFirst);
-}
-
 export function attachChild(relationshipId, personId, type = 'BIRTH') {
   return db(PARENTS_TABLE)
     .insert(
@@ -106,4 +65,49 @@ export function attachChild(relationshipId, personId, type = 'BIRTH') {
       '*',
     )
     .then(returnFirst);
+}
+
+export default class Relationship {
+  constructor(db) {
+    this.db = db;
+    this.event = new Event(db);
+    this.person = new Person(db);
+  }
+
+  async create(spouse1, spouse2, data = {}) {
+    const { marriageDate, marriagePlace, marriagePlaceId } = data;
+
+    const relationshipId = generateUuid();
+
+    const relationship = await this.db(RELATIONSHIP_TABLE)
+      .insert({ id: relationshipId }, '*')
+      .then(returnFirst);
+
+    if (marriageDate || marriagePlace || marriagePlaceId) {
+      const marriage = await this.event.createEvent('marr', {
+        date: marriageDate,
+        place: marriagePlace,
+        placeId: marriagePlaceId,
+      });
+      await this.attachEvent(relationshipId, marriage.id);
+    }
+
+    if (spouse1) {
+      await this.person.attachRelationship(spouse1, relationshipId);
+    }
+
+    if (spouse2) {
+      await this.person.attachRelationship(spouse2, relationshipId);
+    }
+
+    return relationship;
+  }
+
+  attachEvent(relationshipId, eventId) {
+    const id = generateUuid();
+
+    return this.db(RELATIONSHIP_EVENT_TABLE)
+      .insert({ id, relationship_id: relationshipId, event_id: eventId }, '*')
+      .then(returnFirst);
+  }
 }
