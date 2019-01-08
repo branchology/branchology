@@ -2,20 +2,22 @@ import { darken } from 'polished';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Icon from './Icon';
 import UiBlock from './UiBlock';
 
 const Heading = styled.div`
   align-items: center;
   color: #333;
   display: flex;
-  margin-bottom: 10px;
-  padding: 20px;
+  padding: 20px 0 10px 0;
 
   h1 {
     font-weight: 400;
     margin: 0;
     padding: 0;
+  }
+
+  .logo {
+    max-height: 60px;
   }
 
   .menu {
@@ -45,10 +47,7 @@ const Heading = styled.div`
 export default () => (
   <UiBlock>
     <Heading>
-      <h1>
-        <Icon icon={['fal', 'leaf']} flip="horizontal" color="#333" />{' '}
-        Branchology
-      </h1>
+      <img src="/branchology-logo.png" className="logo" />
 
       <div className="menu">
         <Link className="link" to="/">

@@ -19,7 +19,6 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     background-color: #efefef;
-    /* background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/christmas-colour.png'); */
     font-family: 'Roboto', serif;
   }
 
