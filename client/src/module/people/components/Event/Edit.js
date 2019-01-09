@@ -9,11 +9,10 @@ import {
 } from 'module/common/component/FormX';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
-import eventTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
 import EventUpdateMutation from '../../query/eventUpdateMutation';
 
-function transfigureEventTypes() {
+function transfigureEventTypes(eventTypes) {
   return Object.keys(eventTypes).map(type => ({
     value: type,
     ...eventTypes[type],
@@ -24,7 +23,7 @@ function mapPlace(place) {
   return { id: place.id, value: place.description };
 }
 
-function initialValues(event) {
+function initialValues(event, eventTypes) {
   const { id, type, date, place } = event;
 
   const initialValues = {
@@ -63,11 +62,11 @@ function prepareValuesForSubmit(data) {
   return prepared;
 }
 
-const EventEdit = ({ event: editEvent, onClose, updateEvent }) => (
+const EventEdit = ({ event: editEvent, eventTypes, onClose, updateEvent }) => (
   <NotificationContext.Consumer>
     {({ notify }) => (
       <Formik
-        initialValues={initialValues(editEvent)}
+        initialValues={initialValues(editEvent, eventTypes)}
         onSubmit={(values, { setSubmitting }) => {
           const submitValues = prepareValuesForSubmit(values);
 
@@ -115,7 +114,7 @@ const EventEdit = ({ event: editEvent, onClose, updateEvent }) => (
                     label="Type"
                     onChange={setFieldValue}
                     onBlur={setFieldTouched}
-                    options={transfigureEventTypes()}
+                    options={transfigureEventTypes(eventTypes)}
                   />
                 </FieldColumn>
 

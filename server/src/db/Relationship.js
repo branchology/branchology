@@ -84,7 +84,7 @@ export default class Relationship {
       .then(returnFirst);
 
     if (marriageDate || marriagePlace || marriagePlaceId) {
-      const marriage = await this.event.createEvent('marr', {
+      const marriage = await this.event.createEvent('MARR', {
         date: marriageDate,
         place: marriagePlace,
         placeId: marriagePlaceId,
@@ -109,5 +109,16 @@ export default class Relationship {
     return this.db(RELATIONSHIP_EVENT_TABLE)
       .insert({ id, relationship_id: relationshipId, event_id: eventId }, '*')
       .then(returnFirst);
+  }
+
+  removeEvent(eventId) {
+    return this.db(RELATIONSHIP_EVENT_TABLE)
+      .delete()
+      .where('event_id', eventId)
+      .then(() => {
+        return this.db(EVENT_TABLE)
+          .delete()
+          .where('id', eventId);
+      });
   }
 }

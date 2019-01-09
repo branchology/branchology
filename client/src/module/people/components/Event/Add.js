@@ -9,12 +9,9 @@ import {
 } from 'module/common/component/FormX';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
-import eventTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
-import EventCreateMutation from '../../query/eventCreateMutation';
-// import { validateEvent } from '../../../../../../shared/validator';
 
-function transfigureEventTypes() {
+function transfigureEventTypes(eventTypes) {
   return Object.keys(eventTypes).map(type => ({
     value: type,
     ...eventTypes[type],
@@ -23,7 +20,7 @@ function transfigureEventTypes() {
 
 function prepareValuesForSubmit(data) {
   const prepared = {
-    personId: data.personId,
+    id: data.id,
     event: {},
   };
 
@@ -44,9 +41,9 @@ function prepareValuesForSubmit(data) {
   return prepared;
 }
 
-const AddEvent = ({ addPersonEvent, onClose, person }) => {
+const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => {
   const initialValues = {
-    personId: person.id,
+    id: parent.id,
     type: null,
     date: '',
   };
@@ -59,16 +56,16 @@ const AddEvent = ({ addPersonEvent, onClose, person }) => {
           onSubmit={(values, { setSubmitting }) => {
             const submitValues = prepareValuesForSubmit(values);
 
-            return addPersonEvent({ variables: submitValues }).then(
+            return addEvent({ variables: submitValues }).then(
               ({
                 data: {
-                  addPersonEvent: { errors, event },
+                  addEvent: { errors, event },
                 },
               }) => {
                 setSubmitting(false);
                 if (!errors) {
                   onClose();
-                  notify('Person Event Added!');
+                  notify('Event Added!');
                 }
 
                 return event;
@@ -78,7 +75,7 @@ const AddEvent = ({ addPersonEvent, onClose, person }) => {
         >
           {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
             <Dialog
-              header={<StandardDialogHeader title="Add Person Event" />}
+              header={<StandardDialogHeader title="Add Event" />}
               onClose={onClose}
               footer={
                 <div>
@@ -104,7 +101,7 @@ const AddEvent = ({ addPersonEvent, onClose, person }) => {
                       label="Type"
                       onChange={setFieldValue}
                       onBlur={setFieldTouched}
-                      options={transfigureEventTypes()}
+                      options={transfigureEventTypes(eventTypes)}
                     />
                   </FieldColumn>
 
@@ -123,4 +120,4 @@ const AddEvent = ({ addPersonEvent, onClose, person }) => {
   );
 };
 
-export default EventCreateMutation(AddEvent);
+export default AddEvent;

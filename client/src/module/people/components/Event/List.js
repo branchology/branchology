@@ -6,14 +6,12 @@ import EventDelete from './Delete';
 import EventEdit from './Edit';
 import NoPersonEvents from './NoPersonEvents';
 import EventPreferredToggle from './PreferredToggle';
-import eventTypes from './config';
 import CitationList from './CitationList';
 
-const eventsAllowingPrimary = Object.keys(eventTypes).filter(
-  key => eventTypes[key].allowsPrimary,
-);
+const eventsAllowingPrimary = eventTypes =>
+  Object.keys(eventTypes).filter(key => eventTypes[key].allowsPrimary);
 
-export default ({ person, events }) => {
+export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
   const [editEvent, toggleEdit] = useState();
   const [activeDialog, toggleDialog] = useState();
 
@@ -23,14 +21,20 @@ export default ({ person, events }) => {
     <div>
       {editEvent && (
         <EventEdit
-          person={person}
+          parent={parent}
           event={editEvent}
+          eventTypes={eventTypes}
           onClose={() => toggleEdit(null)}
         />
       )}
 
       {activeDialog === 'EventAdd' && (
-        <EventAdd person={person} onClose={toggleDialog} />
+        <EventAdd
+          addEvent={addEvent}
+          parent={parent}
+          eventTypes={eventTypes}
+          onClose={toggleDialog}
+        />
       )}
 
       <SimpleDataTable>
@@ -56,9 +60,9 @@ export default ({ person, events }) => {
           {events.map((event, index) => [
             <tr key={event.id} className={index % 2 === 1 ? 'alt' : ''}>
               <Cell center middle>
-                {eventsAllowingPrimary.includes(event.type.toUpperCase()) && (
-                  <EventPreferredToggle event={event} />
-                )}
+                {eventsAllowingPrimary(eventTypes).includes(
+                  event.type.toUpperCase(),
+                ) && <EventPreferredToggle event={event} />}
               </Cell>
               <Cell>{event.type}</Cell>
               <Cell>{event.date}</Cell>
@@ -71,7 +75,11 @@ export default ({ person, events }) => {
                 >
                   Edit
                 </IconButton>
-                <EventDelete person={person} data={event} />
+                <EventDelete
+                  parent={parent}
+                  data={event}
+                  removeEvent={removeEvent}
+                />
               </Cell>
             </tr>,
             <tr

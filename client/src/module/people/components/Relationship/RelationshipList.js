@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import NoResults from 'component/NoResults';
 import { IconButton } from 'module/common/component/Button';
 import ChildrenList from './ChildrenList';
+import EventList from './EventList';
+import eventTypes from './eventTypes';
 import NoRelationshipEvents from './NoRelationshipEvents';
-import RelationshipEventList from './RelationshipEventList';
 
 export default ({ person, relationships }) => (
   <div>
@@ -25,13 +26,15 @@ export default ({ person, relationships }) => (
 
           <div className="header">
             <h5 className="sectionTitle padTop">Events</h5>
-            <IconButton icon="plus-circle" success sm>
-              Add Event
-            </IconButton>
           </div>
 
           {relationship.events.length ? (
-            <RelationshipEventList events={relationship.events} />
+            <EventList
+              person={person}
+              parent={relationship}
+              events={relationship.events}
+              eventTypes={eventTypes}
+            />
           ) : (
             <NoRelationshipEvents />
           )}

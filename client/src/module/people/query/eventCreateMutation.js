@@ -4,8 +4,8 @@ import eventFull from './fragment/eventFull';
 import personFragment from './fragment/personFragment';
 
 const eventCreateMutation = gql`
-  mutation addPersonEvent($personId: ID!, $event: CreateEventInput!) {
-    addPersonEvent(personId: $personId, event: $event) {
+  mutation addPersonEvent($id: ID!, $event: CreateEventInput!) {
+    addPersonEvent(personId: $id, event: $event) {
       errors {
         field
         message
@@ -21,7 +21,7 @@ const eventCreateMutation = gql`
 
 const connect = graphql(eventCreateMutation, {
   name: 'addPersonEvent',
-  options: function({ person: { id: personId } }) {
+  options: function({ parent: { id: personId } }) {
     return {
       update: function(cache, { data: { addPersonEvent } }) {
         if (!addPersonEvent.event) {

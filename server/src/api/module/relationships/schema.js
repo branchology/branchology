@@ -54,5 +54,13 @@ export default `
       death: EventInput,
       marriage: EventInput,
     ): RelationshipPayload
+
+    addRelationshipEvent(
+      relationshipId: ID!,
+      event: CreateEventInput!,
+      citations: [CreateSourceCitationInput]
+    ): EventPayload
+
+    removeRelationshipEvent(eventId: ID!): RemoveRecordPayload!
   }
 `;

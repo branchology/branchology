@@ -288,7 +288,7 @@ export default class Person {
     }
 
     if (birthDate || birthPlace || birthPlaceId) {
-      const birth = await this.event.createEvent('birt', {
+      const birth = await this.event.createEvent('BIRT', {
         date: birthDate,
         place: birthPlace,
         placeId: birthPlaceId,
@@ -297,7 +297,7 @@ export default class Person {
     }
 
     if (deathDate || deathPlace || deathPlaceId) {
-      const death = await this.event.createEvent('deat', {
+      const death = await this.event.createEvent('DEAT', {
         date: deathDate,
         place: deathPlace,
         placeId: deathPlaceId,

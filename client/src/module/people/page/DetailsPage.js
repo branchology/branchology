@@ -1,8 +1,9 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { TabContainer } from 'module/common/component/Tabs';
+import eventTypes from '../components/eventTypes';
 import AttributeList from '../components/Attribute/List';
-import EventList from '../components/Event/List';
+import EventList from '../components/EventList';
 import Heading from '../components/Heading';
 import NameList from '../components/Name/List';
 import NoteList from '../components/NoteList';
@@ -34,8 +35,10 @@ export default class DetailsPage extends React.Component {
                 ]}
                 contents={[
                   <EventList
+                    parent={data.person}
                     person={data.person}
                     events={data.person.events}
+                    eventTypes={eventTypes}
                   />,
                   <AttributeList
                     person={data.person}

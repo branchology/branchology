@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
 import Confirm from 'module/common/Confirm';
-import personEventDeleteMutation from '../../query/personEventDeleteMutation';
 
-const RemoveWithConfirm = ({ data, remove }) => {
+const RemoveWithConfirm = ({ data, removeEvent }) => {
   const [confirmOpen, toggle] = useState(false);
   const toggleConfirm = () => toggle(!confirmOpen);
 
@@ -14,7 +13,19 @@ const RemoveWithConfirm = ({ data, remove }) => {
           title="Warning"
           icon="exclamation-triangle"
           message="Are you sure you want to permanently remove this data?"
-          onConfirm={() => remove(data.id)}
+          onConfirm={() =>
+            removeEvent(data.id).then(
+              ({
+                data: {
+                  removeEvent: { removed },
+                },
+              }) => {
+                if (removed) {
+                  toggleConfirm();
+                }
+              },
+            )
+          }
           onCancel={toggleConfirm}
         />
       )}
@@ -23,4 +34,4 @@ const RemoveWithConfirm = ({ data, remove }) => {
   );
 };
 
-export default personEventDeleteMutation(RemoveWithConfirm);
+export default RemoveWithConfirm;
