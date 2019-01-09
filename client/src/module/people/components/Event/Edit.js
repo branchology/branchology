@@ -1,11 +1,16 @@
-import React, { PureComponent } from 'react';
-import { createApiValidationError, translateApiErrors } from 'lib';
+import { Form, Formik } from 'formik';
+import React from 'react';
 import { Button } from 'module/common/component/Button';
-import { Form, InputText, Select } from 'module/common/component/Form';
+import {
+  FieldColumn,
+  FieldRow,
+  InputText,
+  Select,
+} from 'module/common/component/FormX';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
 import eventTypes from './config';
-import PlaceAutocomplete from '../PlaceAutocomplete';
+import PlaceAutocomplete from '../PlaceAutocompleteX';
 import EventUpdateMutation from '../../query/eventUpdateMutation';
 
 function transfigureEventTypes() {
@@ -15,100 +20,121 @@ function transfigureEventTypes() {
   }));
 }
 
+function mapPlace(place) {
+  return { id: place.id, value: place.description };
+}
+
 function initialValues(event) {
   const { id, type, date, place } = event;
 
   const initialValues = {
     id,
-    type,
-    date,
-    place: null,
-    placeId: null,
-    __place__: null,
+    type: { value: type, ...eventTypes[type] },
+    date: date ? date : '',
   };
 
   if (place) {
-    initialValues.place = null;
-    initialValues.__place__ = place.description;
-    initialValues.placeId = place.id;
+    initialValues.place = mapPlace(place);
   }
 
   return initialValues;
 }
 
-class EventEdit extends PureComponent {
-  static contextType = NotificationContext;
-
-  submit = values => {
-    return this.props
-      .updateEvent({ variables: values })
-      .then(({ data: { updateEvent: { errors, event } } }) => {
-        if (errors) {
-          throw createApiValidationError(translateApiErrors(errors, 'event'));
-        }
-
-        this.props.onClose();
-        this.context.notify('Person Event Updated!');
-        return event;
-      });
+function prepareValuesForSubmit(data) {
+  const prepared = {
+    id: data.id,
+    event: { date: data.date },
   };
 
-  render() {
-    const { event, onClose } = this.props;
+  if (data.date) {
+    prepared.event.date = data.date;
+  }
 
-    return (
-      <Form
-        initialValues={initialValues(event)}
-        prepareValuesForSubmit={data => {
-          const prepared = {
-            id: event.id,
-            event: { type: data.type, date: data.date },
-          };
+  if (data.type) {
+    prepared.event.type = data.type.value;
+  }
 
-          if (data.placeId) {
-            prepared.event.placeId = data.placeId;
-          } else if (data.place) {
-            prepared.event.place = data.place;
-          }
+  if (data.place && data.place.id) {
+    prepared.event.placeId = data.place.id;
+  } else if (data.place && data.place.value) {
+    prepared.event.place = data.place.value;
+  }
 
-          return prepared;
+  return prepared;
+}
+
+const EventEdit = ({ event: editEvent, onClose, updateEvent }) => (
+  <NotificationContext.Consumer>
+    {({ notify }) => (
+      <Formik
+        initialValues={initialValues(editEvent)}
+        onSubmit={(values, { setSubmitting }) => {
+          const submitValues = prepareValuesForSubmit(values);
+
+          return updateEvent({ variables: submitValues }).then(
+            ({
+              data: {
+                updateEvent: { errors, event },
+              },
+            }) => {
+              setSubmitting(false);
+              if (!errors) {
+                onClose();
+                notify('Person Event Updated!');
+              }
+
+              return event;
+            },
+          );
         }}
-        validate={() => null}
-        onSubmit={this.submit}
-        render={({ container, submit }) => (
+      >
+        {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
           <Dialog
             header={<StandardDialogHeader title="Edit Person Event" />}
             footer={
               <div>
-                <Button type="button" onClick={onClose}>
-                  Cancel
+                <Button danger type="button" onClick={onClose}>
+                  Close
                 </Button>
-                <Button type="button" onClick={submit}>
+                <Button
+                  primary
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
                   Save
                 </Button>
               </div>
             }
           >
-            <Select
-              name="type"
-              label="Type:"
-              autoFocus
-              options={transfigureEventTypes()}
-              container={container}
-            />
-            <InputText name="date" label="Date: " container={container} />
-            <PlaceAutocomplete
-              name="place"
-              label="Place: "
-              autoFocus
-              container={container}
-              hardValues={event.place ? [event.place] : []}
-            />
+            <Form>
+              <FieldRow>
+                <FieldColumn flex={1}>
+                  <Select
+                    name="type"
+                    label="Type"
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    options={transfigureEventTypes()}
+                  />
+                </FieldColumn>
+
+                <FieldColumn flex={2}>
+                  <InputText name="date" label="Date" />
+                </FieldColumn>
+              </FieldRow>
+
+              <PlaceAutocomplete
+                name="place"
+                label="Place: "
+                hardValues={editEvent.place ? [mapPlace(editEvent.place)] : []}
+              />
+            </Form>
           </Dialog>
         )}
-      />
-    );
-  }
-}
+      </Formik>
+    )}
+  </NotificationContext.Consumer>
+);
 
 export default EventUpdateMutation(EventEdit);

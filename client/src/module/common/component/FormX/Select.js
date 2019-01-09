@@ -24,10 +24,10 @@ export class Select extends React.Component {
               <Label htmlFor={field.name}>{label}</Label>
               <ReactSelect
                 {...props}
+                {...field}
                 options={options}
                 onChange={this.handleChange}
                 onBlur={this.handleBlur}
-                value={this.props.value}
               />
             </>
           )}

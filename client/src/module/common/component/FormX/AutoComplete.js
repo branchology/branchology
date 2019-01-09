@@ -43,11 +43,11 @@ const AutoComplete = ({ name, label, onSearch, values, ...props }) => (
           <Label htmlFor={field.name}>{label}</Label>
           <InputWrapper>
             <ReactAutocomplete
-              getItemValue={item => item.label}
+              getItemValue={item => item.value}
               items={values}
               renderItem={(item, highlighted) => (
                 <Result highlighted={highlighted === true} key={item.id}>
-                  {item.label}
+                  {item.value}
                 </Result>
               )}
               {...props}

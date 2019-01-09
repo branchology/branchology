@@ -13,7 +13,7 @@ const searchPlace = gql`
     search: places(search: $search, sorting: $sorting, paging: $paging) {
       values: items {
         id
-        label: description
+        value: description
       }
     }
   }
