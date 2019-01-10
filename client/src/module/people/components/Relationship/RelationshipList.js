@@ -39,16 +39,11 @@ export default ({ person, relationships }) => (
             <NoRelationshipEvents />
           )}
 
-          <div className="header">
-            <h5 className="sectionTitle" style={{ lineHeight: '1.5em' }}>
-              Children
-            </h5>
-            <IconButton icon="plus-circle" success sm>
-              Add Child
-            </IconButton>
-          </div>
-
-          <ChildrenList children={relationship.children} />
+          <ChildrenList
+            person={person}
+            relationship={relationship}
+            children={relationship.children}
+          />
         </div>
       );
     })}

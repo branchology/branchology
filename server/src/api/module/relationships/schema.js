@@ -44,8 +44,21 @@ export default `
   }
 
   extend type Mutation {
-    createChild(relationshipId: ID!, name: NameInput!, birth: EventInput, death: EventInput, sex: Sex!): PersonPayload
-    createParents(personId: ID!, parents: [ParentInput]!, lineage: LineageType!): ParentsPayload
+    createChild(
+      relationshipId: ID!,
+      name: NameInput!,
+      lineage: LineageType = BIRTH,
+      birth: EventInput,
+      death: EventInput,
+      sex: Sex!
+    ): PersonPayload
+
+    createParents(
+      personId: ID!,
+      parents: [ParentInput]!,
+      lineage: LineageType!
+    ): ParentsPayload
+
     createSpouse(
       personId: ID!,
       sex: Sex!,

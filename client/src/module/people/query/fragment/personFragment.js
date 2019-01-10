@@ -52,6 +52,7 @@ export default `
     }
     children {
       id
+      type
       person {
         id
         birth {

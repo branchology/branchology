@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faLeaf } from '@fortawesome/pro-light-svg-icons';
 import {
+  faChild,
   faBat,
   faBible,
   faBirthdayCake,
@@ -42,6 +43,7 @@ library.add(
   faBookOpen,
   faCalendar,
   faCat,
+  faChild,
   faCircle,
   faCloudMoon,
   faGhost,

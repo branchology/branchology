@@ -53,20 +53,6 @@ export function findChildrenByRelationshipIds(ids) {
     .whereIn('relationship_id', ids);
 }
 
-export function attachChild(relationshipId, personId, type = 'BIRTH') {
-  return db(PARENTS_TABLE)
-    .insert(
-      {
-        id: generateUuid(),
-        relationship_id: relationshipId,
-        person_id: personId,
-        type,
-      },
-      '*',
-    )
-    .then(returnFirst);
-}
-
 export default class Relationship {
   constructor(db) {
     this.db = db;
@@ -120,5 +106,19 @@ export default class Relationship {
           .delete()
           .where('id', eventId);
       });
+  }
+
+  attachChild(relationshipId, personId, type = 'BIRTH') {
+    return this.db(PARENTS_TABLE)
+      .insert(
+        {
+          id: generateUuid(),
+          relationship_id: relationshipId,
+          person_id: personId,
+          type,
+        },
+        '*',
+      )
+      .then(returnFirst);
   }
 }
