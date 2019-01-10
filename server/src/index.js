@@ -14,6 +14,7 @@ import Person from 'db/Person';
 import Place from 'db/Place';
 import Source from 'db/Source';
 import Relationship from 'db/Relationship';
+import User from 'db/User';
 
 const { APP_PORT } = process.env;
 
@@ -26,14 +27,15 @@ const schemaWithMiddleware = applyMiddleware(schema, ValidationMiddleware);
 class Context {
   constructor(request) {
     this.request = request;
-    this.dataLoaders = new DataLoaders();
     this.dbal = {
       event: new Event(db),
       person: new Person(db),
       place: new Place(db),
       source: new Source(db),
       relationship: new Relationship(db),
+      user: new User(db),
     };
+    this.dataLoaders = new DataLoaders(this.dbal);
   }
 }
 

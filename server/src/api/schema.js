@@ -1,4 +1,5 @@
 export default `
+  scalar DateTime
   scalar JSON
 
   type ErrorDetails {
