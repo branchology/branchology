@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
+import WithUser from 'module/common/component/WithUser';
 import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
 import NoResults from 'component/NoResults';
 import AttributeAdd from './Add';
@@ -16,17 +17,19 @@ export default ({ person, attributes }) => {
     <NoAttributes />
   ) : (
     <div>
-      {editAttribute && (
-        <AttributeEdit
-          person={person}
-          attribute={editAttribute}
-          onClose={() => toggleEdit(null)}
-        />
-      )}
+      <WithUser>
+        {editAttribute && (
+          <AttributeEdit
+            person={person}
+            attribute={editAttribute}
+            onClose={() => toggleEdit(null)}
+          />
+        )}
 
-      {activeDialog === 'AttributeAdd' && (
-        <AttributeAdd person={person} onClose={toggleDialog} />
-      )}
+        {activeDialog === 'AttributeAdd' && (
+          <AttributeAdd person={person} onClose={toggleDialog} />
+        )}
+      </WithUser>
 
       <SimpleDataTable>
         <thead>
@@ -36,14 +39,16 @@ export default ({ person, attributes }) => {
             <Heading>Details</Heading>
             <Heading>Place</Heading>
             <Heading right>
-              <IconButton
-                icon="plus-circle"
-                success
-                sm
-                onClick={() => toggleDialog('AttributeAdd')}
-              >
-                Add Attribute
-              </IconButton>
+              <WithUser>
+                <IconButton
+                  icon="plus-circle"
+                  success
+                  sm
+                  onClick={() => toggleDialog('AttributeAdd')}
+                >
+                  Add Attribute
+                </IconButton>
+              </WithUser>
             </Heading>
           </tr>
         </thead>
@@ -55,14 +60,16 @@ export default ({ person, attributes }) => {
               <td>{attribute.data}</td>
               <td>{attribute.place && attribute.place.description}</td>
               <td className="actions">
-                <IconButton
-                  primary
-                  icon="pencil"
-                  onClick={() => toggleEdit(attribute)}
-                >
-                  Edit
-                </IconButton>
-                <AttributeDelete person={person} data={attribute} />
+                <WithUser>
+                  <IconButton
+                    primary
+                    icon="pencil"
+                    onClick={() => toggleEdit(attribute)}
+                  >
+                    Edit
+                  </IconButton>
+                  <AttributeDelete person={person} data={attribute} />
+                </WithUser>
               </td>
             </tr>,
             <tr

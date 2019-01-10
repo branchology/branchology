@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
 import { IconButton } from 'module/common/component/Button';
+import WithUser from 'module/common/component/WithUser';
 import Confirm from 'module/common/Confirm';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import SourceCitationAdd from './SourceCitationAdd';
@@ -58,66 +59,70 @@ export default ({ citations, entity, ...props }) => {
     <NotificationConsumer>
       {({ notify }) => (
         <ListContainer>
-          {addOpen && (
-            <SourceCitationAdd
-              entity={entity}
-              onClose={toggleAddOpen}
-              addCitation={props.addCitation}
-            />
-          )}
+          <WithUser>
+            {addOpen && (
+              <SourceCitationAdd
+                entity={entity}
+                onClose={toggleAddOpen}
+                addCitation={props.addCitation}
+              />
+            )}
 
-          {selectedForEdit && (
-            <SourceCitationEdit
-              entity={entity}
-              citation={selectedForEdit}
-              onClose={() => toggleEditOpen(null)}
-              updateCitation={props.updateCitation}
-            />
-          )}
+            {selectedForEdit && (
+              <SourceCitationEdit
+                entity={entity}
+                citation={selectedForEdit}
+                onClose={() => toggleEditOpen(null)}
+                updateCitation={props.updateCitation}
+              />
+            )}
 
-          {deleteOpen && (
-            <Confirm
-              title="Warning"
-              icon="exclamation-triangle"
-              message={`Are you sure you want to permanently remove this citation for "${
-                deleteOpen.source.title
-              }"?`}
-              onConfirm={() =>
-                props
-                  .removeCitation({
-                    variables: {
-                      entityId: entity.id,
-                      citationId: deleteOpen.id,
-                    },
-                  })
-                  .then(({ data: { removeCitation: { errors } } }) => {
-                    if (errors) {
-                      // TODO: FIXME: Let the user know...
-                      return false;
-                    }
+            {deleteOpen && (
+              <Confirm
+                title="Warning"
+                icon="exclamation-triangle"
+                message={`Are you sure you want to permanently remove this citation for "${
+                  deleteOpen.source.title
+                }"?`}
+                onConfirm={() =>
+                  props
+                    .removeCitation({
+                      variables: {
+                        entityId: entity.id,
+                        citationId: deleteOpen.id,
+                      },
+                    })
+                    .then(({ data: { removeCitation: { errors } } }) => {
+                      if (errors) {
+                        // TODO: FIXME: Let the user know...
+                        return false;
+                      }
 
-                    notify('Citation Removed Successfully.');
+                      notify('Citation Removed Successfully.');
 
-                    toggleDeleteOpen(null);
-                  })
-              }
-              onCancel={() => toggleDeleteOpen(null)}
-            />
-          )}
+                      toggleDeleteOpen(null);
+                    })
+                }
+                onCancel={() => toggleDeleteOpen(null)}
+              />
+            )}
+          </WithUser>
 
           <SimpleDataTable>
             <thead>
               <tr>
                 <Heading>Source</Heading>
                 <Heading>
-                  <IconButton
-                    sm
-                    success
-                    icon="plus-circle"
-                    onClick={toggleAddOpen}
-                  >
-                    Add
-                  </IconButton>
+                  <WithUser>
+                    <IconButton
+                      sm
+                      success
+                      icon="plus-circle"
+                      onClick={toggleAddOpen}
+                    >
+                      Add
+                    </IconButton>
+                  </WithUser>
                 </Heading>
               </tr>
             </thead>
@@ -137,18 +142,20 @@ export default ({ citations, entity, ...props }) => {
                     {citation.citation ? (
                       <ToggleCitation onClick={() => toggle(citation.id)} />
                     ) : null}{' '}
-                    <IconButton
-                      xs
-                      success
-                      icon="pencil"
-                      onClick={() => toggleEditOpen(citation)}
-                    />
-                    <IconButton
-                      xs
-                      danger
-                      icon="times"
-                      onClick={() => toggleDeleteOpen(citation)}
-                    />
+                    <WithUser>
+                      <IconButton
+                        xs
+                        success
+                        icon="pencil"
+                        onClick={() => toggleEditOpen(citation)}
+                      />
+                      <IconButton
+                        xs
+                        danger
+                        icon="times"
+                        onClick={() => toggleDeleteOpen(citation)}
+                      />
+                    </WithUser>
                   </Cell>
                 </tr>
               ))}

@@ -1,6 +1,7 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
 import { IconButton } from 'module/common/component/Button';
+import WithUser from 'module/common/component/WithUser';
 import NoResults from './NoResults';
 
 const noteIcons = ['book-open', 'sticky-note'];
@@ -11,9 +12,11 @@ export default () => (
     icon={pickRandom(noteIcons)}
     message={message}
     actions={
-      <IconButton success icon="plus-circle" onClick={() => null}>
-        Add Note
-      </IconButton>
+      <WithUser>
+        <IconButton success icon="plus-circle" onClick={() => null}>
+          Add Note
+        </IconButton>
+      </WithUser>
     }
   />
 );

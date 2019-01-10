@@ -17,6 +17,7 @@ const DialogContainer = styled.div`
   border-radius: 3px;
   margin: 10% auto 40px auto;
   max-width: 640px;
+  text-align: left;
 `;
 
 const DialogBody = styled.div`

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
+import WithUser from 'module/common/component/WithUser';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import NameAdd from './Add';
 import CitationList from './CitationList';
@@ -13,13 +14,15 @@ export default function NameList({ names, person }) {
 
   return (
     <div>
-      {editName && (
-        <NameEdit name={editName} onClose={() => toggleEdit(null)} />
-      )}
+      <WithUser>
+        {editName && (
+          <NameEdit name={editName} onClose={() => toggleEdit(null)} />
+        )}
 
-      {activeDialog === 'NameAdd' && (
-        <NameAdd name={{ personId: person.id }} onClose={toggleDialog} />
-      )}
+        {activeDialog === 'NameAdd' && (
+          <NameAdd name={{ personId: person.id }} onClose={toggleDialog} />
+        )}
+      </WithUser>
 
       <SimpleDataTable>
         <thead>
@@ -30,14 +33,17 @@ export default function NameList({ names, person }) {
             <Heading>Surname</Heading>
             <Heading>Suffix</Heading>
             <Heading right>
-              <IconButton
-                icon="plus-circle"
-                success
-                sm
-                onClick={() => toggleDialog('NameAdd')}
+              <WithUser>
+                <IconButton
+                  icon="plus-circle"
+                  success
+                  sm
+                  onClick={() => toggleDialog('NameAdd')}
+                >
+                  Add Name
+                </IconButton>
+              </WithUser>
               >
-                Add Name
-              </IconButton>
             </Heading>
           </tr>
         </thead>
@@ -52,19 +58,21 @@ export default function NameList({ names, person }) {
               <Cell>{name.surname}</Cell>
               <Cell>{name.suffix}</Cell>
               <Cell className="actions">
-                <IconButton
-                  primary
-                  icon="pencil"
-                  onClick={() => toggleEdit(name)}
-                />
-                <IconButton
-                  primary
-                  icon="book"
-                  onClick={() => toggleEdit(name)}
-                >
-                  0
-                </IconButton>
-                <NameDelete person={person} name={name} />
+                <WithUser>
+                  <IconButton
+                    primary
+                    icon="pencil"
+                    onClick={() => toggleEdit(name)}
+                  />
+                  <IconButton
+                    primary
+                    icon="book"
+                    onClick={() => toggleEdit(name)}
+                  >
+                    0
+                  </IconButton>
+                  <NameDelete person={person} name={name} />
+                </WithUser>
               </Cell>
             </tr>,
             <tr key={`sources-${name.id}`}>

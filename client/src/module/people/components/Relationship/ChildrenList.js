@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useToggle } from 'lib';
 import { IconButton } from 'module/common/component/Button';
+import WithUser from 'module/common/component/WithUser';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
 import AddChild from './AddChild';
 import NoChildren from './NoChildren';
@@ -15,18 +16,22 @@ export default ({ children, person, relationship }) => {
         <h5 className="sectionTitle" style={{ lineHeight: '1.5em' }}>
           Children
         </h5>
-        <IconButton icon="plus-circle" success sm onClick={toggleAdd}>
-          Add Child
-        </IconButton>
+        <WithUser>
+          <IconButton icon="plus-circle" success sm onClick={toggleAdd}>
+            Add Child
+          </IconButton>
+        </WithUser>
       </div>
 
-      {addOpen && (
-        <AddChild
-          person={person}
-          relationship={relationship}
-          onClose={toggleAdd}
-        />
-      )}
+      <WithUser>
+        {addOpen && (
+          <AddChild
+            person={person}
+            relationship={relationship}
+            onClose={toggleAdd}
+          />
+        )}
+      </WithUser>
 
       {children.length === 0 ? (
         <NoChildren onAction={toggleAdd} />

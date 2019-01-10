@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { IconButton } from 'module/common/component/Button';
 import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
+import WithUser from 'module/common/component/WithUser';
 import EventAdd from './Add';
 import EventDelete from './Delete';
 import EventEdit from './Edit';
@@ -19,23 +20,25 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
     <NoPersonEvents />
   ) : (
     <div>
-      {editEvent && (
-        <EventEdit
-          parent={parent}
-          event={editEvent}
-          eventTypes={eventTypes}
-          onClose={() => toggleEdit(null)}
-        />
-      )}
+      <WithUser>
+        {editEvent && (
+          <EventEdit
+            parent={parent}
+            event={editEvent}
+            eventTypes={eventTypes}
+            onClose={() => toggleEdit(null)}
+          />
+        )}
 
-      {activeDialog === 'EventAdd' && (
-        <EventAdd
-          addEvent={addEvent}
-          parent={parent}
-          eventTypes={eventTypes}
-          onClose={toggleDialog}
-        />
-      )}
+        {activeDialog === 'EventAdd' && (
+          <EventAdd
+            addEvent={addEvent}
+            parent={parent}
+            eventTypes={eventTypes}
+            onClose={toggleDialog}
+          />
+        )}
+      </WithUser>
 
       <SimpleDataTable>
         <thead>
@@ -45,14 +48,16 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
             <Heading>Date</Heading>
             <Heading>Place</Heading>
             <Heading right>
-              <IconButton
-                icon="plus-circle"
-                success
-                sm
-                onClick={() => toggleDialog('EventAdd')}
-              >
-                Add Event
-              </IconButton>
+              <WithUser>
+                <IconButton
+                  icon="plus-circle"
+                  success
+                  sm
+                  onClick={() => toggleDialog('EventAdd')}
+                >
+                  Add Event
+                </IconButton>
+              </WithUser>
             </Heading>
           </tr>
         </thead>
@@ -68,18 +73,20 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
               <Cell>{event.date}</Cell>
               <Cell>{event.place && event.place.description}</Cell>
               <Cell className="actions">
-                <IconButton
-                  primary
-                  icon="pencil"
-                  onClick={() => toggleEdit(event)}
-                >
-                  Edit
-                </IconButton>
-                <EventDelete
-                  parent={parent}
-                  data={event}
-                  removeEvent={removeEvent}
-                />
+                <WithUser>
+                  <IconButton
+                    primary
+                    icon="pencil"
+                    onClick={() => toggleEdit(event)}
+                  >
+                    Edit
+                  </IconButton>
+                  <EventDelete
+                    parent={parent}
+                    data={event}
+                    removeEvent={removeEvent}
+                  />
+                </WithUser>
               </Cell>
             </tr>,
             <tr

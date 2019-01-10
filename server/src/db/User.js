@@ -1,7 +1,6 @@
+import moment from 'moment';
 import randToken from 'rand-token';
 import makeUuid from 'uuid/v4';
-
-const TOKEN_LIFETIME = 60 * 60 * 8;
 
 class User {
   constructor(conn) {
@@ -16,9 +15,9 @@ class User {
           user_id: user.id,
           // TODO: Auth logic shouldn't be in dbal layer...
           token: randToken.generate(48),
-          expires: new Date(
-            new Date().getTime() + TOKEN_LIFETIME,
-          ).toISOString(),
+          expires: moment()
+            .add('8', 'hours')
+            .toISOString(),
         },
         '*',
       )

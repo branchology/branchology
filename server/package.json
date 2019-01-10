@@ -34,6 +34,7 @@
     "graphql-middleware": "^1.7.4",
     "graphql-type-json": "^0.2.1",
     "knex": "^0.15.2",
+    "moment": "^2.23.0",
     "pg": "^7.4.3",
     "rand-token": "^0.4.0",
     "require-dir": "^1.1.0",

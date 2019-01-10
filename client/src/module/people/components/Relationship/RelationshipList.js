@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NoResults from 'component/NoResults';
-import { IconButton } from 'module/common/component/Button';
 import ChildrenList from './ChildrenList';
 import EventList from './EventList';
 import eventTypes from './eventTypes';

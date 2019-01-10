@@ -1,6 +1,7 @@
 import { Field, ErrorMessage } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
+import FieldError from './FieldError';
 import { Label } from './Label';
 
 const StyledInput = styled.input`
@@ -28,13 +29,13 @@ export const InputText = ({ name, label, ...props }) => (
   <div>
     <Field
       name={name}
-      render={({ field }) => (
+      render={({ field, form: { errors } }) => (
         <>
           <Label htmlFor={field.name}>{label}</Label>
           <StyledInput id={field.name} {...field} type="text" {...props} />
         </>
       )}
     />
-    <ErrorMessage name={name} component="div" />
+    <ErrorMessage name={name} component={FieldError} />
   </div>
 );

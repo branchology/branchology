@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
-import AppLayout from 'layout/App';
+import App from 'module/common/App';
 import { indexRoute as DashboardRoute } from 'module/dashboard';
 import {
   detailsRoute as PeopleDetailsRoute,
@@ -11,7 +11,7 @@ import { indexRoute as SourcesIndexRoute } from 'module/sources';
 
 const Router = () => (
   <BrowserRouter>
-    <AppLayout>
+    <App>
       <Switch>
         {DashboardRoute()}
         {PeopleIndexRoute()}
@@ -19,7 +19,7 @@ const Router = () => (
         {PlacesIndexRoute()}
         {SourcesIndexRoute()}
       </Switch>
-    </AppLayout>
+    </App>
   </BrowserRouter>
 );
 
