@@ -21,15 +21,6 @@ import { NOTE_TABLE } from './note';
 import Place from './Place';
 import Source from './source';
 
-function createIdLoader(db, tableName, idColumn = 'id') {
-  return id =>
-    db
-      .select('*')
-      .from(tableName)
-      .where(idColumn, id)
-      .then(returnFirst);
-}
-
 export default class Person {
   constructor(db) {
     this.db = db;
@@ -73,9 +64,25 @@ export default class Person {
       .then(returnFirst);
   }
 
-  findAll(filter, sorting) {
+  findAll(filters, sorting) {
     // TODO: Sorting + filtering
-    return this.db.select(['*']).from(PEOPLE_TABLE);
+    const query = this.db.select(['p.*']).from(`${PEOPLE_TABLE} AS p`);
+
+    if (filters.nameContains) {
+      const subquery = this.db(PERSON_NAME_TABLE)
+        .distinct('person_id')
+        .where('given', '~', filters.nameContains);
+
+      query.join(
+        this.db.raw(`(${subquery.toString()}) AS n`),
+        'n.person_id',
+        'p.id',
+      );
+
+      delete filters.nameContains;
+    }
+
+    return query;
   }
 
   findByIds(ids) {
