@@ -4,6 +4,7 @@ import express from 'express';
 import { applyMiddleware } from 'graphql-middleware';
 import { resolvers, typeDefs } from 'api';
 import DataLoaders from 'api/DataLoaders';
+import ProtectedDirective from 'api/directives/ProtectedDirective';
 import ValidationMiddleware from 'api/middleware/ValidationMiddleware';
 import 'config';
 
@@ -21,7 +22,13 @@ const { APP_PORT } = process.env;
 const app = express();
 app.use(cors());
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+  schemaDirectives: {
+    protected: ProtectedDirective,
+  },
+});
 const schemaWithMiddleware = applyMiddleware(schema, ValidationMiddleware);
 
 class Context {
@@ -37,11 +44,24 @@ class Context {
     };
     this.dataLoaders = new DataLoaders(this.dbal);
   }
+
+  getUser = async () => {
+    if ('authorization' in this.request.headers) {
+      const token = await this.dbal.user.findTokenBy({
+        token: this.request.headers.authorization.split(' ', 2)[1],
+      });
+
+      if (token) {
+        // TODO: FIXME: Check token expiration
+        return this.dbal.user.findUserByIds([token.user_id]);
+      }
+    }
+  };
 }
 
 const server = new ApolloServer({
   schema: schemaWithMiddleware,
-  context: req => new Context(req),
+  context: ({ req }) => new Context(req),
 });
 
 server.applyMiddleware({ app });

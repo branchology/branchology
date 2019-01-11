@@ -141,30 +141,95 @@ export default `
   }
 
   extend type Mutation {
-    addPersonAttribute(personId: ID!, attribute: CreateAttributeInput!, citations: [CreateSourceCitationInput]): AttributePayload
-    addPersonAttributeCitation(attributeId: ID!, citation: CreateSourceCitationInput!): AttributePayload
-    addPersonCitation(personId: ID!, citation: CreateSourceCitationInput!): PersonPayload
-    addPersonEvent(personId: ID!, event: CreateEventInput!, citations: [CreateSourceCitationInput]): EventPayload
-    addPersonEventCitation(eventId: ID!, citation: CreateSourceCitationInput!): EventPayload
-    addPersonName(personId: ID!, name: CreateNameInput!, citations: [CreateSourceCitationInput]): NamePayload
-    addPersonNameCitation(nameId: ID!, citation: CreateSourceCitationInput!): NamePayload
-    createPerson(name: CreateNameInput!, birth: CreateEventInput, death: CreateEventInput, sex: Sex!): PersonPayload
+    addPersonAttribute(
+      personId: ID!,
+      attribute: CreateAttributeInput!,
+      citations: [CreateSourceCitationInput]
+    ): AttributePayload @protected
 
-    makePersonEventPreferred(eventId: ID!): PrimaryPersonEventPayload
-    makePersonNamePreferred(personNameId: ID!): PrimaryPersonNamePayload
+    addPersonAttributeCitation(
+      attributeId: ID!,
+      citation: CreateSourceCitationInput!
+    ): AttributePayload @protected
 
-    removePerson(personId: ID): Boolean
-    removePersonAttribute(attributeId: ID!): RemoveRecordPayload!
-    removePersonAttributeCitation(attributeId: ID!, citationId: ID!): AttributePayload!
-    removePersonCitation(citationId: ID!): Boolean
-    removePersonEvent(eventId: ID!): RemoveRecordPayload!
-    removePersonEventCitation(eventId: ID!, citationId: ID!): EventPayload!
-    removePersonName(personNameId: ID): RemoveRecordPayload!
-    removePersonNameCitation(nameId: ID!, citationId: ID!): NamePayload
+    addPersonCitation(
+      personId: ID!,
+      citation: CreateSourceCitationInput!
+    ): PersonPayload @protected
 
-    updateAttribute(id: ID!, attribute: UpdateAttributeInput!): AttributePayload
-    updateEvent(id: ID!, event: UpdateEventInput!): EventPayload
-    updatePerson(id: ID!, sex: Sex!): PersonPayload
-    updatePersonName(id: ID!, name: UpdateNameInput!): NamePayload
+    addPersonEvent(
+      personId: ID!,
+      event: CreateEventInput!,
+      citations: [CreateSourceCitationInput]
+    ): EventPayload @protected
+
+    addPersonEventCitation(
+      eventId: ID!,
+      citation: CreateSourceCitationInput!
+    ): EventPayload @protected
+
+    addPersonName(
+      personId: ID!,
+      name: CreateNameInput!,
+      citations: [CreateSourceCitationInput]
+    ): NamePayload @protected
+
+    addPersonNameCitation(
+      nameId: ID!,
+      citation: CreateSourceCitationInput!
+    ): NamePayload @protected
+
+    createPerson(
+      name: CreateNameInput!,
+      birth: CreateEventInput,
+      death: CreateEventInput,
+      sex: Sex!
+    ): PersonPayload @protected
+
+    makePersonEventPreferred(eventId: ID!): PrimaryPersonEventPayload @protected
+    makePersonNamePreferred(personNameId: ID!): PrimaryPersonNamePayload @protected
+
+    removePerson(personId: ID): Boolean @protected
+    removePersonAttribute(attributeId: ID!): RemoveRecordPayload! @protected
+
+    removePersonAttributeCitation(
+      attributeId: ID!,
+      citationId: ID!
+    ): AttributePayload! @protected
+
+    removePersonCitation(citationId: ID!): Boolean @protected
+    removePersonEvent(eventId: ID!): RemoveRecordPayload! @protected
+
+    removePersonEventCitation(
+      eventId: ID!,
+      citationId: ID!
+    ): EventPayload! @protected
+
+    removePersonName(personNameId: ID): RemoveRecordPayload! @protected
+
+    removePersonNameCitation(
+      nameId: ID!,
+      citationId: ID!
+    ): NamePayload @protected
+
+    updateAttribute(
+      id: ID!,
+      attribute: UpdateAttributeInput!
+    ): AttributePayload @protected
+
+    updateEvent(
+      id: ID!,
+      event: UpdateEventInput!
+    ): EventPayload @protected
+
+    updatePerson(
+      id: ID!, 
+      sex: Sex!
+    ): PersonPayload @protected
+
+    updatePersonName(
+      id: ID!,
+      name: UpdateNameInput!
+    ): NamePayload @protected
   }
 `;

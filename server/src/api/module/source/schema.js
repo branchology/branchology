@@ -44,6 +44,6 @@ export default `
   }
 
   extend type Mutation {
-    updateCitation(id: ID!, citation: UpdateSourceCitationInput!): CitationPayload
+    updateCitation(id: ID!, citation: UpdateSourceCitationInput!): CitationPayload @protected
   }
 `;

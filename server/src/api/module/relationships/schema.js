@@ -51,13 +51,13 @@ export default `
       birth: EventInput,
       death: EventInput,
       sex: Sex!
-    ): PersonPayload
+    ): PersonPayload @protected
 
     createParents(
       personId: ID!,
       parents: [ParentInput]!,
       lineage: LineageType!
-    ): ParentsPayload
+    ): ParentsPayload @protected
 
     createSpouse(
       personId: ID!,
@@ -66,14 +66,14 @@ export default `
       birth: EventInput,
       death: EventInput,
       marriage: EventInput,
-    ): RelationshipPayload
+    ): RelationshipPayload @protected
 
     addRelationshipEvent(
       relationshipId: ID!,
       event: CreateEventInput!,
       citations: [CreateSourceCitationInput]
-    ): EventPayload
+    ): EventPayload @protected
 
-    removeRelationshipEvent(eventId: ID!): RemoveRecordPayload!
+    removeRelationshipEvent(eventId: ID!): RemoveRecordPayload! @protected
   }
 `;

@@ -2,6 +2,8 @@ export default `
   scalar DateTime
   scalar JSON
 
+  directive @protected on FIELD_DEFINITION
+
   type ErrorDetails {
     field: String!
     message: String!
