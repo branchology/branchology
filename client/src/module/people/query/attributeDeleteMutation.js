@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-import personFragment from './fragment/personFragment';
+import { Mutation } from 'module/common';
+import fetchPerson from './fetchPerson';
 
 const attributeRemoveMutation = gql`
   mutation removePersonAttribute($attributeId: ID!) {
@@ -16,53 +16,22 @@ const attributeRemoveMutation = gql`
   }
 `;
 
-const DeleteWrapper = Component => props => {
-  function removeAttributeFromStorage(cache) {
-    const cachedPerson = cache.readFragment({
-      id: `Person:${props.person.id}`,
-      fragment: gql`
-        fragment personFragment on Person {
-          ${personFragment}
-        }
-      `,
-    });
+function rm(fn) {
+  return function(attributeId) {
+    return fn({ variables: { attributeId } });
+  };
+}
 
-    if (cachedPerson) {
-      const { attributes, ...other } = cachedPerson;
-      const newPerson = {
-        ...other,
-        attributes: attributes.filter(n => n.id !== props.data.id),
-      };
-
-      cache.writeFragment({
-        id: `Person:${props.person.id}`,
-        fragment: gql`
-          fragment personFragment on Person {
-            ${personFragment}
-          }
-        `,
-        data: newPerson,
-      });
-    }
-  }
-
+export default WrappedComponent => props => {
+  const refetchQueries = [
+    { query: fetchPerson, variables: { id: props.person.id } },
+  ];
   return (
     <Mutation
       mutation={attributeRemoveMutation}
-      update={removeAttributeFromStorage}
+      refetchQueries={refetchQueries}
     >
-      {remove => (
-        <Component
-          remove={attributeId => {
-            return remove({
-              variables: { attributeId },
-            });
-          }}
-          {...props}
-        />
-      )}
+      {remove => <WrappedComponent remove={rm(remove)} {...props} />}
     </Mutation>
   );
 };
-
-export default DeleteWrapper;

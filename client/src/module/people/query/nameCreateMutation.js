@@ -1,6 +1,7 @@
+import React from 'react';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import personFragment from './fragment/personFragment';
+import { Mutation } from 'module/common';
+import fetchPerson from './fetchPerson';
 
 const nameCreateMutation = gql`
   mutation addPersonName($personId: ID!, $name: CreateNameInput!) {
@@ -12,65 +13,21 @@ const nameCreateMutation = gql`
       }
       name {
         id
-        given
-        surname
-        isPreferred
-        sourceCitations {
-          id
-          citation
-          page
-          source {
-            id
-            title
-          }
-        }
       }
     }
   }
 `;
 
-const connect = graphql(nameCreateMutation, {
-  name: 'addPersonName',
-  options: function({ name: { personId } }) {
-    return {
-      update: function(cache, { data: { addPersonName } }) {
-        if (!addPersonName.name) {
-          return;
-        }
+export default WrappedComponent => props => {
+  const refetchQueries = [
+    { query: fetchPerson, variables: { id: props.person.id } },
+  ];
 
-        const cachedPerson = cache.readFragment({
-          id: `Person:${personId}`,
-          fragment: gql`
-            fragment personFragment on Person {
-              ${personFragment}
-            }
-          `,
-        });
-
-        if (cachedPerson) {
-          const { names, ...other } = cachedPerson;
-
-          const newPerson = {
-            ...other,
-            names: [...names],
-          };
-          newPerson.names.push(addPersonName.name);
-
-          cache.writeFragment({
-            id: `Person:${personId}`,
-            fragment: gql`
-              fragment personFragment on Person {
-                ${personFragment}
-              }
-            `,
-            data: newPerson,
-          });
-        }
-      },
-    };
-  },
-});
-
-export default function Wrapper(Component) {
-  return connect(Component);
-}
+  return (
+    <Mutation mutation={nameCreateMutation} refetchQueries={refetchQueries}>
+      {addPersonName => (
+        <WrappedComponent addPersonName={addPersonName} {...props} />
+      )}
+    </Mutation>
+  );
+};

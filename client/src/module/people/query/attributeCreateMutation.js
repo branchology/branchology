@@ -1,7 +1,8 @@
+import React from 'react';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { Mutation } from 'module/common';
+import fetchPerson from './fetchPerson';
 import eventFull from './fragment/eventFull';
-import personFragment from './fragment/personFragment';
 
 const attributeCreateMutation = gql`
   mutation addPersonAttribute($personId: ID!, $attribute: CreateAttributeInput!) {
@@ -20,48 +21,19 @@ const attributeCreateMutation = gql`
   }
 `;
 
-const connect = graphql(attributeCreateMutation, {
-  name: 'addPersonAttribute',
-  options: function({ person: { id: personId } }) {
-    return {
-      update: function(cache, { data: { addPersonAttribute } }) {
-        if (!addPersonAttribute.attribute) {
-          return;
-        }
+export default WrappedComponent => props => {
+  const refetchQueries = [
+    { query: fetchPerson, variables: { id: props.person.id } },
+  ];
 
-        const cachedPerson = cache.readFragment({
-          id: `Person:${personId}`,
-          fragment: gql`
-            fragment personFragment on Person {
-              ${personFragment}
-            }
-          `,
-        });
-
-        if (cachedPerson) {
-          const { attributes, ...other } = cachedPerson;
-
-          const newPerson = {
-            ...other,
-            attributes: [...attributes],
-          };
-          newPerson.attributes.push(addPersonAttribute.attribute);
-
-          cache.writeFragment({
-            id: `Person:${personId}`,
-            fragment: gql`
-              fragment personFragment on Person {
-                ${personFragment}
-              }
-            `,
-            data: newPerson,
-          });
-        }
-      },
-    };
-  },
-});
-
-export default function Wrapper(Component) {
-  return connect(Component);
-}
+  return (
+    <Mutation
+      mutation={attributeCreateMutation}
+      refetchQueries={refetchQueries}
+    >
+      {addPersonAttribute => (
+        <WrappedComponent addPersonAttribute={addPersonAttribute} {...props} />
+      )}
+    </Mutation>
+  );
+};

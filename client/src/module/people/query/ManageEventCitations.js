@@ -1,5 +1,6 @@
+import React from 'react';
 import gql from 'graphql-tag';
-import { compose, graphql } from 'react-apollo';
+import { Mutation } from 'module/common';
 import citationFragment from './fragment/citation';
 import eventFull from './fragment/eventFull';
 
@@ -20,6 +21,12 @@ const addPersonEventCitationMutation = gql`
   }
 `;
 
+const AddCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={addPersonEventCitationMutation}>
+    {addCitation => <WrappedComponent addCitation={addCitation} {...props} />}
+  </Mutation>
+);
+
 const updateEventCitation = gql`
   mutation updateCitation($id: ID!, $citation: UpdateSourceCitationInput!) {
     updateCitation(id: $id, citation: $citation) {
@@ -30,6 +37,14 @@ const updateEventCitation = gql`
     }
   }
 `;
+
+const UpdateCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={updateEventCitation}>
+    {updateCitation => (
+      <WrappedComponent updateCitation={updateCitation} {...props} />
+    )}
+  </Mutation>
+);
 
 const removeEventCitation = gql`
   mutation removeCitation($entityId: ID!, $citationId: ID!) {
@@ -42,16 +57,16 @@ const removeEventCitation = gql`
   }
 `;
 
-const ManageEventCitations = compose(
-  graphql(addPersonEventCitationMutation, {
-    name: 'addCitation',
-  }),
-  graphql(updateEventCitation, {
-    name: 'updateCitation',
-  }),
-  graphql(removeEventCitation, {
-    name: 'removeCitation',
-  }),
+const RemoveCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={removeEventCitation}>
+    {removeCitation => (
+      <WrappedComponent removeCitation={removeCitation} {...props} />
+    )}
+  </Mutation>
 );
 
-export default ManageEventCitations;
+// insanity
+export default WrappedComponent =>
+  AddCitationWrapper(
+    UpdateCitationWrapper(RemoveCitationWrapper(WrappedComponent)),
+  );

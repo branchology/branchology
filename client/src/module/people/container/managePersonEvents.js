@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { Mutation } from 'module/common';
 import fetchPerson from '../query/fetchPerson';
 import eventFull from '../query/fragment/eventFull';
 

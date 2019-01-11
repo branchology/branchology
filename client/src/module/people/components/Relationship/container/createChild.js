@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import React from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation } from 'module/common';
 import fetchPerson from '../../../query/fetchPerson';
 
 const createChildMutation = gql`

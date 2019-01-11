@@ -1,5 +1,6 @@
+import React from 'react';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { Mutation } from 'module/common';
 import eventFull from './fragment/eventFull';
 
 const eventUpdateMutation = gql`
@@ -18,10 +19,8 @@ const eventUpdateMutation = gql`
   }
 `;
 
-const connect = graphql(eventUpdateMutation, {
-  name: 'updateEvent',
-});
-
-export default function Wrapper(Component) {
-  return connect(Component);
-}
+export default WrappedComponent => props => (
+  <Mutation mutation={eventUpdateMutation}>
+    {updateEvent => <WrappedComponent updateEvent={updateEvent} {...props} />}
+  </Mutation>
+);

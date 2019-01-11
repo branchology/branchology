@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
-import { graphql } from 'react-apollo';
 import { createApiValidationError, translateApiErrors } from 'lib';
 import { Button } from 'module/common/component/Button';
 import { Form, InputText } from 'module/common/component/Form';
 import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
-import nameUpdateMutation from '../../query/nameUpdateMutation';
+import updatePersonNameWrapper from '../../query/nameUpdateMutation';
 
 function initialValues(initialValue) {
   const { id, given, surname } = initialValue;
@@ -36,11 +35,6 @@ class NameEdit extends PureComponent {
       <Form
         onSubmit={this.submit}
         initialValues={initialValues(name)}
-        validate={values => {
-          const errors = {};
-          // TODO: FIXME:
-          return errors;
-        }}
         prepareValuesForSubmit={({ given, surname }) => {
           return {
             id: this.props.name.id,
@@ -75,8 +69,4 @@ class NameEdit extends PureComponent {
   }
 }
 
-const withGraphql = graphql(nameUpdateMutation, {
-  name: 'updatePersonName',
-});
-
-export default withGraphql(NameEdit);
+export default updatePersonNameWrapper(NameEdit);

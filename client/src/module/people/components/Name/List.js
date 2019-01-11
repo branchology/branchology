@@ -20,7 +20,11 @@ export default function NameList({ names, person }) {
         )}
 
         {activeDialog === 'NameAdd' && (
-          <NameAdd name={{ personId: person.id }} onClose={toggleDialog} />
+          <NameAdd
+            person={person}
+            name={{ personId: person.id }}
+            onClose={toggleDialog}
+          />
         )}
       </WithUser>
 
@@ -43,7 +47,6 @@ export default function NameList({ names, person }) {
                   Add Name
                 </IconButton>
               </WithUser>
-              >
             </Heading>
           </tr>
         </thead>

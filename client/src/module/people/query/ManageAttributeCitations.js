@@ -1,5 +1,6 @@
+import React from 'react';
 import gql from 'graphql-tag';
-import { compose, graphql } from 'react-apollo';
+import { Mutation } from 'module/common';
 import citationFragment from './fragment/citation';
 import attributeFragment from './fragment/attribute';
 
@@ -20,7 +21,13 @@ const addPersonAttributeCitationMutation = gql`
   }
 `;
 
-const updateCitation = gql`
+const AddCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={addPersonAttributeCitationMutation}>
+    {addCitation => <WrappedComponent addCitation={addCitation} {...props} />}
+  </Mutation>
+);
+
+const updateCitationMutation = gql`
   mutation updateCitation($id: ID!, $citation: UpdateSourceCitationInput!) {
     updateCitation(id: $id, citation: $citation) {
       citation {
@@ -31,7 +38,15 @@ const updateCitation = gql`
   }
 `;
 
-const removeAttributeCitation = gql`
+const UpdateCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={updateCitationMutation}>
+    {updateCitation => (
+      <WrappedComponent updateCitation={updateCitation} {...props} />
+    )}
+  </Mutation>
+);
+
+const removeAttributeCitationMutation = gql`
   mutation removeCitation($entityId: ID!, $citationId: ID!) {
     removeCitation: removePersonAttributeCitation(attributeId: $entityId, citationId: $citationId) {
       attribute {
@@ -42,16 +57,16 @@ const removeAttributeCitation = gql`
   }
 `;
 
-const ManageAttributeCitations = compose(
-  graphql(addPersonAttributeCitationMutation, {
-    name: 'addCitation',
-  }),
-  graphql(updateCitation, {
-    name: 'updateCitation',
-  }),
-  graphql(removeAttributeCitation, {
-    name: 'removeCitation',
-  }),
+const RemoveCitationWrapper = WrappedComponent => props => (
+  <Mutation mutation={removeAttributeCitationMutation}>
+    {removeCitation => (
+      <WrappedComponent removeCitation={removeCitation} {...props} />
+    )}
+  </Mutation>
 );
 
-export default ManageAttributeCitations;
+// insanity
+export default WrappedComponent =>
+  AddCitationWrapper(
+    UpdateCitationWrapper(RemoveCitationWrapper(WrappedComponent)),
+  );

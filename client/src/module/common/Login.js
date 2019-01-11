@@ -60,7 +60,7 @@ const Login = ({ createToken }) => {
                   }
                 >
                   <Form>
-                    <InputText name="email" label="Email Address" />
+                    <InputText name="email" label="Email Address" autoFocus />
                     <InputText
                       name="password"
                       type="password"
