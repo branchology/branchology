@@ -1,3 +1,4 @@
+import { generateUuid } from 'lib';
 import Mutation from './mutation';
 import Query from './query';
 import schema from './schema';
@@ -31,14 +32,22 @@ const resolvers = {
     },
   },
   Person: {
-    attributes({ id }, params, context) {
-      return context.dataLoaders.event.attributesById.load(id);
+    attributes({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.event.attributesById.load(id),
+        [],
+      );
     },
-    birth({ id }, params, context) {
-      return context.dataLoaders.people.personPreferredEventLoader.load([
-        id,
-        'birt',
-      ]);
+    birth({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personPreferredEventLoader.load([
+          id,
+          'birt',
+        ]),
+        null,
+      );
     },
     death({ id }, params, context) {
       return context.dataLoaders.people.personPreferredEventLoader.load([
@@ -46,17 +55,34 @@ const resolvers = {
         'deat',
       ]);
     },
-    events({ id }, params, context) {
-      return context.dataLoaders.people.personEventLoader.load(id);
+    events({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personEventLoader.load(id),
+        [],
+      );
     },
-    name({ id }, params, context) {
-      return context.dataLoaders.people.personPreferredNameLoader.load(id);
+    name(person, params, context) {
+      const { id, maxPublicDate } = person;
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personPreferredNameLoader.load(id),
+        { id: generateUuid(), given: 'Living', surname: 'Person' },
+      );
     },
-    names({ id }, params, context) {
-      return context.dataLoaders.people.personNameLoader.load(id);
+    names({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personNameLoader.load(id),
+        [{ id: generateUuid(), given: 'Living', surname: 'Person' }],
+      );
     },
-    notes({ id }, params, context) {
-      return context.dataLoaders.people.personNoteLoader.load(id);
+    notes({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personNoteLoader.load(id),
+        [],
+      );
     },
     parents({ id }, params, context) {
       return context.dataLoaders.people.personParentsLoader.load(id);
@@ -64,8 +90,12 @@ const resolvers = {
     relationships({ id }, params, context) {
       return context.dataLoaders.people.personRelationshipLoader.load(id);
     },
-    sourceCitations({ id }, params, context) {
-      return context.dataLoaders.people.personCitationLoader.load(id);
+    sourceCitations({ id, maxPublicDate }, params, context) {
+      return context.conceal(
+        maxPublicDate,
+        context.dataLoaders.people.personCitationLoader.load(id),
+        [],
+      );
     },
   },
 };

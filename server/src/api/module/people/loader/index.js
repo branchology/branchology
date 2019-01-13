@@ -1,6 +1,10 @@
 import DataLoader from 'dataloader';
 import { findPersonParentsByIds } from 'db';
-import { organizeMultipleResultsById, organizeResultsById } from 'lib';
+import {
+  dbToGraphQL,
+  organizeMultipleResultsById,
+  organizeResultsById,
+} from 'lib';
 
 export default class PeopleLoader {
   constructor(dbal) {
@@ -49,6 +53,7 @@ export default class PeopleLoader {
     this.personLoader = new DataLoader(ids =>
       dbal.person
         .findByIds(ids)
+        .then(dbToGraphQL)
         .then(people => organizeResultsById(people, ids)),
     );
     this.personNameCitationLoader = new DataLoader(ids =>

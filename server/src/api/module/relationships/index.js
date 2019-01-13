@@ -4,8 +4,8 @@ import schema from './schema';
 const resolvers = {
   Mutation,
   Child: {
-    person({ person_id }, params, context) {
-      return context.dataLoaders.people.personLoader.load(person_id);
+    person({ personId }, params, context) {
+      return context.dataLoaders.people.personLoader.load(personId);
     },
   },
   Parents: {
@@ -19,8 +19,20 @@ const resolvers = {
     children({ id }, params, context) {
       return context.dataLoaders.relationships.childrenLoader.load(id);
     },
-    events({ id }, params, context) {
-      return context.dataLoaders.relationships.relationshipEventLoader.load(id);
+    async events({ id }, params, context) {
+      const people = await context.dataLoaders.relationships.relationshipPeopleLoader.load(
+        id,
+      );
+
+      const publicDates = people.map(({ maxPublicDate }) => maxPublicDate);
+
+      return context.conceal(
+        publicDates,
+        context.dataLoaders.relationships.relationshipEventLoader.load(id),
+        [],
+      );
+
+      // return context.dataLoaders.relationships.relationshipEventLoader.load(id);
     },
     marriage({ id }, params, context) {
       return context.dataLoaders.relationships.relationshipPreferredEventLoader.load(

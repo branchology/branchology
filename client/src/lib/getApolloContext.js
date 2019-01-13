@@ -4,7 +4,7 @@ export function getApolloContext() {
   if (appContext) {
     const context = JSON.parse(appContext);
 
-    if (context.token.token) {
+    if (context.token && context.token.token) {
       return { headers: { Authorization: `Bearer ${context.token.token}` } };
     }
   }

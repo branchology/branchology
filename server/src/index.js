@@ -31,6 +31,16 @@ const schema = makeExecutableSchema({
 });
 const schemaWithMiddleware = applyMiddleware(schema, ValidationMiddleware);
 
+function isPublic(dates) {
+  const now = new Date();
+
+  return dates
+    .map(date => {
+      return date && new Date(date) <= now;
+    })
+    .reduce((reduced, date) => reduced && date, true);
+}
+
 class Context {
   constructor(request) {
     this.request = request;
@@ -56,6 +66,18 @@ class Context {
         return this.dbal.user.findUserByIds([token.user_id]);
       }
     }
+  };
+
+  conceal = async (publicDates, allow, deny) => {
+    const user = await this.getUser();
+
+    if (user) {
+      return allow;
+    }
+
+    return isPublic(Array.isArray(publicDates) ? publicDates : [publicDates])
+      ? allow
+      : deny;
   };
 }
 

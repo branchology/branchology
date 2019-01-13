@@ -6,14 +6,20 @@ import {
   findRelationshipPersons,
   findRelationshipPrimaryEventsByRelationshipIdAndType,
 } from 'db';
-import { organizeMultipleResultsById, organizeResultsById } from 'lib';
+import {
+  dbToGraphQL,
+  organizeMultipleResultsById,
+  organizeResultsById,
+} from 'lib';
 
 export default class RelationshipLoader {
   constructor(db) {
     this.childrenLoader = new DataLoader(ids =>
-      findChildrenByRelationshipIds(ids).then(children =>
-        organizeMultipleResultsById(children, ids, 'relationship_id'),
-      ),
+      findChildrenByRelationshipIds(ids)
+        .then(dbToGraphQL)
+        .then(children =>
+          organizeMultipleResultsById(children, ids, 'relationshipId'),
+        ),
     );
 
     this.relationshipEventLoader = new DataLoader(ids =>
@@ -29,9 +35,11 @@ export default class RelationshipLoader {
     );
 
     this.relationshipPeopleLoader = new DataLoader(ids =>
-      findRelationshipPersons(ids).then(events =>
-        organizeMultipleResultsById(events, ids, 'relationship_id'),
-      ),
+      findRelationshipPersons(ids)
+        .then(dbToGraphQL)
+        .then(events =>
+          organizeMultipleResultsById(events, ids, 'relationshipId'),
+        ),
     );
 
     this.relationshipPreferredEventLoader = new DataLoader(pairs =>

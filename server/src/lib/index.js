@@ -7,6 +7,8 @@ import organizeMultipleResultsById from './organizeMultipleResultsById';
 import organizeResultsById from './organizeResultsById';
 import returnFirst from './returnFirst';
 
+export * from './dbToGraphQL';
+
 export {
   applyPaging,
   applySorting,
