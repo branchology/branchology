@@ -61,8 +61,7 @@ class Context {
         token: this.request.headers.authorization.split(' ', 2)[1],
       });
 
-      if (token) {
-        // TODO: FIXME: Check token expiration
+      if (token && new Date(token.expires) > new Date()) {
         return this.dbal.user.findUserByIds([token.user_id]);
       }
     }
