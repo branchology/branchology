@@ -4,10 +4,11 @@ import { createHttpLink } from 'apollo-link-http';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createNetworkStatusNotifier } from 'react-apollo-network-status';
+import LoadingGraphic from 'module/common/LoadingGraphic';
+import config from './config';
 import { render } from 'react-dom';
 import Router from './Router';
 import registerServiceWorker from './registerServiceWorker';
-import LoadingGraphic from 'module/common/LoadingGraphic';
 
 const {
   NetworkStatusNotifier,
@@ -17,7 +18,7 @@ const {
 const client = new ApolloClient({
   link: networkStatusNotifierLink.concat(
     createHttpLink({
-      uri: 'http://localhost:4000/graphql',
+      uri: config.ApiUrl,
     }),
   ),
   cache: new InMemoryCache(),

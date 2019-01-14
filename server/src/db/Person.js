@@ -19,7 +19,7 @@ import { formatDbValues, generateUuid, returnFirst } from '../lib';
 import formatForDb from './lib/formatForDb';
 import { NOTE_TABLE } from './note';
 import Place from './Place';
-import Source from './source';
+import Source from './Source';
 
 export default class Person {
   constructor(db) {

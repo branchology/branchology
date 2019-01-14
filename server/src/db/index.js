@@ -1,6 +1,6 @@
 export * from './note';
 export * from './Relationship';
-export * from './source';
+export * from './Source';
 
 import conn from './conn';
 

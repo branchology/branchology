@@ -2,11 +2,12 @@ import { ApolloServer, makeExecutableSchema } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
 import { applyMiddleware } from 'graphql-middleware';
+import path from 'path';
 import { resolvers, typeDefs } from 'api';
 import DataLoaders from 'api/DataLoaders';
 import ProtectedDirective from 'api/directives/ProtectedDirective';
 import ValidationMiddleware from 'api/middleware/ValidationMiddleware';
-import 'config';
+import config from './config';
 
 // TODO: FIXME:
 import db from 'db/conn';
@@ -16,8 +17,6 @@ import Place from 'db/Place';
 import Source from 'db/Source';
 import Relationship from 'db/Relationship';
 import User from 'db/User';
-
-const { APP_PORT } = process.env;
 
 const app = express();
 app.use(cors());
@@ -87,8 +86,16 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-app.listen({ port: APP_PORT }, () =>
+if (config.environment === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+
+  app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  });
+}
+
+app.listen({ port: config.port }, () =>
   console.log(
-    `🎉 Server ready at http://localhost:${APP_PORT}${server.graphqlPath}`,
+    `🎉 Server ready at http://localhost:${config.port}${server.graphqlPath}`,
   ),
 );
