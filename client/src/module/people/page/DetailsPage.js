@@ -1,5 +1,6 @@
 import React from 'react';
 import { mapRouteIdToProps } from 'lib';
+import BrowserTitle from 'module/common/component/BrowserTitle';
 import { TabContainer } from 'module/common/component/Tabs';
 import eventTypes from '../components/eventTypes';
 import AttributeList from '../components/Attribute/List';
@@ -12,6 +13,9 @@ import fetchPerson from '../container/fetchPerson';
 
 const DetailsPage = ({ data }) => (
   <div>
+    <BrowserTitle
+      title={`${data.person.name.given} ${data.person.name.surname}`}
+    />
     <Heading person={data.person} />
 
     <TabContainer

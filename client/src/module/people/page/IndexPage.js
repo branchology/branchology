@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { debounce } from 'throttle-debounce';
+import BrowserTitle from 'module/common/component/BrowserTitle';
 import PeopleList from '../components/PeopleList';
 
 export default () => {
@@ -13,6 +14,7 @@ export default () => {
 
   return (
     <div>
+      <BrowserTitle title="Search People" />
       <h2>PEOPLE!</h2>
       <input type="text" name="search" onChange={onSearch} />
       <PeopleList search={search} />
