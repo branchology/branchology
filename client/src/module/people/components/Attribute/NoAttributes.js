@@ -1,8 +1,12 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
+import { components } from 'module/common';
 import NoResults from '../NoResults';
+
+const {
+  ui: { IconButton },
+  WithUser,
+} = components;
 
 const attributeIcons = [
   'user-astronaut',

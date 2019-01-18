@@ -1,11 +1,14 @@
 import React from 'react';
 import { useToggle } from 'lib';
-import DataContainer from 'module/common/DataContainer';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
+import { components } from 'module/common';
 import AddRelationship from './AddRelationship';
 import NoRelationships from './NoRelationships';
 import RelationshipList from './RelationshipList';
+
+const {
+  ui: { DataContainer, IconButton },
+  WithUser,
+} = components;
 
 export default ({ person }) => {
   const [addOpen, toggleAdd] = useToggle();

@@ -2,10 +2,13 @@ import { darken } from 'polished';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { FauxLink } from 'module/common/component/FauxLink';
-import WithUser from './component/WithUser';
+import { components } from 'module/common';
 import Login from './Login';
-import UiBlock from './UiBlock';
+
+const {
+  ui: { FauxLink, UiBlock },
+  WithUser,
+} = components;
 
 const Heading = styled.div`
   align-items: center;

@@ -1,7 +1,13 @@
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import { Query } from 'react-apollo';
-import { AutoComplete } from 'module/common/component/FormX';
+import { components } from 'module/common';
+
+const {
+  ui: {
+    Form: { AutoComplete },
+  },
+} = components;
 
 // TODO: FIXME: Shoudl we extract this into a wrapper/container?
 const searchPlace = gql`

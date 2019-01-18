@@ -2,7 +2,7 @@ import React from 'react';
 import { darken } from 'polished';
 import styled from 'styled-components';
 import styledMap from 'styled-map';
-import Icon from '../Icon';
+import { Icon } from './';
 
 const danger = '#dd3245';
 const primary = '#0077fa';

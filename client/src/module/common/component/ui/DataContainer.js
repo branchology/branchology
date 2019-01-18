@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.div`
+export const DataContainer = styled.div`
   background-color: #fff;
   border: 1px solid #f0f0f0;
   border-radius: 3px;

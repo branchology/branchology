@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
-import SimpleDataTable, { Heading } from 'module/common/SimpleDataTable';
+import { components } from 'module/common';
 import NoResults from 'component/NoResults';
 import AttributeAdd from './Add';
 import CitationList from './CitationList';
 import AttributeDelete from './Delete';
 import AttributeEdit from './Edit';
 import NoAttributes from './NoAttributes';
+
+const {
+  ui: {
+    DataTable: { Heading, Table },
+    IconButton,
+  },
+  WithUser,
+} = components;
 
 export default ({ person, attributes }) => {
   const [editAttribute, toggleEdit] = useState();
@@ -31,7 +37,7 @@ export default ({ person, attributes }) => {
         )}
       </WithUser>
 
-      <SimpleDataTable>
+      <Table>
         <thead>
           <tr>
             <Heading>Attribute</Heading>
@@ -85,7 +91,7 @@ export default ({ person, attributes }) => {
             </tr>,
           ])}
         </tbody>
-      </SimpleDataTable>
+      </Table>
 
       {attributes.length === 0 && <NoResults />}
     </div>

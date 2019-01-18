@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Icon from 'module/common/Icon';
+import { components } from 'module/common';
+
+const {
+  ui: { Icon },
+} = components;
 
 const Container = styled.div`
   background-color: #f7f7f7;

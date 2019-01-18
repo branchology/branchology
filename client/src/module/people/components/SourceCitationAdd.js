@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText, InputTextArea } from 'module/common/component/Form';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from '../../common/notifications';
 import SourceAutocomplete from './SourceAutocomplete';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 class SourceCitationAdd extends PureComponent {
   static contextType = NotificationContext;
@@ -53,7 +56,7 @@ class SourceCitationAdd extends PureComponent {
         onSubmit={this.submit}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Add Source Citation" />}
+            title="Add Source Citation"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>

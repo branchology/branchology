@@ -1,12 +1,18 @@
 import { Formik, Form } from 'formik';
 import React from 'react';
 import { useToggle } from 'lib';
-import { Button } from 'module/common/component/Button';
-import { FauxLink } from 'module/common/component/FauxLink';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
-import { InputText } from 'module/common/component/FormX';
+import { components } from 'module/common';
 import createTokenWrapper from './container/createToken';
 import { AppContext } from './Context';
+
+const {
+  ui: {
+    Button,
+    Dialog,
+    FauxLink,
+    Form: { InputText },
+  },
+} = components;
 
 const Login = ({ createToken }) => {
   const [loginOpen, toggleLogin] = useToggle();
@@ -41,7 +47,7 @@ const Login = ({ createToken }) => {
             >
               {({ handleSubmit, isSubmitting }) => (
                 <Dialog
-                  header={<StandardDialogHeader title="Log In" />}
+                  title="Log In"
                   onClose={toggleLogin}
                   footer={
                     <div>

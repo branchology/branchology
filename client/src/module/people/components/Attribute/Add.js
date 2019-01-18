@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText, Select } from 'module/common/component/Form';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocomplete';
 import AttributeCreateMutation from '../../query/attributeCreateMutation';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 function transfigureAttributeTypes() {
   return Object.keys(attributeTypes).map(type => ({
@@ -57,7 +60,7 @@ class AddAttribute extends PureComponent {
         validate={() => null /* TODO: FIXME: */}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Add Person Attribute" />}
+            title="Add Person Attribute"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>

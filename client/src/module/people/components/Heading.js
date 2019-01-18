@@ -1,7 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import DataContainer from 'module/common/DataContainer';
+import { components } from 'module/common';
 import ParentNames from '../components/ParentNames';
+
+const {
+  ui: { DataContainer },
+} = components;
 
 const Container = styled(DataContainer)`
   display: flex;

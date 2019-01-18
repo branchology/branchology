@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/component/Button';
-import Confirm from 'module/common/Confirm';
+import { components } from 'module/common';
+
+const {
+  ui: { Confirm, IconButton },
+} = components;
 
 const RemoveWithConfirm = ({ data, removeEvent }) => {
   const [confirmOpen, toggle] = useState(false);

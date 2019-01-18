@@ -1,7 +1,7 @@
 import { Field, ErrorMessage } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
-import FieldError from './FieldError';
+import { FieldError } from './FieldError';
 import { Label } from './Label';
 
 const StyledInput = styled.input`

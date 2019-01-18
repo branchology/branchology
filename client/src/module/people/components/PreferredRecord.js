@@ -1,5 +1,9 @@
 import React from 'react';
-import Icon from 'module/common/Icon';
+import { components } from 'module/common';
+
+const {
+  ui: { Icon },
+} = components;
 
 export default ({ isPreferred, onClick }) => (
   <>

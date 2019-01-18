@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
-import Confirm from 'module/common/Confirm';
-import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
+import { components } from 'module/common';
 import SourceCitationAdd from './SourceCitationAdd';
 import SourceCitationEdit from './SourceCitationEdit';
 import { NotificationConsumer } from '../../common/notifications';
+
+const {
+  ui: {
+    Confirm,
+    DataTable: { Cell, Heading, Table },
+    IconButton,
+  },
+  WithUser,
+} = components;
 
 const ListContainer = styled.ol`
   font-size: 0.9em;
@@ -108,7 +114,7 @@ export default ({ citations, entity, ...props }) => {
             )}
           </WithUser>
 
-          <SimpleDataTable>
+          <Table>
             <thead>
               <tr>
                 <Heading>Source</Heading>
@@ -160,7 +166,7 @@ export default ({ citations, entity, ...props }) => {
                 </tr>
               ))}
             </tbody>
-          </SimpleDataTable>
+          </Table>
         </ListContainer>
       )}
     </NotificationConsumer>

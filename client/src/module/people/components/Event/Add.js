@@ -1,15 +1,16 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
-import { Button } from 'module/common/component/Button';
-import {
-  FieldColumn,
-  FieldRow,
-  InputText,
-  Select,
-} from 'module/common/component/FormX';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
+import { components } from 'module/common';
 import { NotificationContext } from 'module/common/notifications';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
+
+const {
+  ui: {
+    Button,
+    Dialog,
+    Form: { FieldColumn, FieldRow, InputText, Select },
+  },
+} = components;
 
 function transfigureEventTypes(eventTypes) {
   return Object.keys(eventTypes).map(type => ({
@@ -75,7 +76,7 @@ const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => {
         >
           {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
             <Dialog
-              header={<StandardDialogHeader title="Add Event" />}
+              title="Add Event"
               onClose={onClose}
               footer={
                 <div>

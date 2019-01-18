@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Badge from './Badge';
+import { Badge } from './';
 
 const ContainerStyles = styled.div`
   margin-bottom: 10px;

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button } from 'module/common/component/Button';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
+import { Button, Dialog } from './';
 
-export default ({ onCancel, onConfirm, message, title }) => (
+export const Confirm = ({ onCancel, onConfirm, message, title }) => (
   <Dialog
-    header={<StandardDialogHeader title={title} />}
+    title={title}
     footer={
       <div>
         <Button type="button" onClick={onCancel}>

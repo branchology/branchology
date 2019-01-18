@@ -1,15 +1,16 @@
 import { Formik, Form } from 'formik';
 import React from 'react';
-import { Button } from 'module/common/component/Button';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
-import {
-  FieldColumn,
-  FieldRow,
-  InputText,
-  Select,
-} from 'module/common/component/FormX';
+import { components } from 'module/common';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
 import createSpouseWrapper from './container/createSpouse';
+
+const {
+  ui: {
+    Button,
+    Dialog,
+    Form: { FieldColumn, FieldRow, InputText, Select },
+  },
+} = components;
 
 function prepareValuesForSubmit(values) {
   const submitValues = {
@@ -76,7 +77,7 @@ const AddRelationshipForm = ({ createSpouse, person, onClose }) => {
     >
       {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
         <Dialog
-          header={<StandardDialogHeader title="Add Relationship" />}
+          title="Add Relationship"
           onClose={onClose}
           footer={
             <div>

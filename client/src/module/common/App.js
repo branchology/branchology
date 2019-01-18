@@ -2,9 +2,13 @@ import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Footer from 'module/common/Footer';
 import Header from 'module/common/Header';
-import UiBlock from 'module/common/UiBlock';
+import { components } from 'module/common';
 import { NotificationProvider } from 'module/common/notifications';
 import Context from './Context';
+
+const {
+  ui: { UiBlock },
+} = components;
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');

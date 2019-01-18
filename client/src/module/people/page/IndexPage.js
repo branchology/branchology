@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { debounce } from 'throttle-debounce';
-import BrowserTitle from 'module/common/component/BrowserTitle';
+import { components } from 'module/common';
 import PeopleList from '../components/PeopleList';
+
+const {
+  ui: { BrowserTitle },
+} = components;
 
 export default () => {
   const [search, setSearch] = useState();

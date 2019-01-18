@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
-import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
+import { components } from 'module/common';
 import NameAdd from './Add';
 import CitationList from './CitationList';
 import NameDelete from './Delete';
 import NameEdit from './Edit';
 import NamePreferredToggle from './PreferredToggle';
+
+const {
+  ui: {
+    DataTable: { Cell, Heading, Table },
+    IconButton,
+  },
+  WithUser,
+} = components;
 
 export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();
@@ -28,7 +34,7 @@ export default function NameList({ names, person }) {
         )}
       </WithUser>
 
-      <SimpleDataTable>
+      <Table>
         <thead>
           <tr>
             <Heading>&nbsp;</Heading>
@@ -85,7 +91,7 @@ export default function NameList({ names, person }) {
             </tr>,
           ])}
         </tbody>
-      </SimpleDataTable>
+      </Table>
     </div>
   );
 }

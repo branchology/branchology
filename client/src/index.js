@@ -4,7 +4,7 @@ import { createHttpLink } from 'apollo-link-http';
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createNetworkStatusNotifier } from 'react-apollo-network-status';
-import LoadingGraphic from 'module/common/LoadingGraphic';
+import { LoadingGraphic } from 'module/common/component/ui/LoadingGraphic';
 import config from './config';
 import { render } from 'react-dom';
 import Router from './Router';

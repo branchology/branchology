@@ -6,7 +6,7 @@ const backgroundColorMap = styledMap`
   default: #999;
 `;
 
-const Container = styled.span`
+export const Badge = styled.span`
   background-color: ${backgroundColorMap};
   color: #fff;
   border-radius: 8px;
@@ -16,5 +16,3 @@ const Container = styled.span`
   padding: 3px 6px;
   text-align: center;
 `;
-
-export default Container;

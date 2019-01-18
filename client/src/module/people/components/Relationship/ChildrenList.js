@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useToggle } from 'lib';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
-import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
+import { components } from 'module/common';
 import AddChild from './AddChild';
 import NoChildren from './NoChildren';
+
+const {
+  ui: {
+    DataTable: { Cell, Heading, Table },
+    IconButton,
+  },
+  WithUser,
+} = components;
 
 export default ({ children, person, relationship }) => {
   const [addOpen, toggleAdd] = useToggle();
@@ -36,7 +42,7 @@ export default ({ children, person, relationship }) => {
       {children.length === 0 ? (
         <NoChildren onAction={toggleAdd} />
       ) : (
-        <SimpleDataTable>
+        <Table>
           <thead>
             <tr>
               <Heading> </Heading>
@@ -65,7 +71,7 @@ export default ({ children, person, relationship }) => {
               </tr>
             ))}
           </tbody>
-        </SimpleDataTable>
+        </Table>
       )}
     </div>
   );

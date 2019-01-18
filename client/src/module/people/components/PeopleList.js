@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import SimpleDataTable from 'module/common/SimpleDataTable';
+import { components } from 'module/common';
 import filterPeople from '../container/filterPeople';
 
+const {
+  ui: {
+    DataTable: { Table },
+  },
+} = components;
+
 const PeopleList = ({ data }) => (
-  <SimpleDataTable>
+  <Table>
     <thead>
       <tr>
         <th>Surname</th>
@@ -27,7 +33,7 @@ const PeopleList = ({ data }) => (
         </tr>
       ))}
     </tbody>
-  </SimpleDataTable>
+  </Table>
 );
 
 export default filterPeople(PeopleList);

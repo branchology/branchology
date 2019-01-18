@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppContext } from '../Context';
 
-export default ({ children, otherwise }) => (
+export const WithUser = ({ children, otherwise }) => (
   <AppContext.Consumer>
     {({ isAuthenticated, logout, user }) =>
       isAuthenticated()

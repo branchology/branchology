@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/component/Button';
-import Confirm from 'module/common/Confirm';
+import { components } from 'module/common';
 import attributeDeleteMutation from '../../query/attributeDeleteMutation';
+
+const {
+  ui: { Confirm, IconButton },
+} = components;
 
 const RemoveWithConfirm = ({ data, remove }) => {
   const [confirmOpen, toggle] = useState(false);

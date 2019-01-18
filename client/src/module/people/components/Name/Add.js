@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText } from 'module/common/component/Form';
 import { NotificationContext } from 'module/common/notifications';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import nameCreateMutation from '../../query/nameCreateMutation';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 class NameEdit extends PureComponent {
   static contextType = NotificationContext;
@@ -39,7 +42,7 @@ class NameEdit extends PureComponent {
         }}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Add Person Name" />}
+            title="Add Person Name"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>

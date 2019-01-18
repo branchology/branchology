@@ -17,9 +17,7 @@ const Heading = styled.td`
   text-align: ${textAlign};
 `;
 
-export { Cell, Heading };
-
-export default styled.table`
+const Table = styled.table`
   border-collapse: collapse;
   width: 100%;
 
@@ -44,3 +42,5 @@ export default styled.table`
     padding: 0 8px 8px 0;
   }
 `;
+
+export { Cell, Heading, Table };

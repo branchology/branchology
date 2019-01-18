@@ -1,11 +1,14 @@
 import React from 'react';
 import pickRandom from 'lib/pickRandom';
-import { IconButton } from 'module/common/component/Button';
-import WithUser from 'module/common/component/WithUser';
+import { components } from 'module/common';
 import NoResults from '../NoResults';
 
-const eventIcons = ['bible', 'birthday-cake', 'calendar', 'tombstone'];
+const {
+  ui: { IconButton },
+  WithUser,
+} = components;
 
+const eventIcons = ['bible', 'birthday-cake', 'calendar', 'tombstone'];
 const message = `There are currently no events for this person.`;
 
 export default () => (

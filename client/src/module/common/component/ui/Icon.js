@@ -89,7 +89,7 @@ const IconContainer = styled.span`
   font-size: ${sizeMap};
 `;
 
-export default ({ icon, color, spin, transform, ...props }) => (
+export const Icon = ({ icon, color, spin, transform, ...props }) => (
   <IconContainer {...props}>
     <FontAwesomeIcon
       icon={Array.isArray(icon) ? icon : ['fas', icon]}

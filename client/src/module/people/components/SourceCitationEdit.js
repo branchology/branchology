@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText, InputTextArea } from 'module/common/component/Form';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from '../../common/notifications';
 import SourceAutocomplete from './SourceAutocomplete';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 function initialValues(record) {
   const { id, citation, page, source } = record;
@@ -78,7 +81,7 @@ class SourceCitationEdit extends PureComponent {
         onSubmit={this.submit}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Edit Source Citation" />}
+            title="Edit Source Citation"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>

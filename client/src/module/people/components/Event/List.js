@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { IconButton } from 'module/common/component/Button';
-import SimpleDataTable, { Cell, Heading } from 'module/common/SimpleDataTable';
-import WithUser from 'module/common/component/WithUser';
+import { components } from 'module/common';
 import EventAdd from './Add';
 import EventDelete from './Delete';
 import EventEdit from './Edit';
 import NoPersonEvents from './NoPersonEvents';
 import EventPreferredToggle from './PreferredToggle';
 import CitationList from './CitationList';
+
+const {
+  ui: {
+    DataTable: { Cell, Heading, Table },
+    IconButton,
+  },
+  WithUser,
+} = components;
 
 const eventsAllowingPrimary = eventTypes =>
   Object.keys(eventTypes).filter(key => eventTypes[key].allowsPrimary);
@@ -40,7 +46,7 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
         )}
       </WithUser>
 
-      <SimpleDataTable>
+      <Table>
         <thead>
           <tr>
             <Heading> </Heading>
@@ -103,7 +109,7 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
             </tr>,
           ])}
         </tbody>
-      </SimpleDataTable>
+      </Table>
     </div>
   );
 };

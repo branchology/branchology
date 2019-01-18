@@ -1,12 +1,15 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText, Select } from 'module/common/component/Form';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocomplete';
 import AttributeUpdateMutation from '../../query/attributeUpdateMutation';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 function transfigureAttributeTypes() {
   return Object.keys(attributeTypes).map(type => ({
@@ -67,7 +70,7 @@ class AttributeEdit extends PureComponent {
         }}
         prepareValuesForSubmit={data => {
           const { id, place, placeId, __place__, ...attribute } = data;
-          console.log({ attribute });
+
           const prepared = {
             id,
             attribute,
@@ -79,14 +82,12 @@ class AttributeEdit extends PureComponent {
             prepared.attribute.place = place;
           }
 
-          console.log({ prepared });
-
           return prepared;
         }}
         onSubmit={this.submit}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Edit Person Attribute" />}
+            title="Edit Person Attribute"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>

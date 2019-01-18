@@ -1,15 +1,16 @@
 import { Formik, Form } from 'formik';
 import React from 'react';
-import { Button } from 'module/common/component/Button';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
-import {
-  FieldColumn,
-  FieldRow,
-  InputText,
-  Select,
-} from 'module/common/component/FormX';
+import { components } from 'module/common';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
 import createChildWrapper from './container/createChild';
+
+const {
+  ui: {
+    Button,
+    Dialog,
+    Form: { FieldColumn, FieldRow, InputText, Select },
+  },
+} = components;
 
 const lineageTypes = [
   { label: 'Birth', value: 'BIRTH' },
@@ -83,7 +84,7 @@ const AddChildForm = ({ createChild, relationship, onClose }) => {
     >
       {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
         <Dialog
-          header={<StandardDialogHeader title="Add Child" />}
+          title="Add Child"
           onClose={onClose}
           footer={
             <div>

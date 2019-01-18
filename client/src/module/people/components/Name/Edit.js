@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Button } from 'module/common/component/Button';
+import { components } from 'module/common';
 import { Form, InputText } from 'module/common/component/Form';
-import { Dialog, StandardDialogHeader } from 'module/common/modal';
 import { NotificationContext } from 'module/common/notifications';
 import updatePersonNameWrapper from '../../query/nameUpdateMutation';
+
+const {
+  ui: { Button, Dialog },
+} = components;
 
 function initialValues(initialValue) {
   const { id, given, surname } = initialValue;
@@ -43,7 +46,7 @@ class NameEdit extends PureComponent {
         }}
         render={({ container, submit }) => (
           <Dialog
-            header={<StandardDialogHeader title="Update Person Name" />}
+            title="Update Person Name"
             footer={
               <div>
                 <Button type="button" onClick={onClose}>
