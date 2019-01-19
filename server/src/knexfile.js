@@ -22,9 +22,9 @@ module.exports = {
     database: dbConfig.name,
   },
   migrations: {
-    directory: './src/db/migrations',
+    directory: './db/migrations',
   },
   seeds: {
-    directory: './src/db/seeds',
+    directory: './db/seeds',
   },
 };
