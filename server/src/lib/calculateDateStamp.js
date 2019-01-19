@@ -23,7 +23,6 @@ export default function calculateDateStamp(dateValue) {
 
   matches = myValue.match(/^(AFT|ABT|BEF) (.*)$/i);
   if (matches) {
-    console.log({ myValue, matches });
     myValue = matches[2];
   }
 
