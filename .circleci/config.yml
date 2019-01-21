@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:11.7
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run: cd server && npm ci && cd ../client && npm ci
+      - run: cd server && npm run lint
+      - run: cd client && npm run lint

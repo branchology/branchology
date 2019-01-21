@@ -2,6 +2,7 @@
   "name": "branchology",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
     "migrate:latest": "babel-node ./node_modules/.bin/knex migrate:latest --knexfile=src/knexfile.js",
     "migrations:make": "babel-node ./node_modules/.bin/knex migrate:make --knexfile=src/knexfile.js",
     "migrate:rollback": "babel-node ./node_modules/.bin/knex migrate:rollback --knexfile=src/knexfile.js",
@@ -17,12 +18,17 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-watch": "git+https://github.com/monathur/babel-watch.git",
     "chai": "^4.2.0",
+    "eslint": "^5.12.1",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "mocha": "^5.2.0",
     "mock-knex": "^0.4.2",
-    "parse-gedcom": "^1.0.3"
+    "parse-gedcom": "^1.0.3",
+    "prettier": "^1.16.0"
   },
   "dependencies": {
     "apollo-server-express": "^2.1.0",
