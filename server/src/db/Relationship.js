@@ -6,6 +6,7 @@ import {
   PERSON_RELATIONSHIPS_TABLE,
   RELATIONSHIP_TABLE,
   RELATIONSHIP_EVENT_TABLE,
+  RELATIONSHIP_NOTE_TABLE,
 } from './constants';
 import Event from './Event';
 import Person from './Person';
@@ -119,6 +120,14 @@ export default class Relationship {
         },
         '*',
       )
+      .then(returnFirst);
+  }
+
+  attachNote(relationshipId, noteId) {
+    const id = generateUuid();
+
+    return this.db(RELATIONSHIP_NOTE_TABLE)
+      .insert({ id, relationship_id: relationshipId, note_id: noteId }, '*')
       .then(returnFirst);
   }
 }

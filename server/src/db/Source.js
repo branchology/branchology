@@ -1,5 +1,9 @@
 import db from './conn';
-import { SOURCE_CITATION_TABLE, SOURCE_TABLE } from './constants';
+import {
+  SOURCE_CITATION_TABLE,
+  SOURCE_TABLE,
+  SOURCE_NOTE_TABLE,
+} from './constants';
 import { generateUuid, returnFirst } from '../lib';
 
 export default class Source {
@@ -52,5 +56,13 @@ export default class Source {
       .delete()
       .where('id', id)
       .then(() => true);
+  }
+
+  attachNote(sourceId, noteId) {
+    const id = generateUuid();
+
+    return this.db(SOURCE_NOTE_TABLE)
+      .insert({ id, source_id: sourceId, note_id: noteId }, '*')
+      .then(returnFirst);
   }
 }

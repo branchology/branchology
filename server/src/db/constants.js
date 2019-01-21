@@ -24,6 +24,8 @@ export const PERSON_SOURCE_CITATION_TABLE = 'person_source_citations';
 export const PARENTS_TABLE = 'person_parents';
 export const RELATIONSHIP_TABLE = 'relationships';
 export const RELATIONSHIP_EVENT_TABLE = 'relationship_events';
+export const RELATIONSHIP_NOTE_TABLE = 'relationship_notes';
 
 export const SOURCE_TABLE = 'sources';
 export const SOURCE_CITATION_TABLE = 'source_citations';
+export const SOURCE_NOTE_TABLE = 'source_notes';

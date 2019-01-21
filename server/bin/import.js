@@ -101,8 +101,11 @@ function importNote(node) {
   return createNote(data);
 }
 
-function importSource(node) {
+async function importSource(node) {
   const data = { referenceId: node.pointer };
+
+  const notes = [];
+
   node.tree.forEach(attr => {
     switch (attr.tag) {
       case 'AUTH':
@@ -112,8 +115,10 @@ function importSource(node) {
         data.title = attr.data;
         break;
       case 'NOTE':
-        // TODO: FIXME: Implement saving
-        sources.notes.push({ note: attr.data });
+        const note = buildNoteRecord(attr);
+        if (note) {
+          notes.push(note);
+        }
         break;
       case 'PUBL':
         data.publication = attr.data;
@@ -128,7 +133,10 @@ function importSource(node) {
     }
   });
 
-  return dbal.source.createSource(data);
+  const source = await dbal.source.createSource(data);
+  await Promise.all(notes.map(note => dbal.source.attachNote(source.id, note)));
+
+  return source;
 }
 
 async function importPerson(node) {
@@ -149,6 +157,7 @@ async function importPerson(node) {
       case 'CHAN':
         data.lastUpdated = attr.data;
         break;
+      case 'CAST':
       case 'EDUC':
       case 'FACT':
       case 'OCCU':
@@ -182,11 +191,12 @@ async function importPerson(node) {
         // TODO: FIXME: Implement? Or just rely on FAM records?
         break;
       case 'NOTE':
-        notes.push(noteMap[attr.data]);
-        // TODO: FIXME: Implement inline notes?
+        const note = buildNoteRecord(attr);
+        if (note) {
+          notes.push(note);
+        }
         break;
       default:
-        // TODO: FIXME:
         console.warn(
           `Unhandled tag indi.[${attr.tag}]: ${JSON.stringify(attr)}`,
         );
@@ -250,20 +260,23 @@ async function importRelationship(node) {
         break;
       case 'CHIL':
         children.push({ id: peopleMap[attr.data] });
-        // TODO: FIXME: Do something here?
         if (attr.tree.length) {
-          // TODO: FIXME: Implement
           console.warn(`Unhandled tag CHIL.*: ${JSON.stringify(attr.tree)}`);
         }
         break;
       case 'NOTE':
-        notes.push(noteMap[attr.data]);
-        // TODO: FIXME: Implement inline notes?
+        const note = buildNoteRecord(attr);
+        if (note) {
+          notes.push(note);
+        }
         break;
       case 'ANUL':
       case 'DIV':
       case 'MARR':
         events.push(buildEventRecord(attr));
+        break;
+      case 'SOUR':
+        console.warn(`Unhandled RELATIONSHIP.SOUR `, attr);
         break;
       default:
         const result = runIntegrations('fam', { ...data, events }, attr, node);
@@ -290,11 +303,14 @@ async function importRelationship(node) {
     }),
   );
 
-  // TODO: FIXME: Handle children
   await Promise.all(
     children.map(({ id }) => {
       return dbal.relationship.attachChild(relationship.id, id);
     }),
+  );
+
+  await Promise.all(
+    notes.map(note => dbal.relationship.attachNote(relationship.id, note)),
   );
 
   return relationship;
@@ -325,23 +341,21 @@ function buildNameRecord(node) {
 function buildAttributeRecord(node) {
   const attribute = {
     data: node.data,
-    event: {
-      type: node.tag,
-      sources: [],
-      notes: [],
-    },
+    type: node.tag,
+    sources: [],
+    notes: [],
   };
 
   node.tree.forEach(attr => {
     switch (attr.tag.toUpperCase()) {
       case 'DATE':
-        attribute.event.date = attr.data.trim();
+        attribute.date = attr.data.trim();
         break;
       case 'PLAC':
-        attribute.event.place = attr.data.trim();
+        attribute.place = attr.data.trim();
         break;
       case 'SOUR':
-        attribute.event.sources.push(buildSourceCitationRecord(attr));
+        attribute.sources.push(buildSourceCitationRecord(attr));
         break;
       default:
         console.warn(
@@ -358,6 +372,12 @@ function buildEventRecord(node) {
 
   node.tree.forEach(attr => {
     switch (attr.tag.toUpperCase()) {
+      case 'AGE':
+        event.age = attr.data.trim();
+        break;
+      case 'CAUS':
+        event.cause = attr.data.trim();
+        break;
       case 'DATE':
         event.date = attr.data.trim();
         break;
@@ -367,6 +387,9 @@ function buildEventRecord(node) {
       case 'SOUR':
         const sour = buildSourceCitationRecord(attr);
         event.sources.push(sour);
+        break;
+      case 'TYPE':
+        event.customType = attr.data.trim();
         break;
       default:
         console.warn(
@@ -378,32 +401,13 @@ function buildEventRecord(node) {
   return event;
 }
 
-// function buildNoteRecord(node) {
-//   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-//   console.log(JSON.stringify(node, null, 2));
-//   console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-//   // const event = { type: node.tag, sources: [], notes: [] };
+function buildNoteRecord(node) {
+  if (/@N([A-Z0-9]+)@/.test(node.data)) {
+    return noteMap[node.data];
+  }
 
-//   // node.tree.forEach(attr => {
-//   //   switch (attr.tag.toUpperCase()) {
-//   //     case 'DATE':
-//   //       event.date = attr.data.trim();
-//   //       break;
-//   //     case 'PLAC':
-//   //       event.place = attr.data.trim();
-//   //       break;
-//   //     case 'SOUR':
-//   //       event.sources.push(buildSourceCitationRecord(attr));
-//   //       break;
-//   //     default:
-//   //       console.warn(
-//   //         `Unhandled tag event.[${attr.tag}]: ${JSON.stringify(attr)}`,
-//   //       );
-//   //   }
-//   // });
-
-//   // return event;
-// }
+  console.warn(`Unhandled inline note: ${node.data}`);
+}
 
 function buildTextRecord(node) {
   let text = node.data;

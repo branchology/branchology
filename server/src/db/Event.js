@@ -104,18 +104,38 @@ export default class Event {
   }
 
   async createEvent(type, data) {
-    const { date, place, placeId, isPreferred = true, sources = [] } = data;
+    const {
+      date,
+      place,
+      placeId,
+      postalCode,
+      stateProvince,
+      street,
+      street2,
+      city,
+      country,
+      isPreferred = true,
+      sources = [],
+      notes = [],
+      ...extraData
+    } = data;
 
     let dbPlaceId;
     if (place || placeId) {
       dbPlaceId = placeId;
       if (place) {
-        const newPlace = await this.place.create({ description: place });
+        const newPlace = await this.place.create({
+          description: place,
+          street,
+          street2,
+          city,
+          stateProvince,
+          postalCode,
+          country,
+        });
         dbPlaceId = newPlace.id;
       }
     }
-
-    const { postalCode, stateProvince, ...otherPlaceData } = data;
 
     const eventId = generateUuid();
 
@@ -125,6 +145,7 @@ export default class Event {
       date,
       placeId: dbPlaceId,
       isPreferred,
+      ...extraData,
     };
 
     if (eventData.date) {
