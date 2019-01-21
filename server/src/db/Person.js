@@ -64,20 +64,23 @@ export default class Person {
       .then(returnFirst);
   }
 
-  findAll(filters, sorting) {
-    // TODO: Sorting + filtering
-    const query = this.db.select(['p.*']).from(`${PEOPLE_TABLE} AS p`);
+  findAll(filters) {
+    const query = this.db
+      .select('p.*')
+      .from('people as p')
+      .join('person_names AS pn', builder => {
+        builder
+          .on('pn.person_id', '=', 'p.id')
+          .andOn('pn.is_preferred', '=', this.db.raw(true));
+      });
 
     if (filters.nameContains) {
-      const subquery = this.db(PERSON_NAME_TABLE)
-        .distinct('person_id')
-        .where('given', '~', filters.nameContains);
-
-      query.join(
-        this.db.raw(`(${subquery.toString()}) AS n`),
-        'n.person_id',
-        'p.id',
-      );
+      const { nameContains } = filters;
+      query.where(function() {
+        this.whereRaw('surname ~* ?', [nameContains]).orWhereRaw('given ~* ?', [
+          nameContains,
+        ]);
+      });
 
       delete filters.nameContains;
     }
