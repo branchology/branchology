@@ -5,7 +5,7 @@ import filterPeople from '../container/filterPeople';
 
 const {
   ui: {
-    DataTable: { Table },
+    DataTable: { Cell, Heading, Table },
   },
 } = components;
 
@@ -13,23 +13,23 @@ const PeopleList = ({ data }) => (
   <Table>
     <thead>
       <tr>
-        <th>Surname</th>
-        <th>Given Name</th>
-        <th>Born</th>
-        <th>Died</th>
+        <Heading>Surname</Heading>
+        <Heading>Given Name</Heading>
+        <Heading>Born</Heading>
+        <Heading>Died</Heading>
       </tr>
     </thead>
     <tbody>
-      {data.people.items.map(person => (
-        <tr key={person.id}>
-          <td>
+      {data.people.items.map((person, index) => (
+        <tr key={person.id} className={index % 2 === 1 ? 'alt' : ''}>
+          <Cell>
             <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
-          </td>
-          <td>
+          </Cell>
+          <Cell>
             <Link to={`/people/${person.id}`}>{person.name.given}</Link>
-          </td>
-          <td>{person.birth && person.birth.date}</td>
-          <td>{person.death && person.death.date}</td>
+          </Cell>
+          <Cell>{person.birth && person.birth.date}</Cell>
+          <Cell>{person.death && person.death.date}</Cell>
         </tr>
       ))}
     </tbody>
