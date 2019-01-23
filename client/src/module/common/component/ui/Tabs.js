@@ -36,7 +36,7 @@ const TabContainer = ({ tabs = [], contents = [] }) => {
   const [selectedTab, selectTab] = useState(0);
 
   if (tabs.length !== contents.length) {
-    throw 'Tabs and contents must have the same length';
+    throw Error('Tabs and contents must have the same length');
   }
   return (
     <ContainerStyles>

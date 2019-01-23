@@ -60,7 +60,7 @@ const Heading = styled.div`
 export default () => (
   <UiBlock>
     <Heading>
-      <img src="/branchology-logo.png" className="logo" />
+      <img src="/branchology-logo.png" className="logo" alt="Branchology" />
 
       <div className="nav">
         <div className="user">
