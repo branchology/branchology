@@ -8,7 +8,7 @@ const {
   WithUser,
 } = components;
 
-const eventIcons = ['bible', 'birthday-cake', 'calendar', 'tombstone'];
+const eventIcons = ['bible', 'birthday-cake', 'calendar'];
 const message = `There are currently no events for this person.`;
 
 export default () => (

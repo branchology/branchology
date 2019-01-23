@@ -69,7 +69,7 @@ export default ({ person, attributes }) => {
                 <WithUser>
                   <IconButton
                     primary
-                    icon="pencil"
+                    icon="pencil-alt"
                     onClick={() => toggleEdit(attribute)}
                   >
                     Edit

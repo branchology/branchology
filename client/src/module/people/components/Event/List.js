@@ -82,7 +82,7 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
                 <WithUser>
                   <IconButton
                     primary
-                    icon="pencil"
+                    icon="pencil-alt"
                     onClick={() => toggleEdit(event)}
                   >
                     Edit

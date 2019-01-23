@@ -1,42 +1,36 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faLeaf } from '@fortawesome/pro-light-svg-icons';
 import {
-  faChild,
-  faBat,
   faBible,
   faBirthdayCake,
   faBook,
   faBookOpen,
   faCalendar,
   faCat,
-  faCloudMoon,
+  faChild,
   faCircle,
+  faCloudMoon,
   faGhost,
-  faJackOLantern,
   faKey,
-  faPencil,
+  faPencilAlt,
   faPlusCircle,
   faRing,
-  faScarecrow,
   faSearch,
   faSpinner,
   faSquare,
   faStickyNote,
   faTimes,
-  faTombstone,
   faTrash,
   faUserAstronaut,
   faUserGraduate,
   faUserMd,
   faUserNinja,
-} from '@fortawesome/pro-solid-svg-icons';
+} from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import styledMap from 'styled-map';
 
 library.add(
-  faBat,
   faBible,
   faBirthdayCake,
   faBook,
@@ -47,19 +41,15 @@ library.add(
   faCircle,
   faCloudMoon,
   faGhost,
-  faJackOLantern,
   faKey,
-  faLeaf,
-  faPencil,
+  faPencilAlt,
   faPlusCircle,
   faRing,
   faSearch,
   faSpinner,
   faSquare,
-  faScarecrow,
   faStickyNote,
   faTimes,
-  faTombstone,
   faTrash,
   faUserAstronaut,
   faUserGraduate,

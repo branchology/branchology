@@ -70,7 +70,7 @@ export default function NameList({ names, person }) {
                 <WithUser>
                   <IconButton
                     primary
-                    icon="pencil"
+                    icon="pencil-alt"
                     onClick={() => toggleEdit(name)}
                   />
                   <IconButton

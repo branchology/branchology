@@ -152,7 +152,7 @@ export default ({ citations, entity, ...props }) => {
                       <IconButton
                         xs
                         success
-                        icon="pencil"
+                        icon="pencil-alt"
                         onClick={() => toggleEditOpen(citation)}
                       />
                       <IconButton
