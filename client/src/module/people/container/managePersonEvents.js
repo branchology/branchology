@@ -1,7 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'module/common';
-import fetchPerson from '../query/fetchPerson';
 import eventFull from '../query/fragment/eventFull';
 
 const addEventMutation = gql`
@@ -33,27 +32,18 @@ const removeEventMutation = gql`
   }
 `;
 
-export default WrappedComponent => props => {
-  const refetchQueries = [
-    { query: fetchPerson, variables: { id: props.person.id } },
-  ];
-
-  return (
-    <Mutation mutation={addEventMutation} refetchQueries={refetchQueries}>
-      {addEvent => (
-        <Mutation
-          mutation={removeEventMutation}
-          refetchQueries={refetchQueries}
-        >
-          {removeEvent => (
-            <WrappedComponent
-              addEvent={addEvent}
-              removeEvent={eventId => removeEvent({ variables: { eventId } })}
-              {...props}
-            />
-          )}
-        </Mutation>
-      )}
-    </Mutation>
-  );
-};
+export default WrappedComponent => props => (
+  <Mutation mutation={addEventMutation}>
+    {addEvent => (
+      <Mutation mutation={removeEventMutation}>
+        {removeEvent => (
+          <WrappedComponent
+            addEvent={addEvent}
+            removeEvent={eventId => removeEvent({ variables: { eventId } })}
+            {...props}
+          />
+        )}
+      </Mutation>
+    )}
+  </Mutation>
+);

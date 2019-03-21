@@ -22,7 +22,9 @@ function transfigureEventTypes(eventTypes) {
 function prepareValuesForSubmit(data) {
   const prepared = {
     id: data.id,
-    event: {},
+    event: {
+      type: '',
+    },
   };
 
   if (data.date) {
@@ -42,6 +44,20 @@ function prepareValuesForSubmit(data) {
   return prepared;
 }
 
+function mapMutationErrorsForFormik(errors, stripKey = '') {
+  const newErrors = {};
+  for (const error of errors) {
+    const formattedKey = error.field.replace(stripKey, '');
+    if (!(formattedKey in newErrors)) {
+      newErrors[formattedKey] = error.message.replace(stripKey, '');
+    } else {
+      newErrors[formattedKey] += ` ${error.message.replace(stripKey, '')}`;
+    }
+  }
+
+  return newErrors;
+}
+
 const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => {
   const initialValues = {
     id: parent.id,
@@ -54,24 +70,23 @@ const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => {
       {({ notify }) => (
         <Formik
           initialValues={initialValues}
-          onSubmit={(values, { setSubmitting }) => {
+          onSubmit={(values, { setErrors, setSubmitting }) => {
             const submitValues = prepareValuesForSubmit(values);
 
-            return addEvent({ variables: submitValues }).then(
-              ({
-                data: {
-                  addEvent: { errors, event },
-                },
-              }) => {
+            return addEvent({ variables: submitValues })
+              .then(({ data: { addEvent: { errors, event } } }) => {
                 setSubmitting(false);
                 if (!errors) {
                   onClose();
                   notify('Event Added!');
                 }
+                setErrors(mapMutationErrorsForFormik(errors, 'event.'));
 
-                return event;
-              },
-            );
+                return errors;
+              })
+              .catch(e => {
+                setSubmitting(false);
+              });
           }}
         >
           {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
