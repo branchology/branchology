@@ -1,6 +1,7 @@
 import { Field, ErrorMessage } from 'formik';
 import React from 'react';
 import ReactSelect from 'react-select';
+import { FieldError } from './FieldError';
 import { Label } from './Label';
 
 export class Select extends React.Component {
@@ -32,7 +33,7 @@ export class Select extends React.Component {
             </>
           )}
         />
-        <ErrorMessage name={name} component="div" />
+        <ErrorMessage name={name} component={FieldError} />
       </div>
     );
   }
