@@ -38,7 +38,7 @@ function validateSimpleDate(dateString) {
 
   matches = dateString.match(/^([A-Za-z]{3}) ([0-9]{4})$/i);
   if (matches) {
-    if (!validMonths.includes(matches[1].toUpperCase())) {
+    if (!Object.keys(validMonths).includes(matches[1].toUpperCase())) {
       return false;
     }
 
@@ -85,7 +85,7 @@ export function validateGedcomDate(dateString) {
 
   matches = dateString.match(/^(AFT|ABT|BEF) (.*)$/i);
   if (matches) {
-    return validateSimpleDate(matches[1]);
+    return validateSimpleDate(matches[2]);
   }
 
   return validateSimpleDate(dateString);
