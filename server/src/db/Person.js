@@ -443,11 +443,13 @@ export default class Person {
   removeEvent(eventId) {
     return this.db(PERSON_EVENT_TABLE)
       .delete()
+      .returning('*')
       .where('event_id', eventId)
-      .then(() => {
+      .then(personEvent => {
         return this.db(EVENT_TABLE)
           .delete()
-          .where('id', eventId);
+          .where('id', eventId)
+          .then(() => personEvent[0]);
       });
   }
 

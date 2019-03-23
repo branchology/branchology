@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'module/common';
-import eventFull from '../query/fragment/eventFull';
+import personFragment from '../query/fragment/personFragment';
 
 const addEventMutation = gql`
   mutation addEvent($id: ID!, $event: CreateEventInput!) {
@@ -11,9 +11,8 @@ const addEventMutation = gql`
         message
         details
       }
-      event {
-        ${eventFull}
-        isPreferred
+      person {
+        ${personFragment}
       }
     }
   }
@@ -28,6 +27,9 @@ const removeEventMutation = gql`
         details
       }
       removed
+      person {
+        ${personFragment}
+      }
     }
   }
 `;

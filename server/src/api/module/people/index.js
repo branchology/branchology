@@ -6,6 +6,16 @@ import schema from './schema';
 const resolvers = {
   Mutation,
   Query,
+  EventPayload: {
+    person({ personId }, args, context) {
+      return context.dataLoaders.people.personLoader.load(personId);
+    },
+  },
+  RemovePersonRecordPayload: {
+    person({ personId }, args, context) {
+      return context.dataLoaders.people.personLoader.load(personId);
+    },
+  },
   Name: {
     isPreferred({ is_preferred }) {
       // TODO: FIXME:

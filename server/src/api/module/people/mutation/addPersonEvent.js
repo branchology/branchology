@@ -30,7 +30,7 @@ export default {
             citation,
           );
         }),
-      ]).then(() => ({ event }));
+      ]).then(() => ({ event, personId }));
     });
   },
 };

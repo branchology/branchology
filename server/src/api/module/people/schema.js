@@ -104,6 +104,7 @@ export default `
   type EventPayload {
     errors: [ErrorDetails]
     event: Event
+    person: Person
   }
 
   type NamePayload {
@@ -128,6 +129,12 @@ export default `
   type RemoveRecordPayload {
     errors: [ErrorDetails]
     removed: Boolean
+  }
+
+  type RemovePersonRecordPayload {
+    errors: [ErrorDetails]
+    removed: Boolean
+    person: Person
   }
 
   type PrimaryPersonNamePayload {
@@ -198,7 +205,7 @@ export default `
     ): AttributePayload! @protected
 
     removePersonCitation(citationId: ID!): Boolean @protected
-    removePersonEvent(eventId: ID!): RemoveRecordPayload! @protected
+    removePersonEvent(eventId: ID!): RemovePersonRecordPayload! @protected
 
     removePersonEventCitation(
       eventId: ID!,
