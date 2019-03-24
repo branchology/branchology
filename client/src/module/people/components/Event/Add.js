@@ -58,82 +58,78 @@ function mapMutationErrorsForFormik(errors, stripKey = '') {
   return newErrors;
 }
 
-const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => {
-  const initialValues = {
-    id: parent.id,
-    type: null,
-    date: '',
-  };
+const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => (
+  <NotificationContext.Consumer>
+    {({ notify }) => (
+      <Formik
+        initialValues={{
+          id: parent.id,
+          type: null,
+          date: '',
+        }}
+        onSubmit={(values, { setErrors, setSubmitting }) => {
+          const submitValues = prepareValuesForSubmit(values);
 
-  return (
-    <NotificationContext.Consumer>
-      {({ notify }) => (
-        <Formik
-          initialValues={initialValues}
-          onSubmit={(values, { setErrors, setSubmitting }) => {
-            const submitValues = prepareValuesForSubmit(values);
-
-            return addEvent({ variables: submitValues })
-              .then(({ data: { addEvent: { errors, event } } }) => {
-                setSubmitting(false);
-                if (!errors) {
-                  onClose();
-                  notify('Event Added!');
-                }
-                setErrors(mapMutationErrorsForFormik(errors, 'event.'));
-
-                return errors;
-              })
-              .catch(e => {
-                setSubmitting(false);
-              });
-          }}
-        >
-          {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
-            <Dialog
-              title="Add Event"
-              onClose={onClose}
-              footer={
-                <div>
-                  <Button danger type="button" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </div>
+          return addEvent({ variables: submitValues })
+            .then(({ data: { addEvent: { errors } } }) => {
+              setSubmitting(false);
+              if (!errors) {
+                onClose();
+                notify('Event Added!');
               }
-            >
-              <Form>
-                <FieldRow>
-                  <FieldColumn flex={1}>
-                    <Select
-                      name="type"
-                      label="Type"
-                      onChange={setFieldValue}
-                      onBlur={setFieldTouched}
-                      options={transfigureEventTypes(eventTypes)}
-                    />
-                  </FieldColumn>
+              setErrors(mapMutationErrorsForFormik(errors, 'event.'));
 
-                  <FieldColumn flex={2}>
-                    <InputText name="date" label="Date" />
-                  </FieldColumn>
-                </FieldRow>
+              return errors;
+            })
+            .catch(() => {
+              setSubmitting(false);
+            });
+        }}
+      >
+        {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
+          <Dialog
+            title="Add Event"
+            onClose={onClose}
+            footer={
+              <div>
+                <Button danger type="button" onClick={onClose}>
+                  Close
+                </Button>
+                <Button
+                  primary
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  Save
+                </Button>
+              </div>
+            }
+          >
+            <Form>
+              <FieldRow>
+                <FieldColumn flex={1}>
+                  <Select
+                    name="type"
+                    label="Type"
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    options={transfigureEventTypes(eventTypes)}
+                  />
+                </FieldColumn>
 
-                <PlaceAutocomplete name="place" label="Place: " />
-              </Form>
-            </Dialog>
-          )}
-        </Formik>
-      )}
-    </NotificationContext.Consumer>
-  );
-};
+                <FieldColumn flex={2}>
+                  <InputText name="date" label="Date" />
+                </FieldColumn>
+              </FieldRow>
+
+              <PlaceAutocomplete name="place" label="Place: " />
+            </Form>
+          </Dialog>
+        )}
+      </Formik>
+    )}
+  </NotificationContext.Consumer>
+);
 
 export default AddEvent;

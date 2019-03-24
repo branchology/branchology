@@ -8,12 +8,17 @@ const resolvers = {
   Query,
   EventPayload: {
     person({ personId }, args, context) {
-      return context.dataLoaders.people.personLoader.load(personId);
+      return personId && context.dataLoaders.people.personLoader.load(personId);
+    },
+  },
+  NamePayload: {
+    person({ personId }, args, context) {
+      return personId && context.dataLoaders.people.personLoader.load(personId);
     },
   },
   RemovePersonRecordPayload: {
     person({ personId }, args, context) {
-      return context.dataLoaders.people.personLoader.load(personId);
+      return personId && context.dataLoaders.people.personLoader.load(personId);
     },
   },
   Name: {

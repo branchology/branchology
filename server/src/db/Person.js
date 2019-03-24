@@ -362,7 +362,9 @@ export default class Person {
   removeName(personNameId) {
     return this.db(PERSON_NAME_TABLE)
       .delete()
-      .where('id', personNameId);
+      .returning('*')
+      .where('id', personNameId)
+      .then(personName => personName[0]);
   }
 
   async setPersonNamePreferred(personNameId) {

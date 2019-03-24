@@ -47,6 +47,8 @@ export default {
       },
     }),
   resolve: function removePersonNameMutation(root, { personNameId }) {
-    return person.removeName(personNameId).then(() => ({ removed: true }));
+    return person
+      .removeName(personNameId)
+      .then(({ person_id }) => ({ removed: true, personId: person_id }));
   },
 };

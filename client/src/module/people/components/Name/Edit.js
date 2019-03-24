@@ -1,75 +1,43 @@
-import React, { PureComponent } from 'react';
-import { createApiValidationError, translateApiErrors } from 'lib';
-import { components } from 'module/common';
-import { Form, InputText } from 'module/common/component/Form';
-import { NotificationContext } from 'module/common/notifications';
+import React from 'react';
+import NameForm from './Form';
 import updatePersonNameWrapper from '../../query/nameUpdateMutation';
-
-const {
-  ui: { Button, Dialog },
-} = components;
 
 function initialValues(initialValue) {
   const { id, given, surname } = initialValue;
   return { id, given, surname };
 }
 
-class NameEdit extends PureComponent {
-  static contextType = NotificationContext;
-
-  submit = values => {
-    return this.props
-      .updatePersonName({ variables: values })
-      .then(({ data: { updatePersonName: { errors, name } } }) => {
-        if (errors) {
-          throw createApiValidationError(translateApiErrors(errors, 'name'));
-        }
-
-        this.props.onClose();
-        this.context.notify('Person Name Updated!');
-        return name;
-      });
+function prepareValuesForSubmit({ given, id, surname }) {
+  return {
+    id,
+    name: { given, surname },
   };
-
-  render() {
-    const { name, onClose } = this.props;
-
-    return (
-      <Form
-        onSubmit={this.submit}
-        initialValues={initialValues(name)}
-        prepareValuesForSubmit={({ given, surname }) => {
-          return {
-            id: this.props.name.id,
-            name: { given, surname },
-          };
-        }}
-        render={({ container, submit }) => (
-          <Dialog
-            title="Update Person Name"
-            footer={
-              <div>
-                <Button type="button" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="button" onClick={submit}>
-                  Save
-                </Button>
-              </div>
-            }
-          >
-            <InputText
-              name="given"
-              label="Given: "
-              autoFocus
-              container={container}
-            />
-            <InputText name="surname" label="Surname: " container={container} />
-          </Dialog>
-        )}
-      />
-    );
-  }
 }
 
-export default updatePersonNameWrapper(NameEdit);
+const EditName = ({ onClose, name, updatePersonName }) => (
+  <NameForm
+    initialValues={initialValues(name)}
+    onClose={onClose}
+    onSave={variables => {
+      return new Promise((resolve, reject) => {
+        updatePersonName({
+          variables,
+        })
+          .then(({ data: { updatePersonName: { errors } } }) => {
+            if (errors) {
+              reject(errors);
+            } else {
+              resolve();
+            }
+          })
+          .catch(() => {
+            reject({});
+          });
+      });
+    }}
+    prepareValuesForSubmit={prepareValuesForSubmit}
+    title="Update Person Name"
+  />
+);
+
+export default updatePersonNameWrapper(EditName);

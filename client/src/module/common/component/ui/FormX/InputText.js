@@ -29,7 +29,7 @@ export const InputText = ({ name, label, ...props }) => (
   <div>
     <Field
       name={name}
-      render={({ field, form: { errors } }) => (
+      render={({ field }) => (
         <>
           <Label htmlFor={field.name}>{label}</Label>
           <StyledInput id={field.name} {...field} type="text" {...props} />

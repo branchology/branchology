@@ -1,71 +1,38 @@
-import React, { PureComponent } from 'react';
-import { createApiValidationError, translateApiErrors } from 'lib';
-import { components } from 'module/common';
-import { Form, InputText } from 'module/common/component/Form';
-import { NotificationContext } from 'module/common/notifications';
+import React from 'react';
+import NameForm from './Form';
 import nameCreateMutation from '../../query/nameCreateMutation';
 
-const {
-  ui: { Button, Dialog },
-} = components;
-
-class NameEdit extends PureComponent {
-  static contextType = NotificationContext;
-
-  submit = values => {
-    return this.props
-      .addPersonName({ variables: values })
-      .then(({ data: { addPersonName: { errors, name } } }) => {
-        if (errors) {
-          throw createApiValidationError(translateApiErrors(errors), 'name');
-        }
-
-        this.props.onClose();
-        this.context.notify('Person Name Added!');
-        return name;
-      });
+function prepareValuesForSubmit({ given, personId, surname }) {
+  return {
+    personId,
+    name: { given, surname },
   };
-
-  render() {
-    const { onClose } = this.props;
-
-    return (
-      <Form
-        prepareValuesForSubmit={({ given, surname }) => {
-          return {
-            personId: this.props.name.personId,
-            name: { given, surname },
-          };
-        }}
-        onSubmit={values => {
-          return this.submit(values);
-        }}
-        render={({ container, submit }) => (
-          <Dialog
-            title="Add Person Name"
-            footer={
-              <div>
-                <Button type="button" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="button" onClick={submit}>
-                  Save
-                </Button>
-              </div>
-            }
-          >
-            <InputText
-              name="given"
-              label="Given: "
-              autoFocus
-              container={container}
-            />
-            <InputText name="surname" label="Surname: " container={container} />
-          </Dialog>
-        )}
-      />
-    );
-  }
 }
 
-export default nameCreateMutation(NameEdit);
+const AddName = ({ addPersonName, onClose, person }) => (
+  <NameForm
+    initialValues={{ personId: person.id, surname: '', given: '' }}
+    onClose={onClose}
+    onSave={variables => {
+      return new Promise((resolve, reject) => {
+        addPersonName({
+          variables,
+        })
+          .then(({ data: { addPersonName: { errors } } }) => {
+            if (errors) {
+              reject(errors);
+            } else {
+              resolve();
+            }
+          })
+          .catch(() => {
+            reject({});
+          });
+      });
+    }}
+    prepareValuesForSubmit={prepareValuesForSubmit}
+    title="Add Person Name"
+  />
+);
+
+export default nameCreateMutation(AddName);

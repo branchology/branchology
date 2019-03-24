@@ -35,6 +35,6 @@ export default {
       },
     }),
   resolve: function addPersonNameMutation(root, { personId, name }) {
-    return person.addName(personId, name).then(n => ({ name: n }));
+    return person.addName(personId, name).then(n => ({ name: n, personId }));
   },
 };

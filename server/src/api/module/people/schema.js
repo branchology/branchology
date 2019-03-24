@@ -110,6 +110,7 @@ export default `
   type NamePayload {
     errors: [ErrorDetails]
     name: Name
+    person: Person
   }
 
   type PersonPayload {
@@ -212,7 +213,7 @@ export default `
       citationId: ID!
     ): EventPayload! @protected
 
-    removePersonName(personNameId: ID): RemoveRecordPayload! @protected
+    removePersonName(personNameId: ID): RemovePersonRecordPayload! @protected
 
     removePersonNameCitation(
       nameId: ID!,
