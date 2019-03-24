@@ -1,4 +1,5 @@
 .env
+build
 config.json
 docker-compose.yml
 node_modules

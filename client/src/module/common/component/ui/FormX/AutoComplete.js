@@ -3,6 +3,7 @@ import React from 'react';
 import ReactAutocomplete from 'react-autocomplete';
 import styled from 'styled-components';
 import styledMap from 'styled-map';
+import { FieldError } from './FieldError';
 import { rawStyles } from './Input';
 import { Label } from './Label';
 
@@ -75,7 +76,7 @@ const AutoComplete = ({ name, label, onSearch, values, ...props }) => (
               value={getIn(form.values, `${name}[value]`, '')}
             />
           </InputWrapper>
-          <ErrorMessage name={name} component="div" />
+          <ErrorMessage name={name} component={FieldError} />
         </>
       );
     }}

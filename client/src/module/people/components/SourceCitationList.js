@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
 import { components } from 'module/common';
-import SourceCitationAdd from './SourceCitationAdd';
-import SourceCitationEdit from './SourceCitationEdit';
+import SourceCitationAdd from './Citation/Add';
+import SourceCitationEdit from './Citation/Edit';
 import { NotificationConsumer } from '../../common/notifications';
 
 const {
