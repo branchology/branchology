@@ -226,7 +226,9 @@ export default class Person {
   removeAttribute(attributeId) {
     return this.db(PERSON_ATTRIBUTE_TABLE)
       .delete()
-      .where('id', attributeId);
+      .returning('*')
+      .where('id', attributeId)
+      .then(returnFirst);
   }
 
   async addAttributeSourceCitation(attributeId, sourceId, data) {

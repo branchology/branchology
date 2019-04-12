@@ -1,14 +1,18 @@
-import React, { PureComponent } from 'react';
-import { createApiValidationError, translateApiErrors } from 'lib';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { mapMutationErrorsForFormik } from 'lib';
 import { components } from 'module/common';
-import { Form, InputText, Select } from 'module/common/component/Form';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
-import PlaceAutocomplete from '../PlaceAutocomplete';
+import PlaceAutocomplete from '../PlaceAutocompleteX';
 import AttributeCreateMutation from '../../query/attributeCreateMutation';
 
 const {
-  ui: { Button, Dialog },
+  ui: {
+    Button,
+    Dialog,
+    Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
+  },
 } = components;
 
 function transfigureAttributeTypes() {
@@ -18,85 +22,129 @@ function transfigureAttributeTypes() {
   }));
 }
 
-class AddAttribute extends PureComponent {
-  static contextType = NotificationContext;
-
-  submit = values => {
-    return this.props
-      .addPersonAttribute({ variables: values })
-      .then(({ data: { addPersonAttribute: { errors, attribute } } }) => {
-        if (errors) {
-          throw createApiValidationError(
-            translateApiErrors(errors, 'attribute'),
-          );
-        }
-
-        this.props.onClose();
-        this.context.notify('Person Attribute Added!');
-        return attribute;
-      });
+function prepareValuesForSubmit({
+  personId,
+  type = '',
+  data,
+  date,
+  place,
+  placeId,
+}) {
+  const prepared = {
+    personId,
+    attribute: { type: '' },
   };
 
-  render() {
-    const { onClose, person } = this.props;
-
-    return (
-      <Form
-        prepareValuesForSubmit={({ type, data, date, place, placeId }) => {
-          const prepared = {
-            personId: person.id,
-            attribute: { type, data, date },
-          };
-
-          if (placeId) {
-            prepared.attribute.placeId = placeId;
-          } else if (place) {
-            prepared.attribute.place = place;
-          }
-
-          return prepared;
-        }}
-        onSubmit={this.submit}
-        validate={() => null /* TODO: FIXME: */}
-        render={({ container, submit }) => (
-          <Dialog
-            title="Add Person Attribute"
-            footer={
-              <div>
-                <Button type="button" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="button" onClick={submit}>
-                  Save
-                </Button>
-              </div>
-            }
-          >
-            <Select
-              name="type"
-              label="Type:"
-              autoFocus
-              options={transfigureAttributeTypes()}
-              container={container}
-            />
-            <InputText
-              name="data"
-              label="Data: "
-              container={container}
-              autoFocus
-            />
-            <InputText name="date" label="Date: " container={container} />
-            <PlaceAutocomplete
-              name="place"
-              label="Place: "
-              autoFocus
-              container={container}
-            />
-          </Dialog>
-        )}
-      />
-    );
+  if (type) {
+    prepared.attribute.type = type.value;
   }
+
+  if (date) {
+    prepared.attribute.date = date;
+  }
+
+  if (data) {
+    prepared.attribute.data = data;
+  }
+
+  if (placeId) {
+    prepared.attribute.placeId = placeId;
+  } else if (place && place.value) {
+    prepared.attribute.place = place.value;
+  }
+
+  return prepared;
+}
+
+function AddAttribute({ addPersonAttribute, onClose, person }) {
+  return (
+    <NotificationContext.Consumer>
+      {({ notify }) => (
+        <Formik
+          initialValues={{
+            personId: person.id,
+            type: null,
+            date: '',
+            data: '',
+          }}
+          onSubmit={(values, { setErrors, setSubmitting }) => {
+            const submitValues = prepareValuesForSubmit(values);
+
+            return addPersonAttribute({ variables: submitValues })
+              .then(({ data: { addPersonAttribute: { errors } } }) => {
+                setSubmitting(false);
+                console.log({ errors });
+                if (!errors) {
+                  onClose();
+                  notify('Attribute Added!');
+                  return;
+                }
+                setErrors(mapMutationErrorsForFormik(errors, 'attribute.'));
+
+                console.log({ errors });
+
+                return errors;
+              })
+              .catch(e => {
+                console.log(e);
+                notify('Failed to save attribute', 'error');
+                setSubmitting(false);
+              });
+          }}
+        >
+          {({ handleSubmit, isSubmitting, setFieldTouched, setFieldValue }) => (
+            <Dialog
+              title="Add Person Attribute"
+              footer={
+                <div>
+                  <Button danger type="button" onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button
+                    primary
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    Save
+                  </Button>
+                </div>
+              }
+            >
+              <Form>
+                <FieldSet legend="Attribute Details">
+                  <FieldRow>
+                    <FieldColumn flex={1}>
+                      <Select
+                        name="type"
+                        label="Type"
+                        onChange={setFieldValue}
+                        onBlur={setFieldTouched}
+                        options={transfigureAttributeTypes()}
+                      />
+                    </FieldColumn>
+
+                    <FieldColumn flex={2}>
+                      <InputText name="data" label="Data: " />
+                    </FieldColumn>
+                  </FieldRow>
+
+                  <FieldRow>
+                    <FieldColumn flex={1}>
+                      <InputText name="date" label="Date" />
+                    </FieldColumn>
+                    <FieldColumn flex={2}>
+                      <PlaceAutocomplete name="place" label="Place: " />
+                    </FieldColumn>
+                  </FieldRow>
+                </FieldSet>
+              </Form>
+            </Dialog>
+          )}
+        </Formik>
+      )}
+    </NotificationContext.Consumer>
+  );
 }
 
 export default AttributeCreateMutation(AddAttribute);

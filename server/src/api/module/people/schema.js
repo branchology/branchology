@@ -99,6 +99,7 @@ export default `
   type AttributePayload {
     attribute: Attribute
     errors: [ErrorDetails]
+    person: Person
   }
 
   type EventPayload {
@@ -198,7 +199,7 @@ export default `
     makePersonNamePreferred(personNameId: ID!): PrimaryPersonNamePayload @protected
 
     removePerson(personId: ID): Boolean @protected
-    removePersonAttribute(attributeId: ID!): RemoveRecordPayload! @protected
+    removePersonAttribute(attributeId: ID!): RemovePersonRecordPayload! @protected
 
     removePersonAttributeCitation(
       attributeId: ID!,

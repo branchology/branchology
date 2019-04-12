@@ -1,9 +1,11 @@
 import * as yup from 'yup';
-import { addEventSourceCitation, createAttribute, createSource } from 'db';
+import validateAttribute from 'service/validator/validateAttribute';
 
 export default {
-  // TODO: FIXME:
-  validationSchema: yup.object(),
+  validationSchema: yup.object().shape({
+    personId: yup.string().required(),
+    attribute: validateAttribute().required(),
+  }),
   resolve: function addPersonAttributeMutation(
     root,
     { personId, attribute: attributeData, citations = [] },
@@ -29,7 +31,7 @@ export default {
               citation,
             );
           }),
-        ).then(() => ({ attribute }));
+        ).then(() => ({ attribute, personId }));
       });
   },
 };

@@ -1,8 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'module/common';
-import fetchPerson from './fetchPerson';
-import eventFull from './fragment/eventFull';
+import personFragment from './fragment/personFragment';
 
 const attributeCreateMutation = gql`
   mutation addPersonAttribute($personId: ID!, $attribute: CreateAttributeInput!) {
@@ -12,25 +11,16 @@ const attributeCreateMutation = gql`
         message
         details
       }
-      attribute {
-        ${eventFull}
-        data
-        isPreferred
+      person {
+        ${personFragment}
       }
     }
   }
 `;
 
 export default WrappedComponent => props => {
-  const refetchQueries = [
-    { query: fetchPerson, variables: { id: props.person.id } },
-  ];
-
   return (
-    <Mutation
-      mutation={attributeCreateMutation}
-      refetchQueries={refetchQueries}
-    >
+    <Mutation mutation={attributeCreateMutation}>
       {addPersonAttribute => (
         <WrappedComponent addPersonAttribute={addPersonAttribute} {...props} />
       )}

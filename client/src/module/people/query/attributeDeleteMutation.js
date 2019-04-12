@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'module/common';
-import fetchPerson from './fetchPerson';
+import personFragment from './fragment/personFragment';
 
 const attributeRemoveMutation = gql`
   mutation removePersonAttribute($attributeId: ID!) {
@@ -12,6 +12,9 @@ const attributeRemoveMutation = gql`
         details
       }
       removed
+      person {
+        ${personFragment}
+      }
     }
   }
 `;
@@ -23,14 +26,8 @@ function rm(fn) {
 }
 
 export default WrappedComponent => props => {
-  const refetchQueries = [
-    { query: fetchPerson, variables: { id: props.person.id } },
-  ];
   return (
-    <Mutation
-      mutation={attributeRemoveMutation}
-      refetchQueries={refetchQueries}
-    >
+    <Mutation mutation={attributeRemoveMutation}>
       {remove => <WrappedComponent remove={rm(remove)} {...props} />}
     </Mutation>
   );

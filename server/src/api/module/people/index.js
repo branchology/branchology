@@ -6,6 +6,11 @@ import schema from './schema';
 const resolvers = {
   Mutation,
   Query,
+  AttributePayload: {
+    person({ personId }, args, context) {
+      return personId && context.dataLoaders.people.personLoader.load(personId);
+    },
+  },
   EventPayload: {
     person({ personId }, args, context) {
       return personId && context.dataLoaders.people.personLoader.load(personId);
