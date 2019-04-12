@@ -1,23 +1,38 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import styledMap from 'styled-map';
+
+const bgColorMap = styledMap`
+  error: #ef5753;
+  success: #51d88a;
+`;
+
+const fgColorMap = styledMap`
+  error: #fcebea;
+  success: #e3fcec;
+`;
 
 const NotificationContext = React.createContext();
 
 export { NotificationContext };
 
 const NotificationContainer = styled.div`
-  background-color: hotpink;
+  background-color: ${bgColorMap};
   box-sizing: border-box;
+  color: ${fgColorMap};
   cursor: pointer;
   padding: 10px;
   position: fixed;
   width: 100%;
+  z-index: 4000;
 `;
 
 const Notification = () => (
   <NotificationConsumer>
-    {({ message, dismiss }) => (
-      <NotificationContainer onClick={dismiss}>{message}</NotificationContainer>
+    {({ message, dismiss, type }) => (
+      <NotificationContainer onClick={dismiss} {...{ [type]: true }}>
+        {message}
+      </NotificationContainer>
     )}
   </NotificationConsumer>
 );
@@ -30,10 +45,11 @@ export class NotificationProvider extends Component {
       timeout: null,
       isOpen: false,
       message: '',
+      type: '',
     };
   }
 
-  notify = message => {
+  notify = (message, type = 'success') => {
     if (this.state.timeout) {
       clearInterval(this.state.timeout);
     }
@@ -41,6 +57,7 @@ export class NotificationProvider extends Component {
     this.setState({
       timeout: setTimeout(this.dismiss, 5000),
       message,
+      type,
       isOpen: true,
     });
   };
@@ -49,6 +66,7 @@ export class NotificationProvider extends Component {
     this.setState({
       timeout: null,
       message: '',
+      type: '',
       isOpen: false,
     });
   };
@@ -62,6 +80,7 @@ export class NotificationProvider extends Component {
           notify: this.notify,
           dismiss: this.dismiss,
           message: this.state.message,
+          type: this.state.type,
         }}
       >
         {this.state.isOpen && <Notification />}
