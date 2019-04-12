@@ -13,6 +13,19 @@ const {
   },
 } = components;
 
+export const Fields = ({ initialValues }) => (
+  <>
+    <SourceAutocomplete
+      name="source"
+      label="Source: "
+      autoFocus
+      hardValues={initialValues.source ? [initialValues.source] : []}
+    />
+    <InputText name="page" label="Page: " />
+    <TextArea name="citation" label="Citation: " />
+  </>
+);
+
 export default function CitationForm({
   initialValues,
   onClose,
@@ -59,16 +72,7 @@ export default function CitationForm({
               }
             >
               <Form>
-                <SourceAutocomplete
-                  name="source"
-                  label="Source: "
-                  autoFocus
-                  hardValues={
-                    initialValues.source ? [initialValues.source] : []
-                  }
-                />
-                <InputText name="page" label="Page: " />
-                <TextArea name="citation" label="Citation: " />
+                <Fields initialValues={initialValues} />
               </Form>
             </Dialog>
           )}

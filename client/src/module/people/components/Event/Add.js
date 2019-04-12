@@ -3,12 +3,13 @@ import React from 'react';
 import { components } from 'module/common';
 import { NotificationContext } from 'module/common/notifications';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
+import { Fields as CitationFields } from '../Citation/Form';
 
 const {
   ui: {
     Button,
     Dialog,
-    Form: { FieldColumn, FieldRow, InputText, Select },
+    Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
 
@@ -41,6 +42,17 @@ function prepareValuesForSubmit(data) {
     prepared.event.place = data.place.value;
   }
 
+  if (data.source || data.citation || data.page) {
+    const citation = { citation: data.citation, page: data.page };
+    if (data.source && data.source.id) {
+      citation.sourceId = data.source.id;
+    } else if (data.source && data.source.value) {
+      citation.source = data.source.value;
+    }
+
+    prepared.citations = [citation];
+  }
+
   return prepared;
 }
 
@@ -66,6 +78,8 @@ const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => (
           id: parent.id,
           type: null,
           date: '',
+          page: '',
+          citation: '',
         }}
         onSubmit={(values, { setErrors, setSubmitting }) => {
           const submitValues = prepareValuesForSubmit(values);
@@ -107,23 +121,29 @@ const AddEvent = ({ addEvent, eventTypes, onClose, parent }) => (
             }
           >
             <Form>
-              <FieldRow>
-                <FieldColumn flex={1}>
-                  <Select
-                    name="type"
-                    label="Type"
-                    onChange={setFieldValue}
-                    onBlur={setFieldTouched}
-                    options={transfigureEventTypes(eventTypes)}
-                  />
-                </FieldColumn>
+              <FieldSet legend="Event Details">
+                <FieldRow>
+                  <FieldColumn flex={1}>
+                    <Select
+                      name="type"
+                      label="Type"
+                      onChange={setFieldValue}
+                      onBlur={setFieldTouched}
+                      options={transfigureEventTypes(eventTypes)}
+                    />
+                  </FieldColumn>
 
-                <FieldColumn flex={2}>
-                  <InputText name="date" label="Date" />
-                </FieldColumn>
-              </FieldRow>
+                  <FieldColumn flex={2}>
+                    <InputText name="date" label="Date" />
+                  </FieldColumn>
+                </FieldRow>
 
-              <PlaceAutocomplete name="place" label="Place: " />
+                <PlaceAutocomplete name="place" label="Place: " />
+              </FieldSet>
+
+              <FieldSet legend="Source (optional)">
+                <CitationFields initialValues={{}} />
+              </FieldSet>
             </Form>
           </Dialog>
         )}
