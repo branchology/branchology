@@ -12,8 +12,8 @@ const defaults = {
 const dbConfig = { ...defaults, ...config.db };
 
 module.exports = {
-  client: 'pg',
-  debug: dbConfig.debug === 'true',
+  client: dbConfig.client || 'pg',
+  debug: dbConfig.debug === true,
   connection: {
     host: dbConfig.host,
     port: dbConfig.port,
