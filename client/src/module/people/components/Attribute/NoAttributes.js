@@ -17,13 +17,13 @@ const attributeIcons = [
 
 const message = `There are currently no attributes for this person.`;
 
-export default () => (
+export default ({ onAddClick }) => (
   <NoResults
     icon={pickRandom(attributeIcons)}
     message={message}
     actions={
       <WithUser>
-        <IconButton success icon="plus-circle" onClick={() => null}>
+        <IconButton success icon="plus-circle" onClick={onAddClick}>
           Add Attribute
         </IconButton>
       </WithUser>

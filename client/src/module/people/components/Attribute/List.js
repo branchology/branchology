@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { components } from 'module/common';
-import NoResults from 'component/NoResults';
 import AttributeAdd from './Add';
 import CitationList from './CitationList';
 import AttributeDelete from './Delete';
@@ -19,9 +18,7 @@ export default ({ person, attributes }) => {
   const [editAttribute, toggleEdit] = useState();
   const [activeDialog, toggleDialog] = useState();
 
-  return attributes.length === 0 ? (
-    <NoAttributes />
-  ) : (
+  return (
     <div>
       <WithUser>
         {editAttribute && (
@@ -37,63 +34,67 @@ export default ({ person, attributes }) => {
         )}
       </WithUser>
 
-      <Table>
-        <thead>
-          <tr>
-            <Heading>Attribute</Heading>
-            <Heading>Date</Heading>
-            <Heading>Details</Heading>
-            <Heading>Place</Heading>
-            <Heading right>
-              <WithUser>
-                <IconButton
-                  icon="plus-circle"
-                  success
-                  sm
-                  onClick={() => toggleDialog('AttributeAdd')}
-                >
-                  Add Attribute
-                </IconButton>
-              </WithUser>
-            </Heading>
-          </tr>
-        </thead>
-        <tbody>
-          {attributes.map((attribute, index) => [
-            <tr className={index % 2 === 1 ? 'alt' : ''} key={attribute.id}>
-              <td>{attribute.type}</td>
-              <td>{attribute.date}</td>
-              <td>{attribute.data}</td>
-              <td>{attribute.place && attribute.place.description}</td>
-              <td className="actions">
+      {attributes.length === 0 && (
+        <NoAttributes onAddClick={() => toggleDialog('AttributeAdd')} />
+      )}
+
+      {attributes.length > 0 && (
+        <Table>
+          <thead>
+            <tr>
+              <Heading>Attribute</Heading>
+              <Heading>Date</Heading>
+              <Heading>Details</Heading>
+              <Heading>Place</Heading>
+              <Heading right>
                 <WithUser>
                   <IconButton
-                    primary
-                    icon="pencil-alt"
-                    onClick={() => toggleEdit(attribute)}
+                    icon="plus-circle"
+                    success
+                    sm
+                    onClick={() => toggleDialog('AttributeAdd')}
                   >
-                    Edit
+                    Add Attribute
                   </IconButton>
-                  <AttributeDelete person={person} data={attribute} />
                 </WithUser>
-              </td>
-            </tr>,
-            <tr
-              className={index % 2 === 1 ? 'alt' : ''}
-              key={`sources-${attribute.id}`}
-            >
-              <td colSpan="5" className="citations">
-                <CitationList
-                  citations={attribute.sourceCitations}
-                  entity={attribute}
-                />
-              </td>
-            </tr>,
-          ])}
-        </tbody>
-      </Table>
-
-      {attributes.length === 0 && <NoResults />}
+              </Heading>
+            </tr>
+          </thead>
+          <tbody>
+            {attributes.map((attribute, index) => [
+              <tr className={index % 2 === 1 ? 'alt' : ''} key={attribute.id}>
+                <td>{attribute.type}</td>
+                <td>{attribute.date}</td>
+                <td>{attribute.data}</td>
+                <td>{attribute.place && attribute.place.description}</td>
+                <td className="actions">
+                  <WithUser>
+                    <IconButton
+                      primary
+                      icon="pencil-alt"
+                      onClick={() => toggleEdit(attribute)}
+                    >
+                      Edit
+                    </IconButton>
+                    <AttributeDelete person={person} data={attribute} />
+                  </WithUser>
+                </td>
+              </tr>,
+              <tr
+                className={index % 2 === 1 ? 'alt' : ''}
+                key={`sources-${attribute.id}`}
+              >
+                <td colSpan="5" className="citations">
+                  <CitationList
+                    citations={attribute.sourceCitations}
+                    entity={attribute}
+                  />
+                </td>
+              </tr>,
+            ])}
+          </tbody>
+        </Table>
+      )}
     </div>
   );
 };

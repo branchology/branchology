@@ -45,12 +45,7 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
       </WithUser>
 
       {events.length === 0 && (
-        <NoPersonEvents
-          onAddClick={() => {
-            console.log('fffff');
-            toggleDialog('EventAdd');
-          }}
-        />
+        <NoPersonEvents onAddClick={() => toggleDialog('EventAdd')} />
       )}
 
       {events.length > 0 && (
