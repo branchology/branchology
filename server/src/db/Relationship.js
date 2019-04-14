@@ -61,23 +61,12 @@ export default class Relationship {
     this.person = new Person(db);
   }
 
-  async create(spouse1, spouse2, data = {}) {
-    const { marriageDate, marriagePlace, marriagePlaceId } = data;
-
+  async create(spouse1, spouse2) {
     const relationshipId = generateUuid();
 
     const relationship = await this.db(RELATIONSHIP_TABLE)
       .insert({ id: relationshipId }, '*')
       .then(returnFirst);
-
-    if (marriageDate || marriagePlace || marriagePlaceId) {
-      const marriage = await this.event.createEvent('MARR', {
-        date: marriageDate,
-        place: marriagePlace,
-        placeId: marriagePlaceId,
-      });
-      await this.attachEvent(relationshipId, marriage.id);
-    }
 
     if (spouse1) {
       await this.person.attachRelationship(spouse1, relationshipId);

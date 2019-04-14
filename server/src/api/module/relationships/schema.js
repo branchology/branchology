@@ -31,6 +31,13 @@ export default `
     relationship: Relationship
   }
 
+
+  type CreateSpousePayload {
+    error: JSON
+    relationship: Relationship
+    person: Person
+  }
+
   type ParentsPayload {
     error: ErrorDetails
     parents: Parents
@@ -62,7 +69,8 @@ export default `
       lineage: LineageType = BIRTH,
       birth: EventInput,
       death: EventInput,
-      sex: Sex!
+      sex: Sex!,
+      citations: [CreateSourceCitationInput]
     ): PersonPayload @protected
 
     createParents(
@@ -78,7 +86,8 @@ export default `
       birth: EventInput,
       death: EventInput,
       marriage: EventInput,
-    ): RelationshipPayload @protected
+      citations: [CreateSourceCitationInput]
+    ): CreateSpousePayload @protected
 
     addRelationshipEvent(
       relationshipId: ID!,
