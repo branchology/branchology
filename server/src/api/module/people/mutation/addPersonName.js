@@ -34,7 +34,20 @@ export default {
         return true;
       },
     }),
-  resolve: function addPersonNameMutation(root, { personId, name }) {
-    return person.addName(personId, name).then(n => ({ name: n, personId }));
+  resolve: function addPersonNameMutation(
+    root,
+    { personId, name, citations = [] },
+    context,
+  ) {
+    return person
+      .addName(personId, name)
+      .then(name =>
+        context.dbal.source.attachSourceCitation(
+          context.dbal.person.addNameSourceCitation,
+          name.id,
+          citations,
+        ),
+      )
+      .then(n => ({ name: n, personId }));
   },
 };

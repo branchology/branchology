@@ -251,25 +251,16 @@ export default class Person {
   async createName(personId, nameData) {
     const nameId = generateUuid();
 
-    // TODO: FIXME: Implement
-    const { sources = [], notes = [], ...data } = nameData;
-
-    const name = await this.db(PERSON_NAME_TABLE)
+    return this.db(PERSON_NAME_TABLE)
       .insert(
         {
           id: nameId,
           person_id: personId,
-          ...data,
+          ...nameData,
         },
         '*',
       )
       .then(returnFirst);
-
-    return Promise.all(
-      sources.map(({ sourceId, ...data }) => {
-        return this.addNameSourceCitation(name.id, sourceId, data);
-      }),
-    ).then(() => name);
   }
 
   async create(data) {
@@ -419,7 +410,7 @@ export default class Person {
       .then(() => personEvent);
   }
 
-  async addNameSourceCitation(personNameId, sourceId, data) {
+  addNameSourceCitation = async (personNameId, sourceId, data) => {
     const id = generateUuid();
 
     const citation = await this.source.createSourceCitation(sourceId, data);
@@ -434,7 +425,7 @@ export default class Person {
         '*',
       )
       .then(returnFirst);
-  }
+  };
 
   attachEvent(personId, eventId) {
     const id = generateUuid();

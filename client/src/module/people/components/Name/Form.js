@@ -2,12 +2,13 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 import { components } from 'module/common';
 import { NotificationContext } from 'module/common/notifications';
+import { Fields as CitationFields } from '../Citation/Form';
 
 const {
   ui: {
     Button,
     Dialog,
-    Form: { InputText },
+    Form: { FieldRow, FieldSet, InputText },
   },
 } = components;
 
@@ -26,6 +27,7 @@ function mapMutationErrorsForFormik(errors, stripKey = '') {
 }
 
 export default function NameForm({
+  includeCitation,
   initialValues,
   onClose,
   onSave,
@@ -71,8 +73,16 @@ export default function NameForm({
               }
             >
               <Form>
-                <InputText name="given" label="Given:" autoFocus />
-                <InputText name="surname" label="Surname:" />
+                <FieldSet legend="Name Details">
+                  <InputText name="given" label="Given:" autoFocus />
+                  <InputText name="surname" label="Surname:" />
+                </FieldSet>
+
+                {includeCitation && (
+                  <FieldSet legend="Source (optional)">
+                    <CitationFields initialValues={{}} />
+                  </FieldSet>
+                )}
               </Form>
             </Dialog>
           )}
