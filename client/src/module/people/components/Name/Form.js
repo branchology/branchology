@@ -8,7 +8,7 @@ const {
   ui: {
     Button,
     Dialog,
-    Form: { FieldRow, FieldSet, InputText },
+    Form: { FieldSet, InputText },
   },
 } = components;
 
