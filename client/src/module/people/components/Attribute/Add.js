@@ -4,6 +4,7 @@ import { mapMutationErrorsForFormik } from 'lib';
 import { components } from 'module/common';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
+import { Fields as CitationFields } from '../Citation/Form';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
 import AttributeCreateMutation from '../../query/attributeCreateMutation';
 
@@ -29,6 +30,7 @@ function prepareValuesForSubmit({
   date,
   place,
   placeId,
+  ...other
 }) {
   const prepared = {
     personId,
@@ -53,6 +55,17 @@ function prepareValuesForSubmit({
     prepared.attribute.place = place.value;
   }
 
+  if (other.source || other.citation || other.page) {
+    const citation = { citation: other.citation, page: other.page };
+    if (other.source && other.source.id) {
+      citation.sourceId = other.source.id;
+    } else if (other.source && other.source.value) {
+      citation.source = other.source.value;
+    }
+
+    prepared.citations = [citation];
+  }
+
   return prepared;
 }
 
@@ -66,6 +79,8 @@ function AddAttribute({ addPersonAttribute, onClose, person }) {
             type: null,
             date: '',
             data: '',
+            page: '',
+            citation: '',
           }}
           onSubmit={(values, { setErrors, setSubmitting }) => {
             const submitValues = prepareValuesForSubmit(values);
@@ -73,7 +88,6 @@ function AddAttribute({ addPersonAttribute, onClose, person }) {
             return addPersonAttribute({ variables: submitValues })
               .then(({ data: { addPersonAttribute: { errors } } }) => {
                 setSubmitting(false);
-                console.log({ errors });
                 if (!errors) {
                   onClose();
                   notify('Attribute Added!');
@@ -81,12 +95,9 @@ function AddAttribute({ addPersonAttribute, onClose, person }) {
                 }
                 setErrors(mapMutationErrorsForFormik(errors, 'attribute.'));
 
-                console.log({ errors });
-
                 return errors;
               })
               .catch(e => {
-                console.log(e);
                 notify('Failed to save attribute', 'error');
                 setSubmitting(false);
               });
@@ -137,6 +148,10 @@ function AddAttribute({ addPersonAttribute, onClose, person }) {
                       <PlaceAutocomplete name="place" label="Place: " />
                     </FieldColumn>
                   </FieldRow>
+                </FieldSet>
+
+                <FieldSet legend="Source (optional)">
+                  <CitationFields initialValues={{}} />
                 </FieldSet>
               </Form>
             </Dialog>

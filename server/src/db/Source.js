@@ -65,4 +65,21 @@ export default class Source {
       .insert({ id, source_id: sourceId, note_id: noteId }, '*')
       .then(returnFirst);
   }
+
+  attachSourceCitation(method, relatedId, citations) {
+    return Promise.all(
+      citations.map(async ({ source, sourceId, ...citation }) => {
+        let mySourceId = sourceId;
+
+        if (source) {
+          const source = await this.create({
+            title: source,
+          });
+          mySourceId = source.id;
+        }
+
+        return method(relatedId, mySourceId, citation);
+      }),
+    );
+  }
 }

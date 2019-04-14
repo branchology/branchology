@@ -171,7 +171,7 @@ export default class Event {
       .then(returnFirst);
   }
 
-  async addSourceCitation(eventId, sourceId, data) {
+  addSourceCitation = async (eventId, sourceId, data) => {
     const id = generateUuid();
 
     const citation = await this.source.createSourceCitation(sourceId, data);
@@ -186,5 +186,5 @@ export default class Event {
         '*',
       )
       .then(returnFirst);
-  }
+  };
 }

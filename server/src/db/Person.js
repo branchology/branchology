@@ -231,7 +231,7 @@ export default class Person {
       .then(returnFirst);
   }
 
-  async addAttributeSourceCitation(attributeId, sourceId, data) {
+  addAttributeSourceCitation = async (attributeId, sourceId, data) => {
     const id = generateUuid();
 
     const citation = await this.source.createSourceCitation(sourceId, data);
@@ -246,7 +246,7 @@ export default class Person {
         '*',
       )
       .then(returnFirst);
-  }
+  };
 
   async createName(personId, nameData) {
     const nameId = generateUuid();

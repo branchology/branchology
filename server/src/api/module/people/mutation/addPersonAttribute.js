@@ -13,25 +13,14 @@ export default {
   ) {
     return context.dbal.person
       .createAttribute(personId, attributeData)
-      .then(attribute => {
-        return Promise.all(
-          citations.map(async ({ source, sourceId, ...citation }) => {
-            let mySourceId = sourceId;
-
-            if (source) {
-              const source = await context.dbal.source.create({
-                title: source,
-              });
-              mySourceId = source.id;
-            }
-
-            return context.dbal.person.addPersonAttributeSourceCitation(
-              attribute.id,
-              mySourceId,
-              citation,
-            );
-          }),
-        ).then(() => ({ attribute, personId }));
-      });
+      .then(attribute =>
+        context.dbal.source
+          .attachSourceCitation(
+            context.dbal.person.addAttributeSourceCitation,
+            attribute.id,
+            citations,
+          )
+          .then(() => ({ attribute, personId })),
+      );
   },
 };

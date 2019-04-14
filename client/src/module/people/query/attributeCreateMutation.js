@@ -4,8 +4,8 @@ import { Mutation } from 'module/common';
 import personFragment from './fragment/personFragment';
 
 const attributeCreateMutation = gql`
-  mutation addPersonAttribute($personId: ID!, $attribute: CreateAttributeInput!) {
-    addPersonAttribute(personId: $personId, attribute: $attribute) {
+  mutation addPersonAttribute($personId: ID!, $attribute: CreateAttributeInput!, $citations: [CreateSourceCitationInput]) {
+    addPersonAttribute(personId: $personId, attribute: $attribute, citations: $citations) {
       errors {
         field
         message
