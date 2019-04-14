@@ -14,23 +14,12 @@ export default {
     return context.dbal.event.createEvent(type, eventData).then(event => {
       return Promise.all([
         context.dbal.relationship.attachEvent(relationshipId, event.id),
-        ...citations.map(async ({ source, sourceId, ...citation }) => {
-          let mySourceId = sourceId;
-
-          if (source) {
-            const source = await context.dbal.source.createSource({
-              title: source,
-            });
-            mySourceId = source.id;
-          }
-
-          return context.dbal.event.addSourceCitation(
-            event.id,
-            mySourceId,
-            citation,
-          );
-        }),
-      ]).then(() => ({ event }));
+        context.dbal.source.attachSourceCitation(
+          context.dbal.event.addSourceCitation,
+          event.id,
+          citations,
+        ),
+      ]).then(() => ({ event, relationshipId }));
     });
   },
 };

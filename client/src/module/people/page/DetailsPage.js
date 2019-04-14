@@ -30,6 +30,7 @@ const DetailsPage = ({ data }) => (
       ]}
       contents={[
         <EventList
+          type="person"
           parent={data.person}
           person={data.person}
           events={data.person.events}

@@ -8,16 +8,15 @@ const {
   WithUser,
 } = components;
 
-const eventIcons = ['calendar', 'ring'];
-const message = `There are currently no events for this relationship.`;
+const eventIcons = ['bible', 'birthday-cake', 'calendar'];
 
-export default () => (
+export default ({ onAddClick, type }) => (
   <NoResults
     icon={pickRandom(eventIcons)}
-    message={message}
+    message={`There are currently no events for this ${type}.`}
     actions={
       <WithUser>
-        <IconButton success icon="plus-circle" onClick={() => null}>
+        <IconButton success icon="plus-circle" onClick={onAddClick}>
           Add Event
         </IconButton>
       </WithUser>

@@ -1,20 +1,18 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'module/common';
-import fetchPerson from '../../../query/fetchPerson';
-import eventFull from '../../../query/fragment/eventFull';
+import relationshipFragment from '../../../query/fragment/relationship';
 
 const addEventMutation = gql`
-  mutation addEvent($id: ID!, $event: CreateEventInput!) {
-    addEvent: addRelationshipEvent(relationshipId: $id, event: $event) {
+  mutation addEvent($id: ID!, $event: CreateEventInput!, $citations: [CreateSourceCitationInput]) {
+    addEvent: addRelationshipEvent(relationshipId: $id, event: $event, citations: $citations) {
       errors {
         field
         message
         details
       }
-      event {
-        ${eventFull}
-        isPreferred
+      relationship {
+        ${relationshipFragment}
       }
     }
   }
@@ -29,22 +27,18 @@ const removeEventMutation = gql`
         details
       }
       removed
+      relationship {
+        ${relationshipFragment}
+      }
     }
   }
 `;
 
 export default WrappedComponent => props => {
-  const refetchQueries = [
-    { query: fetchPerson, variables: { id: props.person.id } },
-  ];
-
   return (
-    <Mutation mutation={addEventMutation} refetchQueries={refetchQueries}>
+    <Mutation mutation={addEventMutation}>
       {addEvent => (
-        <Mutation
-          mutation={removeEventMutation}
-          refetchQueries={refetchQueries}
-        >
+        <Mutation mutation={removeEventMutation}>
           {removeEvent => (
             <WrappedComponent
               addEvent={addEvent}

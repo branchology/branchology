@@ -102,10 +102,13 @@ export default class Relationship {
     return this.db(RELATIONSHIP_EVENT_TABLE)
       .delete()
       .where('event_id', eventId)
-      .then(() => {
+      .returning('*')
+      .then(returnFirst)
+      .then(relationshipEvent => {
         return this.db(EVENT_TABLE)
           .delete()
-          .where('id', eventId);
+          .where('id', eventId)
+          .then(() => relationshipEvent);
       });
   }
 

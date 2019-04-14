@@ -4,7 +4,6 @@ import NoResults from 'component/NoResults';
 import ChildrenList from './ChildrenList';
 import EventList from './EventList';
 import eventTypes from './eventTypes';
-import NoRelationshipEvents from './NoRelationshipEvents';
 
 export default ({ person, relationships }) => (
   <div>
@@ -27,16 +26,13 @@ export default ({ person, relationships }) => (
             <h5 className="sectionTitle padTop">Events</h5>
           </div>
 
-          {relationship.events.length ? (
-            <EventList
-              person={person}
-              parent={relationship}
-              events={relationship.events}
-              eventTypes={eventTypes}
-            />
-          ) : (
-            <NoRelationshipEvents />
-          )}
+          <EventList
+            type="relationship"
+            person={person}
+            parent={relationship}
+            events={relationship.events}
+            eventTypes={eventTypes}
+          />
 
           <ChildrenList
             person={person}

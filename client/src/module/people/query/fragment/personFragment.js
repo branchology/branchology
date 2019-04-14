@@ -3,6 +3,7 @@ import eventBasics from './eventBasics';
 import eventFull from './eventFull';
 import nameBasics from './nameBasics';
 import name from './name';
+import relationship from './relationship';
 
 export default `
   id
@@ -40,32 +41,7 @@ export default `
     ${name}
   }
   relationships {
-    id
-    events {
-      ${eventFull}
-    }
-    people {
-      id
-      name {
-        ${nameBasics}
-      }
-    }
-    children {
-      id
-      type
-      person {
-        id
-        birth {
-          ${eventBasics}
-        }
-        death {
-          ${eventBasics}
-        }
-        name {
-          ${nameBasics}
-        }
-      }
-    }
+    ${relationship}
   }
   notes {
     id

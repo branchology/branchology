@@ -43,6 +43,18 @@ export default `
     sex: Sex!
   }
 
+  type RelationshipEventPayload {
+    errors: [ErrorDetails]
+    event: Event
+    relationship: Relationship
+  }
+
+  type RemoveRelationshipEventPayload {
+    errors: [ErrorDetails]
+    removed: Boolean
+    relationship: Relationship
+  }
+
   extend type Mutation {
     createChild(
       relationshipId: ID!,
@@ -72,8 +84,8 @@ export default `
       relationshipId: ID!,
       event: CreateEventInput!,
       citations: [CreateSourceCitationInput]
-    ): EventPayload @protected
+    ): RelationshipEventPayload @protected
 
-    removeRelationshipEvent(eventId: ID!): RemoveRecordPayload! @protected
+    removeRelationshipEvent(eventId: ID!): RemoveRelationshipEventPayload! @protected
   }
 `;

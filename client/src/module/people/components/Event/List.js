@@ -3,7 +3,7 @@ import { components } from 'module/common';
 import EventAdd from './Add';
 import EventDelete from './Delete';
 import EventEdit from './Edit';
-import NoPersonEvents from './NoPersonEvents';
+import NoEvents from './NoEvents';
 import EventPreferredToggle from './PreferredToggle';
 import CitationList from './CitationList';
 
@@ -18,7 +18,14 @@ const {
 const eventsAllowingPrimary = eventTypes =>
   Object.keys(eventTypes).filter(key => eventTypes[key].allowsPrimary);
 
-export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
+export default ({
+  addEvent,
+  events,
+  eventTypes,
+  parent,
+  removeEvent,
+  type,
+}) => {
   const [editEvent, toggleEdit] = useState();
   const [activeDialog, toggleDialog] = useState();
 
@@ -45,7 +52,7 @@ export default ({ addEvent, events, eventTypes, parent, removeEvent }) => {
       </WithUser>
 
       {events.length === 0 && (
-        <NoPersonEvents onAddClick={() => toggleDialog('EventAdd')} />
+        <NoEvents type={type} onAddClick={() => toggleDialog('EventAdd')} />
       )}
 
       {events.length > 0 && (
