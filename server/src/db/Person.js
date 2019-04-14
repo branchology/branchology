@@ -188,15 +188,7 @@ export default class Person {
   }
 
   async createAttribute(personId, attrData) {
-    const {
-      data,
-      date,
-      place,
-      placeId,
-      type,
-      isPreferred = true,
-      sources = [],
-    } = attrData;
+    const { data, date, place, placeId, type, isPreferred = true } = attrData;
 
     let dbPlaceId;
     if (place || placeId) {
@@ -314,7 +306,7 @@ export default class Person {
   async addSourceCitation(personId, sourceId, data) {
     const id = generateUuid();
 
-    // TODO: FIXME:
+    // TODO: FIXME: fix what? nice comment...
     const citation = await createSourceCitation(sourceId, data);
 
     return this.db(PERSON_SOURCE_CITATION_TABLE)
