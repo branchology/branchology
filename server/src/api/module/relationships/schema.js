@@ -31,9 +31,13 @@ export default `
     relationship: Relationship
   }
 
+  type CreateChildPayload {
+    errors: [ErrorDetails]
+    relationship: Relationship
+  }
 
   type CreateSpousePayload {
-    error: JSON
+    errors: [ErrorDetails]
     relationship: Relationship
     person: Person
   }
@@ -71,7 +75,7 @@ export default `
       death: EventInput,
       sex: Sex!,
       citations: [CreateSourceCitationInput]
-    ): PersonPayload @protected
+    ): CreateChildPayload @protected
 
     createParents(
       personId: ID!,

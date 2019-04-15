@@ -3,6 +3,16 @@ import schema from './schema';
 
 const resolvers = {
   Mutation,
+  CreateChildPayload: {
+    relationship({ relationshipId }, args, context) {
+      return (
+        relationshipId &&
+        context.dataLoaders.relationships.relationshipLoader.load(
+          relationshipId,
+        )
+      );
+    },
+  },
   CreateSpousePayload: {
     person({ personId }, args, context) {
       return personId && context.dataLoaders.people.personLoader.load(personId);

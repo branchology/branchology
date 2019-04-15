@@ -1,6 +1,7 @@
 import { Formik, Form } from 'formik';
 import React from 'react';
 import { components } from 'module/common';
+import { Fields as CitationFields } from '../Citation/Form';
 import PlaceAutocomplete from '../PlaceAutocompleteX';
 import createChildWrapper from './container/createChild';
 
@@ -8,7 +9,7 @@ const {
   ui: {
     Button,
     Dialog,
-    Form: { FieldColumn, FieldRow, InputText, Select },
+    Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
 
@@ -46,6 +47,17 @@ function prepareValuesForSubmit(values) {
 
   prepareEvent('birth', 'BIRT');
   prepareEvent('death', 'DEAT');
+
+  if (values.source || values.citation || values.page) {
+    const citation = { citation: values.citation, page: values.page };
+    if (values.source && values.source.id) {
+      citation.sourceId = values.source.id;
+    } else if (values.source && values.source.value) {
+      citation.source = values.source.value;
+    }
+
+    submitValues.citations = [citation];
+  }
 
   return submitValues;
 }
@@ -103,57 +115,69 @@ const AddChildForm = ({ createChild, relationship, onClose }) => {
           }
         >
           <Form>
-            <FieldRow>
-              <FieldColumn flex={1}>
-                <Select
-                  autoFocus
-                  name="sex"
-                  label="Sex"
-                  onChange={setFieldValue}
-                  onBlur={setFieldTouched}
-                  options={[
-                    { value: 'F', label: 'Female' },
-                    { value: 'M', label: 'Male' },
-                  ]}
-                />
-              </FieldColumn>
-              <FieldColumn flex={1}>
-                <Select
-                  name="lineage"
-                  label="Lineage"
-                  onChange={setFieldValue}
-                  onBlur={setFieldTouched}
-                  options={lineageTypes}
-                />
-              </FieldColumn>
-            </FieldRow>
+            <FieldSet legend="Child Info">
+              <FieldRow>
+                <FieldColumn flex={1}>
+                  <Select
+                    autoFocus
+                    name="sex"
+                    label="Sex"
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    options={[
+                      { value: 'F', label: 'Female' },
+                      { value: 'M', label: 'Male' },
+                    ]}
+                  />
+                </FieldColumn>
+                <FieldColumn flex={1}>
+                  <Select
+                    name="lineage"
+                    label="Lineage"
+                    onChange={setFieldValue}
+                    onBlur={setFieldTouched}
+                    options={lineageTypes}
+                  />
+                </FieldColumn>
+              </FieldRow>
 
-            <FieldRow>
-              <FieldColumn flex={1}>
-                <InputText name="name[given]" label="Given Name" />
-              </FieldColumn>
-              <FieldColumn flex={1}>
-                <InputText name="name[surname]" label="Surname" />
-              </FieldColumn>
-            </FieldRow>
+              <FieldRow>
+                <FieldColumn flex={1}>
+                  <InputText name="name[given]" label="Given Name" />
+                </FieldColumn>
+                <FieldColumn flex={1}>
+                  <InputText name="name[surname]" label="Surname" />
+                </FieldColumn>
+              </FieldRow>
 
-            <FieldRow>
-              <FieldColumn>
-                <InputText name="birth[date]" label="Birth Date" />
-              </FieldColumn>
-              <FieldColumn flex={2}>
-                <PlaceAutocomplete name="birth[place]" label="Place: " />
-              </FieldColumn>
-            </FieldRow>
+              <FieldRow>
+                <FieldColumn>
+                  <InputText name="birth[date]" label="Birth Date" />
+                </FieldColumn>
+                <FieldColumn flex={2}>
+                  <PlaceAutocomplete name="birth[place]" label="Place: " />
+                </FieldColumn>
+              </FieldRow>
 
-            <FieldRow>
-              <FieldColumn>
-                <InputText name="death[date]" label="Death Date" />
-              </FieldColumn>
-              <FieldColumn flex={2}>
-                <PlaceAutocomplete name="death[place]" label="Place: " />
-              </FieldColumn>
-            </FieldRow>
+              <FieldRow>
+                <FieldColumn>
+                  <InputText name="death[date]" label="Death Date" />
+                </FieldColumn>
+                <FieldColumn flex={2}>
+                  <PlaceAutocomplete name="death[place]" label="Place: " />
+                </FieldColumn>
+              </FieldRow>
+            </FieldSet>
+
+            <FieldSet legend="Source (optional)">
+              <p>
+                <small>
+                  Note: Any citation given below will be applied to the any
+                  birth, death, and marriage events filled out above.
+                </small>
+              </p>
+              <CitationFields initialValues={{}} />
+            </FieldSet>
           </Form>
         </Dialog>
       )}

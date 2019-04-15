@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import React from 'react';
 import { Mutation } from 'module/common';
-import fetchPerson from '../../../query/fetchPerson';
+import relationshipFragment from '../../../query/fragment/relationship';
 
 const createChildMutation = gql`
   mutation createChild(
@@ -11,6 +11,7 @@ const createChildMutation = gql`
     $lineage: LineageType
     $birth: EventInput
     $death: EventInput
+    $citations: [CreateSourceCitationInput]
   ) {
     createChild(
       relationshipId: $relationshipId
@@ -19,26 +20,22 @@ const createChildMutation = gql`
       lineage: $lineage
       birth: $birth
       death: $death
+      citations: $citations
     ) {
       errors {
         field
         message
         details
       }
-      person {
-        id
+      relationship {
+        ${relationshipFragment}
       }
     }
   }
 `;
 
 export default WrappedComponent => props => (
-  <Mutation
-    mutation={createChildMutation}
-    refetchQueries={[
-      { query: fetchPerson, variables: { id: props.person.id } },
-    ]}
-  >
+  <Mutation mutation={createChildMutation}>
     {createChild => (
       <WrappedComponent
         createChild={variables => createChild({ variables })}
