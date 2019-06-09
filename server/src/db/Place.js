@@ -1,4 +1,5 @@
-import { generateUuid, returnFirst } from '../lib';
+import { returnFirst } from '../lib';
+import { dbToGraphQL, generateUuid, graphQLToDb } from './lib';
 
 export default class Place {
   constructor(db) {
@@ -8,14 +9,16 @@ export default class Place {
   findByIds(ids) {
     return this.db('places')
       .select('*')
-      .whereIn('id', ids);
+      .whereIn('id', ids)
+      .then(dbToGraphQL);
   }
 
   findAll(search) {
     return this.db
       .select(['*'])
       .from('places')
-      .where('description', '~*', search);
+      .where('description', '~*', search)
+      .then(dbToGraphQL);
   }
 
   async create(data) {
@@ -25,14 +28,15 @@ export default class Place {
 
     return this.db('places')
       .insert(
-        {
+        graphQLToDb({
           id: placeId,
-          postal_code: postalCode,
-          state_province: stateProvince,
+          postalCode,
+          stateProvince,
           ...otherPlaceData,
-        },
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 }

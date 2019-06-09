@@ -1,5 +1,4 @@
 import DataLoader from 'dataloader';
-import { findPersonParentsByIds } from 'db';
 import {
   dbToGraphQL,
   organizeMultipleResultsById,
@@ -12,7 +11,7 @@ export default class PeopleLoader {
       dbal.person
         .findNotesByAttributeIds(ids)
         .then(notes =>
-          organizeMultipleResultsById(notes, ids, 'person_attribute_id'),
+          organizeMultipleResultsById(notes, ids, 'personAttributeId'),
         ),
     );
 
@@ -20,7 +19,7 @@ export default class PeopleLoader {
       dbal.person
         .findCitationsByAttributeIds(ids)
         .then(citations =>
-          organizeMultipleResultsById(citations, ids, 'person_attribute_id'),
+          organizeMultipleResultsById(citations, ids, 'personAttributeId'),
         ),
     );
 
@@ -28,26 +27,26 @@ export default class PeopleLoader {
       dbal.person
         .findCitationsByPersonIds(ids)
         .then(citations =>
-          organizeMultipleResultsById(citations, ids, 'person_id'),
+          organizeMultipleResultsById(citations, ids, 'personId'),
         ),
     );
     this.personEventCitationLoader = new DataLoader(ids =>
       dbal.person
         .findEventCitationsByPersonIds(ids)
         .then(citations =>
-          organizeMultipleResultsById(citations, ids, 'person_event_id'),
+          organizeMultipleResultsById(citations, ids, 'personEventId'),
         ),
     );
     this.personEventLoader = new DataLoader(ids =>
       dbal.person
         .findEventsByPersonIds(ids)
-        .then(events => organizeMultipleResultsById(events, ids, 'person_id')),
+        .then(events => organizeMultipleResultsById(events, ids, 'personId')),
     );
     this.personEventNoteLoader = new DataLoader(ids =>
       dbal.person
         .findEventNotesByPersonEventIds(ids)
         .then(notes =>
-          organizeMultipleResultsById(notes, ids, 'person_event_id'),
+          organizeMultipleResultsById(notes, ids, 'personEventId'),
         ),
     );
     this.personLoader = new DataLoader(ids =>
@@ -60,32 +59,30 @@ export default class PeopleLoader {
       dbal.person
         .findNameCitationsByPersonIds(ids)
         .then(citations =>
-          organizeMultipleResultsById(citations, ids, 'person_name_id'),
+          organizeMultipleResultsById(citations, ids, 'personNameId'),
         ),
     );
 
     this.personNameLoader = new DataLoader(ids =>
       dbal.person
         .findNamesByPersonIds(ids)
-        .then(names => organizeMultipleResultsById(names, ids, 'person_id')),
+        .then(names => organizeMultipleResultsById(names, ids, 'personId')),
     );
 
     this.personNameNoteLoader = new DataLoader(ids =>
       dbal.person
         .findNameNotesByPersonNameIds(ids)
-        .then(notes =>
-          organizeMultipleResultsById(notes, ids, 'person_name_id'),
-        ),
+        .then(notes => organizeMultipleResultsById(notes, ids, 'personNameId')),
     );
     this.personNoteLoader = new DataLoader(ids =>
       dbal.person
         .findNotesByPersonIds(ids)
-        .then(notes => organizeMultipleResultsById(notes, ids, 'person_id')),
+        .then(notes => organizeMultipleResultsById(notes, ids, 'personId')),
     );
     this.personParentsLoader = new DataLoader(ids =>
-      findPersonParentsByIds(ids).then(names =>
-        organizeMultipleResultsById(names, ids, 'person_id'),
-      ),
+      dbal.relationship
+        .findPersonParentsByIds(ids)
+        .then(names => organizeMultipleResultsById(names, ids, 'personId')),
     );
     this.personPreferredEventLoader = new DataLoader(pairs =>
       dbal.person
@@ -94,7 +91,8 @@ export default class PeopleLoader {
           pairs.map(([id, type]) =>
             events.find(
               result =>
-                result.person_id === id && result.type.toLowerCase() === type,
+                result.personId === id &&
+                result.type.toLowerCase() === type.toLowerCase(),
             ),
           ),
         ),
@@ -103,14 +101,14 @@ export default class PeopleLoader {
     this.personPreferredNameLoader = new DataLoader(ids =>
       dbal.person
         .findPreferredNameByIds(ids)
-        .then(names => organizeResultsById(names, ids, 'person_id')),
+        .then(names => organizeResultsById(names, ids, 'personId')),
     );
 
     this.personRelationshipLoader = new DataLoader(ids =>
       dbal.person
         .findRelationshipsByPersonIds(ids)
         .then(relationships =>
-          organizeMultipleResultsById(relationships, ids, 'person_id'),
+          organizeMultipleResultsById(relationships, ids, 'personId'),
         ),
     );
   }

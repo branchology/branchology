@@ -5,6 +5,10 @@ export default function formatDbValues(input) {
     return snakeCase(input);
   }
 
+  if (Array.isArray(input)) {
+    return input.map(row => formatDbValues(row));
+  }
+
   const data = {};
 
   Object.entries(input).forEach(([key, value]) => {

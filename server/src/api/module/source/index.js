@@ -6,8 +6,8 @@ const resolvers = {
   Mutation,
   Query,
   SourceCitation: {
-    source({ source_id }, params, context) {
-      return context.dataLoaders.source.sourceLoader.load(source_id);
+    source({ sourceId }, params, context) {
+      return context.dataLoaders.source.sourceLoader.load(sourceId);
     },
   },
 };

@@ -7,5 +7,5 @@ const person = new Person(db);
 export default function removePersonAttributeMutation(root, { attributeId }) {
   return person
     .removeAttribute(attributeId)
-    .then(({ person_id }) => ({ removed: true, personId: person_id }));
+    .then(({ personId }) => ({ removed: true, personId }));
 }

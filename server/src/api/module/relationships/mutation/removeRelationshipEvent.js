@@ -5,8 +5,8 @@ export default function removeRelationshipEventMutation(
 ) {
   return context.dbal.relationship
     .removeEvent(eventId)
-    .then(({ relationship_id }) => ({
+    .then(({ relationshipId }) => ({
       removed: true,
-      relationshipId: relationship_id,
+      relationshipId,
     }));
 }

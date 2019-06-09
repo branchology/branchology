@@ -27,10 +27,6 @@ const resolvers = {
     },
   },
   Name: {
-    isPreferred({ is_preferred }) {
-      // TODO: FIXME:
-      return is_preferred;
-    },
     notes({ id }, params, context) {
       return context.dataLoaders.people.personNameNoteLoader.load(id);
     },
@@ -39,9 +35,9 @@ const resolvers = {
     },
   },
   Attribute: {
-    place({ place_id }, params, context) {
-      return place_id
-        ? context.dataLoaders.event.placeLoader.load(place_id)
+    place({ placeId }, params, context) {
+      return placeId
+        ? context.dataLoaders.event.placeLoader.load(placeId)
         : null;
     },
     notes({ id }, params, context) {

@@ -1,3 +1,4 @@
+import { calculateDateStamp, returnFirst } from 'lib';
 import {
   EVENT_TABLE,
   EVENT_NOTE_TABLE,
@@ -6,12 +7,7 @@ import {
   SOURCE_CITATION_TABLE,
   PERSON_ATTRIBUTE_TABLE,
 } from './constants';
-import {
-  calculateDateStamp,
-  formatDbValues,
-  generateUuid,
-  returnFirst,
-} from '../lib';
+import { dbToGraphQL, generateUuid, graphQLToDb } from './lib';
 import Place from './Place';
 import Source from './Source';
 
@@ -27,7 +23,8 @@ export default class Event {
       .select(['sc.*', 'event_id'])
       .from(`${EVENT_SOURCE_CITATION_TABLE} AS esc`)
       .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'esc.source_citation_id')
-      .whereIn('event_id', ids);
+      .whereIn('event_id', ids)
+      .then(dbToGraphQL);
   }
 
   findNotesByEventIds(ids) {
@@ -35,26 +32,30 @@ export default class Event {
       .select(['n.*'])
       .from(`${EVENT_NOTE_TABLE} AS en`)
       .join(`${NOTE_TABLE} as n`, 'n.id', 'en.note_id')
-      .whereIn('event_id', ids);
+      .whereIn('event_id', ids)
+      .then(dbToGraphQL);
   }
 
   findPersonAttributesByPersonIds(ids) {
     return this.db(PERSON_ATTRIBUTE_TABLE)
       .select('*')
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findById(id) {
     return this.db(EVENT_TABLE)
       .select('*')
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   findEventsByIds(ids) {
     return this.db(EVENT_TABLE)
       .select('*')
-      .whereIn('id', ids);
+      .whereIn('id', ids)
+      .then(dbToGraphQL);
   }
 
   async createAttribute(personId, attrData) {
@@ -67,22 +68,24 @@ export default class Event {
 
     return this.db(PERSON_ATTRIBUTE_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id: generateUuid(),
           event_id: event.id,
-          person_id: personId,
+          personId,
           data,
-        },
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   updateAttribute(id, attrData) {
     return this.db(PERSON_ATTRIBUTE_TABLE)
-      .update(formatDbValues(attrData), '*')
+      .update(graphQLToDb(attrData), '*')
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   async updateEvent(id, event) {
@@ -100,7 +103,8 @@ export default class Event {
     return this.db(EVENT_TABLE)
       .update(formatDbValues(eventData), '*')
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   async createEvent(type, data) {
@@ -153,8 +157,9 @@ export default class Event {
     }
 
     const event = await this.db(EVENT_TABLE)
-      .insert(formatDbValues(eventData), '*')
-      .then(returnFirst);
+      .insert(graphQLToDb(eventData), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
 
     return Promise.all(
       sources.map(({ sourceId, ...data }) => {
@@ -167,8 +172,9 @@ export default class Event {
     const id = generateUuid();
 
     return this.db(EVENT_NOTE_TABLE)
-      .insert({ id, event_id: eventId, note_id: noteId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, eventId, noteId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   addSourceCitation = async (eventId, sourceId, data) => {
@@ -178,13 +184,14 @@ export default class Event {
 
     return this.db(EVENT_SOURCE_CITATION_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id,
-          event_id: eventId,
+          eventId,
           source_citation_id: citation.id,
-        },
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   };
 }

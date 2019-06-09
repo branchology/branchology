@@ -1,54 +1,36 @@
 import Mutation from './mutation';
 import schema from './schema';
 
+function fetchRelationshipLoader({ relationshipId }, args, context) {
+  return (
+    relationshipId &&
+    context.dataLoaders.relationships.relationshipLoader.load(relationshipId)
+  );
+}
+
+function fetchPersonLoader({ personId }, args, context) {
+  return personId && context.dataLoaders.people.personLoader.load(personId);
+}
+
 const resolvers = {
   Mutation,
   CreateChildPayload: {
-    relationship({ relationshipId }, args, context) {
-      return (
-        relationshipId &&
-        context.dataLoaders.relationships.relationshipLoader.load(
-          relationshipId,
-        )
-      );
-    },
+    relationship: fetchRelationshipLoader,
   },
   CreateSpousePayload: {
-    person({ personId }, args, context) {
-      return personId && context.dataLoaders.people.personLoader.load(personId);
-    },
+    person: fetchPersonLoader,
   },
   RelationshipEventPayload: {
-    relationship({ relationshipId }, args, context) {
-      return (
-        relationshipId &&
-        context.dataLoaders.relationships.relationshipLoader.load(
-          relationshipId,
-        )
-      );
-    },
+    relationship: fetchRelationshipLoader,
   },
   RemoveRelationshipEventPayload: {
-    relationship({ relationshipId }, args, context) {
-      return (
-        relationshipId &&
-        context.dataLoaders.relationships.relationshipLoader.load(
-          relationshipId,
-        )
-      );
-    },
+    relationship: fetchRelationshipLoader,
   },
   Child: {
-    person({ personId }, params, context) {
-      return context.dataLoaders.people.personLoader.load(personId);
-    },
+    person: fetchPersonLoader,
   },
   Parents: {
-    relationship({ relationship_id }, params, context) {
-      return context.dataLoaders.relationships.relationshipLoader.load(
-        relationship_id,
-      );
-    },
+    relationship: fetchRelationshipLoader,
   },
   Relationship: {
     children({ id }, params, context) {
@@ -66,8 +48,6 @@ const resolvers = {
         context.dataLoaders.relationships.relationshipEventLoader.load(id),
         [],
       );
-
-      // return context.dataLoaders.relationships.relationshipEventLoader.load(id);
     },
     marriage({ id }, params, context) {
       return context.dataLoaders.relationships.relationshipPreferredEventLoader.load(

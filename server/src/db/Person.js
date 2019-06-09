@@ -1,3 +1,4 @@
+import { returnFirst } from 'lib';
 import {
   EVENT_TABLE,
   PEOPLE_TABLE,
@@ -15,8 +16,13 @@ import {
   PERSON_ATTRIBUTE_NOTE_TABLE,
 } from './constants';
 import Event from './Event';
-import { formatDbValues, generateUuid, returnFirst } from '../lib';
-import formatForDb from './lib/formatForDb';
+import {
+  applyPaging,
+  applySorting,
+  dbToGraphQL,
+  generateUuid,
+  graphQLToDb,
+} from './lib';
 import { NOTE_TABLE } from './note';
 import Place from './Place';
 import Source from './Source';
@@ -53,7 +59,8 @@ export default class Person {
       .select('*')
       .from('people')
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   findNameById(id) {
@@ -61,10 +68,11 @@ export default class Person {
       .select('*')
       .from(PERSON_NAME_TABLE)
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
-  findAll(filters) {
+  findAll(filters, sorting, paging) {
     const query = this.db
       .select('p.*')
       .from('people as p')
@@ -85,13 +93,16 @@ export default class Person {
       delete filters.nameContains;
     }
 
-    return query;
+    return applyPaging(applySorting(query, sorting), paging).then(
+      ({ paging, items }) => ({ paging, items: dbToGraphQL(items) }),
+    );
   }
 
   findByIds(ids) {
     return this.db(PEOPLE_TABLE)
       .select('*')
-      .whereIn('id', ids);
+      .whereIn('id', ids)
+      .then(dbToGraphQL);
   }
 
   findCitationsByPersonIds(ids) {
@@ -99,7 +110,8 @@ export default class Person {
       .select(['sc.*', 'person_id'])
       .from(`${PERSON_SOURCE_CITATION_TABLE} AS psc`)
       .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'psc.source_citation_id')
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findCitationsByAttributeIds(ids) {
@@ -107,7 +119,8 @@ export default class Person {
       .select(['sc.*', 'pas.person_attribute_id'])
       .from(`${PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE} AS pas`)
       .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'pas.source_citation_id')
-      .whereIn('pas.person_attribute_id', ids);
+      .whereIn('pas.person_attribute_id', ids)
+      .then(dbToGraphQL);
   }
 
   findEventsByPersonIds(ids) {
@@ -115,7 +128,8 @@ export default class Person {
       .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
       .from(`${PERSON_EVENT_TABLE} as pe`)
       .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findNameCitationsByPersonIds(ids) {
@@ -123,20 +137,23 @@ export default class Person {
       .select(['sc.*', 'person_name_id'])
       .from(`${PERSON_NAME_SOURCE_CITATION_TABLE} AS nsc`)
       .join(`${SOURCE_CITATION_TABLE} AS sc`, 'sc.id', 'nsc.source_citation_id')
-      .whereIn('person_name_id', ids);
+      .whereIn('person_name_id', ids)
+      .then(dbToGraphQL);
   }
 
   findNameByIds(ids) {
     return this.db(PERSON_NAME_TABLE)
       .select('*')
-      .whereIn('id', ids);
+      .whereIn('id', ids)
+      .then(dbToGraphQL);
   }
 
   findNamesByPersonIds(ids) {
     return this.db
       .select(['*'])
       .from(PERSON_NAME_TABLE)
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findNameNotesByPersonNameIds(ids) {
@@ -144,7 +161,8 @@ export default class Person {
       .select(['n.*', 'pnn.person_name_id'])
       .from(`${PERSON_NAME_NOTE_TABLE} AS pnn`)
       .join(`${NOTE_TABLE} as n`, 'n.id', 'pnn.note_id')
-      .whereIn('person_name_id', ids);
+      .whereIn('person_name_id', ids)
+      .then(dbToGraphQL);
   }
 
   findNotesByAttributeIds(ids) {
@@ -152,7 +170,8 @@ export default class Person {
       .select(['n.*', 'pan.person_attribute_id'])
       .from(`${PERSON_ATTRIBUTE_NOTE_TABLE} AS pan`)
       .join(`${NOTE_TABLE} as n`, 'n.id', 'pan.note_id')
-      .whereIn('pan.id', ids);
+      .whereIn('pan.id', ids)
+      .then(dbToGraphQL);
   }
 
   findNotesByPersonIds(ids) {
@@ -160,7 +179,8 @@ export default class Person {
       .select(['n.*', 'pn.person_id'])
       .from(`${PERSON_NOTE_TABLE} AS pn`)
       .join(`${NOTE_TABLE} as n`, 'n.id', 'pn.note_id')
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findPrimaryEventsByPersonIdAndType(pairs) {
@@ -168,7 +188,11 @@ export default class Person {
       .select(['e.*', 'pe.id AS person_event_id', 'pe.person_id'])
       .from(`${PERSON_EVENT_TABLE} as pe`)
       .join(`${EVENT_TABLE} as e`, 'e.id', 'pe.event_id')
-      .whereIn(this.db.raw('(person_id, LOWER(e.type))'), pairs);
+      .whereIn(
+        this.db.raw('(person_id, LOWER(e.type))'),
+        pairs.map(([personId, type]) => [personId, type.toLowerCase()]),
+      )
+      .then(dbToGraphQL);
   }
 
   findPreferredNameByIds(ids) {
@@ -176,7 +200,8 @@ export default class Person {
       .select(['*'])
       .from(PERSON_NAME_TABLE)
       .where('is_preferred', true)
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   findRelationshipsByPersonIds(ids) {
@@ -184,7 +209,8 @@ export default class Person {
       .select(['pr.person_id', 'r.*'])
       .from(`${PERSON_RELATIONSHIPS_TABLE} AS pr`)
       .join(`${RELATIONSHIP_TABLE} as r`, 'r.id', 'pr.relationship_id')
-      .whereIn('person_id', ids);
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
   }
 
   async createAttribute(personId, attrData) {
@@ -212,7 +238,8 @@ export default class Person {
         }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   removeAttribute(attributeId) {
@@ -220,7 +247,8 @@ export default class Person {
       .delete()
       .returning('*')
       .where('id', attributeId)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   addAttributeSourceCitation = async (attributeId, sourceId, data) => {
@@ -230,14 +258,15 @@ export default class Person {
 
     return this.db(PERSON_ATTRIBUTE_SOURCE_CITATION_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id,
-          person_attribute_id: attributeId,
-          source_citation_id: citation.id,
-        },
+          personAttributeId: attributeId,
+          sourceCitationId: citation.id,
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   };
 
   async createName(personId, nameData) {
@@ -245,14 +274,15 @@ export default class Person {
 
     return this.db(PERSON_NAME_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id: nameId,
-          person_id: personId,
+          personId,
           ...nameData,
-        },
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   async create(data) {
@@ -274,7 +304,8 @@ export default class Person {
     // create a person...
     const person = await this.db(PEOPLE_TABLE)
       .insert({ id: personId, sex }, '*')
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
 
     const bagOfPromises = [];
 
@@ -311,37 +342,40 @@ export default class Person {
 
     return this.db(PERSON_SOURCE_CITATION_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id,
-          person_id: personId,
-          source_citation_id: citation.id,
-        },
+          personId,
+          sourceCitationId: citation.id,
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   addName(personId, { given, surname, isPreferred = false }) {
     // TODO: FIXME: other name parts
     return this.db(PERSON_NAME_TABLE)
       .insert(
-        formatForDb({
+        graphQLToDb({
           id: generateUuid(),
-          person_id: personId,
+          personId,
           given,
           surname,
           isPreferred,
         }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   updateName(personNameId, nameData) {
     return this.db(PERSON_NAME_TABLE)
       .update(nameData, '*')
       .where('id', personNameId)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   removeName(personNameId) {
@@ -349,7 +383,8 @@ export default class Person {
       .delete()
       .returning('*')
       .where('id', personNameId)
-      .then(personName => personName[0]);
+      .then(personName => personName[0])
+      .then(dbToGraphQL);
   }
 
   async setPersonNamePreferred(personNameId) {
@@ -409,22 +444,24 @@ export default class Person {
 
     return this.db(PERSON_NAME_SOURCE_CITATION_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id,
-          person_name_id: personNameId,
-          source_citation_id: citation.id,
-        },
+          personNameId,
+          sourceCitationId: citation.id,
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   };
 
   attachEvent(personId, eventId) {
     const id = generateUuid();
 
     return this.db(PERSON_EVENT_TABLE)
-      .insert({ id, person_id: personId, event_id: eventId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, personId, eventId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   removeEvent(eventId) {
@@ -437,30 +474,34 @@ export default class Person {
           .delete()
           .where('id', eventId)
           .then(() => personEvent[0]);
-      });
+      })
+      .then(dbToGraphQL);
   }
 
   attachNote(personId, noteId) {
     const id = generateUuid();
 
     return this.db(PERSON_NOTE_TABLE)
-      .insert({ id, person_id: personId, note_id: noteId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, personId, noteId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   attachNameNote(personNameId, noteId) {
     const id = generateUuid();
 
     return this.db(PERSON_NAME_NOTE_TABLE)
-      .insert({ id, person_name_id: personNameId, note_id: noteId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, personNameId, noteId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   attachRelationship(personId, relationshipId) {
     const id = generateUuid();
 
     return this.db(PERSON_RELATIONSHIPS_TABLE)
-      .insert({ id, person_id: personId, relationship_id: relationshipId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, personId, relationshipId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 }

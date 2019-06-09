@@ -24,7 +24,7 @@ export default class RelationshipLoader {
 
     this.relationshipEventLoader = new DataLoader(ids =>
       findRelationshipEventsByRelationshipIds(ids).then(events =>
-        organizeMultipleResultsById(events, ids, 'relationship_id'),
+        organizeMultipleResultsById(events, ids, 'relationshipId'),
       ),
     );
 
@@ -48,7 +48,7 @@ export default class RelationshipLoader {
           return pairs.map(([id, type]) => {
             return events.find(
               result =>
-                result.relationship_id === id &&
+                result.relationshipId === id &&
                 result.type.toLowerCase() === type.toLowerCase(),
             );
           });

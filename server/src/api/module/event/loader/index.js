@@ -12,20 +12,20 @@ export default class EventLoader {
     this.attributesById = new DataLoader(ids =>
       dbal.event
         .findPersonAttributesByPersonIds(ids)
-        .then(attrs => organizeMultipleResultsById(attrs, ids, 'person_id')),
+        .then(attrs => organizeMultipleResultsById(attrs, ids, 'personId')),
     );
 
     this.eventNoteLoader = new DataLoader(ids =>
       dbal.event
         .findNotesByEventIds(ids)
-        .then(notes => organizeMultipleResultsById(notes, ids, 'event_id')),
+        .then(notes => organizeMultipleResultsById(notes, ids, 'eventId')),
     );
 
     this.eventSourceCitationLoader = new DataLoader(ids =>
       dbal.event
         .findCitationsByEventIds(ids)
         .then(citations =>
-          organizeMultipleResultsById(citations, ids, 'event_id'),
+          organizeMultipleResultsById(citations, ids, 'eventId'),
         ),
     );
 

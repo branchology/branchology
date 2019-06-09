@@ -33,7 +33,7 @@ export default {
         }
 
         const personNames = await person.findNamesByPersonIds([
-          names[0].person_id,
+          names[0].personId,
         ]);
 
         if (personNames.length < 2) {
@@ -49,6 +49,6 @@ export default {
   resolve: function removePersonNameMutation(root, { personNameId }) {
     return person
       .removeName(personNameId)
-      .then(({ person_id }) => ({ removed: true, personId: person_id }));
+      .then(({ personId }) => ({ removed: true, personId }));
   },
 };

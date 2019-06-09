@@ -1,10 +1,11 @@
+import { returnFirst } from 'lib';
 import db from './conn';
 import {
   SOURCE_CITATION_TABLE,
   SOURCE_TABLE,
   SOURCE_NOTE_TABLE,
 } from './constants';
-import { generateUuid, returnFirst } from '../lib';
+import { dbToGraphQL, generateUuid, graphQLToDb } from './lib';
 
 export default class Source {
   constructor(db) {
@@ -14,14 +15,16 @@ export default class Source {
   findSourceByIds(ids) {
     return db(SOURCE_TABLE)
       .select('*')
-      .whereIn('id', ids);
+      .whereIn('id', ids)
+      .then(dbToGraphQL);
   }
 
   findAll(search) {
     return this.db
       .select(['*'])
       .from(SOURCE_TABLE)
-      .where('title', '~', search);
+      .where('title', '~', search)
+      .then(dbToGraphQL);
   }
 
   createSource(data) {
@@ -31,7 +34,8 @@ export default class Source {
 
     return db(SOURCE_TABLE)
       .insert({ id: sourceId, title }, '*')
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   createSourceCitation(sourceId, data) {
@@ -40,30 +44,34 @@ export default class Source {
     const citationId = generateUuid();
 
     return db(SOURCE_CITATION_TABLE)
-      .insert({ id: citationId, source_id: sourceId, citation, page }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id: citationId, sourceId, citation, page }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   updateSourceCitation(id, data) {
     return db(SOURCE_CITATION_TABLE)
       .update({ ...data }, '*')
       .where('id', id)
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   deleteCitation(id) {
     return db(SOURCE_CITATION_TABLE)
       .delete()
       .where('id', id)
-      .then(() => true);
+      .then(() => true)
+      .then(dbToGraphQL);
   }
 
   attachNote(sourceId, noteId) {
     const id = generateUuid();
 
     return this.db(SOURCE_NOTE_TABLE)
-      .insert({ id, source_id: sourceId, note_id: noteId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, sourceId, noteId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   attachSourceCitation(method, relatedId, citations) {

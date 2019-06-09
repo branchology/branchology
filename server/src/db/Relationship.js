@@ -1,3 +1,4 @@
+import { returnFirst } from 'lib';
 import db from './conn';
 import {
   EVENT_TABLE,
@@ -10,7 +11,7 @@ import {
 } from './constants';
 import Event from './Event';
 import Person from './Person';
-import { generateUuid, returnFirst } from '../lib';
+import { dbToGraphQL, generateUuid, graphQLToDb } from './lib';
 
 export function findRelationshipsByIds(ids) {
   return db(RELATIONSHIP_TABLE)
@@ -23,7 +24,8 @@ export function findRelationshipPersons(ids) {
     .select(['p.*', 'pr.relationship_id'])
     .from(`${PERSON_RELATIONSHIPS_TABLE} as pr`)
     .join(`${PEOPLE_TABLE} as p`, 'p.id', 'pr.person_id')
-    .whereIn('relationship_id', ids);
+    .whereIn('relationship_id', ids)
+    .then(dbToGraphQL);
 }
 
 export function findRelationshipEventsByRelationshipIds(ids) {
@@ -31,7 +33,8 @@ export function findRelationshipEventsByRelationshipIds(ids) {
     .select(['e.*', 're.id AS relationship_event_id', 're.relationship_id'])
     .from(`${RELATIONSHIP_EVENT_TABLE} as re`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 're.event_id')
-    .whereIn('relationship_id', ids);
+    .whereIn('relationship_id', ids)
+    .then(dbToGraphQL);
 }
 
 export function findRelationshipPrimaryEventsByRelationshipIdAndType(pairs) {
@@ -39,19 +42,21 @@ export function findRelationshipPrimaryEventsByRelationshipIdAndType(pairs) {
     .select(['e.*', 're.id AS relationship_event_id', 're.relationship_id'])
     .from(`${RELATIONSHIP_EVENT_TABLE} as re`)
     .join(`${EVENT_TABLE} as e`, 'e.id', 're.event_id')
-    .whereIn(db.raw('(relationship_id, LOWER(e.type))'), pairs);
-}
-
-export function findPersonParentsByIds(ids) {
-  return db(PARENTS_TABLE)
-    .select('*')
-    .whereIn('person_id', ids);
+    .whereIn(
+      db.raw('(relationship_id, LOWER(e.type))'),
+      pairs.map(([relationshipId, type]) => [
+        relationshipId,
+        type.toLowerCase(),
+      ]),
+    )
+    .then(dbToGraphQL);
 }
 
 export function findChildrenByRelationshipIds(ids) {
   return db(PARENTS_TABLE)
     .select('*')
-    .whereIn('relationship_id', ids);
+    .whereIn('relationship_id', ids)
+    .then(dbToGraphQL);
 }
 
 export default class Relationship {
@@ -61,12 +66,20 @@ export default class Relationship {
     this.person = new Person(db);
   }
 
+  findPersonParentsByIds(ids) {
+    return db(PARENTS_TABLE)
+      .select('*')
+      .whereIn('person_id', ids)
+      .then(dbToGraphQL);
+  }
+
   async create(spouse1, spouse2) {
     const relationshipId = generateUuid();
 
     const relationship = await this.db(RELATIONSHIP_TABLE)
       .insert({ id: relationshipId }, '*')
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
 
     if (spouse1) {
       await this.person.attachRelationship(spouse1, relationshipId);
@@ -83,8 +96,9 @@ export default class Relationship {
     const id = generateUuid();
 
     return this.db(RELATIONSHIP_EVENT_TABLE)
-      .insert({ id, relationship_id: relationshipId, event_id: eventId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, relationshipId, eventId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   removeEvent(eventId) {
@@ -98,28 +112,31 @@ export default class Relationship {
           .delete()
           .where('id', eventId)
           .then(() => relationshipEvent);
-      });
+      })
+      .then(dbToGraphQL);
   }
 
   attachChild(relationshipId, personId, type = 'BIRTH') {
     return this.db(PARENTS_TABLE)
       .insert(
-        {
+        graphQLToDb({
           id: generateUuid(),
-          relationship_id: relationshipId,
-          person_id: personId,
+          relationshipId,
+          personId,
           type,
-        },
+        }),
         '*',
       )
-      .then(returnFirst);
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 
   attachNote(relationshipId, noteId) {
     const id = generateUuid();
 
     return this.db(RELATIONSHIP_NOTE_TABLE)
-      .insert({ id, relationship_id: relationshipId, note_id: noteId }, '*')
-      .then(returnFirst);
+      .insert(graphQLToDb({ id, relationshipId, noteId }), '*')
+      .then(returnFirst)
+      .then(dbToGraphQL);
   }
 }
