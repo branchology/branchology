@@ -1,14 +1,6 @@
 import React from 'react';
-import { AppContext } from '../Context';
+import { UserContext } from '../../../UserContext';
 
-export const WithUser = ({ children, otherwise }) => (
-  <AppContext.Consumer>
-    {({ isAuthenticated, logout, user }) =>
-      isAuthenticated()
-        ? typeof children === 'function'
-          ? children({ logout, user })
-          : children
-        : otherwise
-    }
-  </AppContext.Consumer>
+export const WithUser = ({ children }) => (
+  <UserContext.Consumer>{props => children(props)}</UserContext.Consumer>
 );

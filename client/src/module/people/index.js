@@ -1,14 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import makeAsyncModuleLoader from 'lib/makeAsyncModuleLoader';
 
-const AsyncDetails = makeAsyncModuleLoader({
-  loader: () => import('./page/DetailsPage'),
-});
-
-const AsyncIndex = makeAsyncModuleLoader({
-  loader: () => import('./page/IndexPage'),
-});
+const AsyncIndex = React.lazy(() => import('./page/IndexPage'));
+const AsyncDetails = React.lazy(() => import('./page/DetailsPage'));
 
 const detailsRoute = () => (
   <Route path="/people/:id" component={AsyncDetails} />

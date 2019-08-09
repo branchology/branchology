@@ -4,7 +4,6 @@ import Footer from 'module/common/Footer';
 import Header from 'module/common/Header';
 import { components } from 'module/common';
 import { NotificationProvider } from 'module/common/notifications';
-import Context from './Context';
 
 const {
   ui: { UiBlock },
@@ -48,12 +47,10 @@ const AppContainer = styled.div``;
 export default ({ children }) => (
   <AppContainer>
     <GlobalStyle />
-    <Context>
-      <NotificationProvider>
-        <Header />
-        <UiBlock>{children}</UiBlock>
-        <Footer />
-      </NotificationProvider>
-    </Context>
+    <NotificationProvider>
+      <Header />
+      <UiBlock>{children}</UiBlock>
+      <Footer />
+    </NotificationProvider>
   </AppContainer>
 );

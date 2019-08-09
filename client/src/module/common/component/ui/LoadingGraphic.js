@@ -1,10 +1,6 @@
+import { Icon } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
-import { components } from 'module/common';
-
-const {
-  ui: { Icon },
-} = components;
 
 const Container = styled.div`
   align-items: center;
@@ -25,7 +21,7 @@ const Container = styled.div`
 export const LoadingGraphic = () => (
   <Container>
     <div className="loading">
-      <Icon icon="spinner" color="#fff" spin /> Loading…
+      <Icon icon="clean" color="#fff" /> Loading…
     </div>
   </Container>
 );

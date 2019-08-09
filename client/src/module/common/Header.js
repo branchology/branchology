@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { components } from 'module/common';
-import Login from './Login';
 
 const {
   ui: { FauxLink, UiBlock },
@@ -64,11 +63,11 @@ export default () => (
 
       <div className="nav">
         <div className="user">
-          <WithUser otherwise={<Login />}>
+          <WithUser>
             {({ logout, user }) => (
               <div>
-                <strong>Welcome, {user.email}!</strong>{' '}
-                <FauxLink onClick={() => logout()}>Logout</FauxLink>
+                <strong>Welcome, {user.user.email}!</strong>{' '}
+                <FauxLink onClick={logout}>Logout</FauxLink>
               </div>
             )}
           </WithUser>
