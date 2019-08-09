@@ -1,39 +1,33 @@
+import { HTMLTable } from '@blueprintjs/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { components } from 'module/common';
 import filterPeople from '../container/filterPeople';
 
-const {
-  ui: {
-    DataTable: { Cell, Heading, Table },
-  },
-} = components;
-
 const PeopleList = ({ data }) => (
-  <Table>
+  <HTMLTable interactive striped style={{ width: '100%' }}>
     <thead>
       <tr>
-        <Heading>Surname</Heading>
-        <Heading>Given Name</Heading>
-        <Heading>Born</Heading>
-        <Heading>Died</Heading>
+        <th>Surname</th>
+        <th>Given Name</th>
+        <th>Born</th>
+        <th>Died</th>
       </tr>
     </thead>
     <tbody>
-      {data.people.items.map((person, index) => (
-        <tr key={person.id} className={index % 2 === 1 ? 'alt' : ''}>
-          <Cell>
+      {data.people.items.map(person => (
+        <tr>
+          <td>
             <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
-          </Cell>
-          <Cell>
+          </td>
+          <td>
             <Link to={`/people/${person.id}`}>{person.name.given}</Link>
-          </Cell>
-          <Cell>{person.birth && person.birth.date}</Cell>
-          <Cell>{person.death && person.death.date}</Cell>
+          </td>
+          <td>{person.birth && person.birth.date}</td>
+          <td>{person.death && person.death.date}</td>
         </tr>
       ))}
     </tbody>
-  </Table>
+  </HTMLTable>
 );
 
 export default filterPeople(PeopleList);
