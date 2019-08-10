@@ -1,4 +1,9 @@
-import { Button, ButtonGroup, HTMLTable } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  HTMLTable,
+  NonIdealState,
+} from '@blueprintjs/core';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
@@ -104,61 +109,75 @@ const SourceCitationsList = ({ citations, entity, ...props }) => {
             />
           )}
 
-          <HTMLTable interactive striped style={{ width: '100%' }}>
-            <thead>
-              <tr>
-                <th>Source</th>
-                <th className="right">
-                  <Button
-                    small
-                    minimal
-                    intent="success"
-                    icon="add"
-                    onClick={toggleAddOpen}
-                  >
-                    Add Citation
-                  </Button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {citations.map(citation => (
-                <tr key={citation.id}>
-                  <td>
-                    {citation.source.title}{' '}
-                    {citation.page ? `- ${citation.page}` : null}{' '}
-                    {expanded.includes(citation.id) && (
-                      <CitationDetails>
-                        {nl2br(citation.citation)}
-                      </CitationDetails>
-                    )}
-                  </td>
-                  <td className="right">
-                    <ButtonGroup minimal={true}>
-                      {citation.citation ? (
-                        <ToggleCitation onClick={() => toggle(citation.id)} />
-                      ) : null}
+          {citations.length === 0 && (
+            <NonIdealState
+              icon="folder-open"
+              description={`There are currently no citations.`}
+              action={
+                <Button icon="add" intent="success" onClick={toggleAddOpen}>
+                  Add Citation
+                </Button>
+              }
+            />
+          )}
 
-                      <Button
-                        small
-                        intent="success"
-                        icon="edit"
-                        minimal
-                        onClick={() => toggleEditOpen(citation)}
-                      />
-                      <Button
-                        small
-                        intent="danger"
-                        icon="cross"
-                        minimal
-                        onClick={() => toggleDeleteOpen(citation)}
-                      />
-                    </ButtonGroup>
-                  </td>
+          {citations.length > 0 && (
+            <HTMLTable interactive striped style={{ width: '100%' }}>
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th className="right">
+                    <Button
+                      small
+                      minimal
+                      intent="success"
+                      icon="add"
+                      onClick={toggleAddOpen}
+                    >
+                      Add Citation
+                    </Button>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </HTMLTable>
+              </thead>
+              <tbody>
+                {citations.map(citation => (
+                  <tr key={citation.id}>
+                    <td>
+                      {citation.source.title}{' '}
+                      {citation.page ? `- ${citation.page}` : null}{' '}
+                      {expanded.includes(citation.id) && (
+                        <CitationDetails>
+                          {nl2br(citation.citation)}
+                        </CitationDetails>
+                      )}
+                    </td>
+                    <td className="right">
+                      <ButtonGroup minimal={true}>
+                        {citation.citation ? (
+                          <ToggleCitation onClick={() => toggle(citation.id)} />
+                        ) : null}
+
+                        <Button
+                          small
+                          intent="success"
+                          icon="edit"
+                          minimal
+                          onClick={() => toggleEditOpen(citation)}
+                        />
+                        <Button
+                          small
+                          intent="danger"
+                          icon="cross"
+                          minimal
+                          onClick={() => toggleDeleteOpen(citation)}
+                        />
+                      </ButtonGroup>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </HTMLTable>
+          )}
         </ListContainer>
       )}
     </NotificationConsumer>
