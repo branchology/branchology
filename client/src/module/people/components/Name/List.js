@@ -9,9 +9,18 @@ import NamePreferredToggle from './PreferredToggle';
 export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();
   const [activeDialog, toggleDialog] = useState();
+  const [citationsRecord, setCitationsRecord] = useState();
 
   return (
     <div>
+      {citationsRecord && (
+        <CitationList
+          entity={citationsRecord}
+          citations={citationsRecord.sourceCitations}
+          onClose={() => setCitationsRecord(null)}
+        />
+      )}
+
       {editName && (
         <NameEdit name={editName} onClose={() => toggleEdit(null)} />
       )}
@@ -46,7 +55,7 @@ export default function NameList({ names, person }) {
           </tr>
         </thead>
         <tbody>
-          {names.map(name => [
+          {names.map(name => (
             <tr key={name.id}>
               <td className="center middle">
                 <NamePreferredToggle name={name} />
@@ -62,7 +71,7 @@ export default function NameList({ names, person }) {
                     icon="book"
                     minimal
                     small
-                    onClick={() => toggleEdit(name)}
+                    onClick={() => setCitationsRecord(name)}
                   >
                     {name.sourceCitations.length}
                   </Button>
@@ -78,13 +87,8 @@ export default function NameList({ names, person }) {
                   <NameDelete person={person} name={name} />
                 </ButtonGroup>
               </td>
-            </tr>,
-            <tr key={`sources-${name.id}`}>
-              <td colSpan="3" className="citations">
-                <CitationList citations={name.sourceCitations} entity={name} />
-              </td>
-            </tr>,
-          ])}
+            </tr>
+          ))}
         </tbody>
       </HTMLTable>
     </div>

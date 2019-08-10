@@ -2,7 +2,7 @@ import { Button, ButtonGroup, HTMLTable } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
-import { Confirm } from 'module/common/component/ui';
+import { Confirm, Dialog } from 'module/common/component/ui';
 import SourceCitationAdd from './Citation/Add';
 import SourceCitationEdit from './Citation/Edit';
 import { NotificationConsumer } from '../../common/notifications';
@@ -42,7 +42,7 @@ function useToggle(defaultValue = false) {
   return [toggled, toggle];
 }
 
-export default ({ citations, entity, ...props }) => {
+const SourceCitationsList = ({ citations, entity, ...props }) => {
   const [expanded, setExpanded] = useState([]);
   const [addOpen, toggleAddOpen] = useToggle();
   const [selectedForEdit, toggleEditOpen] = useState(null);
@@ -164,3 +164,23 @@ export default ({ citations, entity, ...props }) => {
     </NotificationConsumer>
   );
 };
+
+function CitationsDialog({ citations, entity, onClose }) {
+  return (
+    <Dialog
+      title="Manage Citations"
+      onClose={onClose}
+      footer={
+        <div>
+          <Button intent="danger" onClick={onClose}>
+            Close
+          </Button>
+        </div>
+      }
+    >
+      <SourceCitationsList citations={citations} entity={entity} />
+    </Dialog>
+  );
+}
+
+export default CitationsDialog;

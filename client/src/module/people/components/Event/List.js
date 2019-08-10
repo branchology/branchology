@@ -1,6 +1,5 @@
 import { Button, ButtonGroup, Divider, HTMLTable } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { components } from 'module/common';
 import EventAdd from './Add';
 import EventDelete from './Delete';
 import EventEdit from './Edit';
@@ -8,30 +7,8 @@ import NoEvents from './NoEvents';
 import EventPreferredToggle from './PreferredToggle';
 import CitationList from './CitationList';
 
-const {
-  ui: { Dialog },
-} = components;
-
 const eventsAllowingPrimary = eventTypes =>
   Object.keys(eventTypes).filter(key => eventTypes[key].allowsPrimary);
-
-function CitationsDialog({ citations, entity, onClose }) {
-  return (
-    <Dialog
-      title="Manage Citations"
-      onClose={onClose}
-      footer={
-        <div>
-          <Button intent="danger" onClick={onClose}>
-            Close
-          </Button>
-        </div>
-      }
-    >
-      <CitationList citations={citations} entity={entity} />
-    </Dialog>
-  );
-}
 
 export default ({
   addEvent,
@@ -48,7 +25,7 @@ export default ({
   return (
     <div>
       {citationsEvent && (
-        <CitationsDialog
+        <CitationList
           entity={citationsEvent}
           citations={citationsEvent.sourceCitations}
           onClose={() => setCitationsEvent(null)}

@@ -9,9 +9,18 @@ import NoAttributes from './NoAttributes';
 export default ({ person, attributes }) => {
   const [editAttribute, toggleEdit] = useState();
   const [activeDialog, toggleDialog] = useState();
+  const [citationsEvent, setCitationsEvent] = useState();
 
   return (
     <div>
+      {citationsEvent && (
+        <CitationList
+          entity={citationsEvent}
+          citations={citationsEvent.sourceCitations}
+          onClose={() => setCitationsEvent(null)}
+        />
+      )}
+
       {editAttribute && (
         <AttributeEdit
           person={person}
@@ -49,7 +58,7 @@ export default ({ person, attributes }) => {
             </tr>
           </thead>
           <tbody>
-            {attributes.map((attribute, index) => [
+            {attributes.map((attribute, index) => (
               <tr className={index % 2 === 1 ? 'alt' : ''} key={attribute.id}>
                 <td>{attribute.type}</td>
                 <td>{attribute.date}</td>
@@ -62,7 +71,7 @@ export default ({ person, attributes }) => {
                       icon="book"
                       small
                       minimal
-                      onClick={() => null}
+                      onClick={() => setCitationsEvent(attribute)}
                     >
                       {attribute.sourceCitations.length}
                     </Button>
@@ -78,19 +87,8 @@ export default ({ person, attributes }) => {
                     <AttributeDelete person={person} data={attribute} />
                   </ButtonGroup>
                 </td>
-              </tr>,
-              <tr
-                className={index % 2 === 1 ? 'alt' : ''}
-                key={`sources-${attribute.id}`}
-              >
-                <td colSpan="5" className="citations">
-                  <CitationList
-                    citations={attribute.sourceCitations}
-                    entity={attribute}
-                  />
-                </td>
-              </tr>,
-            ])}
+              </tr>
+            ))}
           </tbody>
         </HTMLTable>
       )}
