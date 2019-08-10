@@ -11,6 +11,7 @@ const createTokenMutation = gql`
         expires
         user {
           id
+          name
           email
         }
       }

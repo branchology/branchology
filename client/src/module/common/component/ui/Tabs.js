@@ -25,6 +25,8 @@ const ContainerStyles = styled.div`
 
   .tabContentContainer {
     background-color: #fff;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
     padding: 10px;
   }
 `;
@@ -34,10 +36,14 @@ const TabStyles = styled.div`
   cursor: pointer;
   padding: 10px 15px;
 
+  &:first-child {
+    border-top-left-radius: 3px;
+  }
+
   &.active,
   &:hover {
     background-color: #fff;
-    border-top-color: #1b7bf7;
+    /* border-top-color: #1b7bf7; */
 
     ${Badge} {
       background-color: #1b7bf7;

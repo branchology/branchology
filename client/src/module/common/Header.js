@@ -11,9 +11,17 @@ import {
 } from '@blueprintjs/core';
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
 import { components } from 'module/common';
 
 const { WithUser } = components;
+
+const Hello = styled.div`
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  padding: 10px;
+`;
 
 export default withRouter(({ history }) => (
   <Navbar>
@@ -56,7 +64,7 @@ export default withRouter(({ history }) => (
           <WithUser>
             {({ logout, user }) => (
               <Menu>
-                <p>HELLO, {user.user.email}</p>
+                <Hello>Hello, {user.user.name}</Hello>
                 <MenuItem icon="user" text="Profile" />
                 <MenuItem icon="cog" text="Settings" />
                 <MenuDivider />

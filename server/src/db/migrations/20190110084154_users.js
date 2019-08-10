@@ -1,6 +1,7 @@
 async function up(db) {
   await db.schema.createTable('users', table => {
     table.uuid('id').primary();
+    table.string('name', 50).notNullable();
     table.string('email').notNullable();
     table.string('password').notNullable();
     table.timestamps(false, true);

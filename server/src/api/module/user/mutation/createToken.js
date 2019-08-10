@@ -12,5 +12,6 @@ export default async function createToken(root, { email, password }, context) {
   }
 
   const token = await context.dbal.user.createToken(user);
+
   return { token };
 }
