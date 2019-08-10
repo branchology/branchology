@@ -1,7 +1,6 @@
-import { Button } from '@blueprintjs/core';
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { Dialog } from 'module/common/component/ui';
+import { Dialog, DialogCommonFooter } from 'module/common/component/ui';
 import { Form, InputText, Select } from 'module/common/component/Form';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
@@ -86,14 +85,11 @@ class AttributeEdit extends PureComponent {
           <Dialog
             title="Edit Person Attribute"
             footer={
-              <div>
-                <Button intent="danger" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button intent="primary" onClick={submit}>
-                  Save
-                </Button>
-              </div>
+              <DialogCommonFooter
+                isSubmitting={false}
+                onSubmit={submit}
+                onClose={onClose}
+              />
             }
           >
             <Select

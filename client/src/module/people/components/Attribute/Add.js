@@ -1,4 +1,3 @@
-import { Button } from '@blueprintjs/core';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { mapMutationErrorsForFormik } from 'lib';
@@ -12,6 +11,7 @@ import AttributeCreateMutation from '../../query/attributeCreateMutation';
 const {
   ui: {
     Dialog,
+    DialogCommonFooter,
     Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
@@ -107,18 +107,11 @@ function AddAttribute({ addPersonAttribute, onClose, person }) {
             <Dialog
               title="Add Person Attribute"
               footer={
-                <div>
-                  <Button type="danger" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    intent="primary"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </div>
+                <DialogCommonFooter
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                  onClose={onClose}
+                />
               }
             >
               <Form>

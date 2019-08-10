@@ -7,8 +7,8 @@ import createChildWrapper from './container/createChild';
 
 const {
   ui: {
-    Button,
     Dialog,
+    DialogCommonFooter,
     Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
@@ -99,19 +99,11 @@ const AddChildForm = ({ createChild, relationship, onClose }) => {
           title="Add Child"
           onClose={onClose}
           footer={
-            <div>
-              <Button danger type="button" onClick={onClose}>
-                Close
-              </Button>
-              <Button
-                primary
-                type="button"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
-                Save
-              </Button>
-            </div>
+            <DialogCommonFooter
+              isSubmitting={isSubmitting}
+              onSubmit={handleSubmit}
+              onClose={onClose}
+            />
           }
         >
           <Form>

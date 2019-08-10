@@ -7,8 +7,8 @@ import createSpouseWrapper from './container/createSpouse';
 
 const {
   ui: {
-    Button,
     Dialog,
+    DialogCommonFooter,
     Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
@@ -92,19 +92,11 @@ const AddRelationshipForm = ({ createSpouse, person, onClose }) => {
           title="Add Relationship"
           onClose={onClose}
           footer={
-            <div>
-              <Button danger type="button" onClick={onClose}>
-                Close
-              </Button>
-              <Button
-                primary
-                type="button"
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-              >
-                Save
-              </Button>
-            </div>
+            <DialogCommonFooter
+              isSubmitting={isSubmitting}
+              onSubmit={handleSubmit}
+              onClose={onClose}
+            />
           }
         >
           <Form>

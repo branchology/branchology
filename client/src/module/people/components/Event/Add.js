@@ -8,8 +8,8 @@ import { Fields as CitationFields } from '../Citation/Form';
 
 const {
   ui: {
-    Button,
     Dialog,
+    DialogCommonFooter,
     Form: { FieldColumn, FieldRow, FieldSet, InputText, Select },
   },
 } = components;
@@ -94,19 +94,11 @@ function AddEvent({ addEvent, eventTypes, onClose, parent }) {
               title="Add Event"
               onClose={onClose}
               footer={
-                <div>
-                  <Button danger type="button" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </div>
+                <DialogCommonFooter
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                  onClose={onClose}
+                />
               }
             >
               <Form>

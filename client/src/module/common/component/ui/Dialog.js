@@ -1,3 +1,4 @@
+import { Button, ButtonGroup, Divider } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
 import { Backdrop } from './Backdrop';
@@ -43,4 +44,16 @@ const Dialog = ({ footer, title, children }) => (
   </Backdrop>
 );
 
-export { Dialog };
+const DialogCommonFooter = ({ isSubmitting, onClose, onSubmit }) => (
+  <ButtonGroup minimal={true}>
+    <Button intent="danger" onClick={onClose}>
+      Close
+    </Button>
+    <Divider />
+    <Button intent="primary" onClick={onSubmit} disabled={isSubmitting}>
+      Save
+    </Button>
+  </ButtonGroup>
+);
+
+export { Dialog, DialogCommonFooter };

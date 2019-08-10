@@ -6,8 +6,8 @@ import { Fields as CitationFields } from '../Citation/Form';
 
 const {
   ui: {
-    Button,
     Dialog,
+    DialogCommonFooter,
     Form: { FieldSet, InputText },
   },
 } = components;
@@ -57,19 +57,11 @@ export default function NameForm({
             <Dialog
               title={title}
               footer={
-                <div>
-                  <Button danger type="button" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button
-                    primary
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </div>
+                <DialogCommonFooter
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                  onClose={onClose}
+                />
               }
             >
               <Form>

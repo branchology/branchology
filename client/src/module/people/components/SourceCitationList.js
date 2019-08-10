@@ -191,7 +191,7 @@ function CitationsDialog({ citations, entity, onClose }) {
       onClose={onClose}
       footer={
         <div>
-          <Button intent="danger" onClick={onClose}>
+          <Button intent="danger" minimal onClick={onClose}>
             Close
           </Button>
         </div>
