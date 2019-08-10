@@ -5,7 +5,7 @@ import {
   SOURCE_TABLE,
   SOURCE_NOTE_TABLE,
 } from './constants';
-import { dbToGraphQL, generateUuid, graphQLToDb } from './lib';
+import { generateUuid, graphQLToDb } from './lib';
 
 export default class Source {
   constructor(db) {
@@ -15,16 +15,14 @@ export default class Source {
   findSourceByIds(ids) {
     return db(SOURCE_TABLE)
       .select('*')
-      .whereIn('id', ids)
-      .then(dbToGraphQL);
+      .whereIn('id', ids);
   }
 
   findAll(search) {
     return this.db
       .select(['*'])
       .from(SOURCE_TABLE)
-      .where('title', '~', search)
-      .then(dbToGraphQL);
+      .where('title', '~', search);
   }
 
   createSource(data) {
@@ -34,8 +32,7 @@ export default class Source {
 
     return db(SOURCE_TABLE)
       .insert({ id: sourceId, title }, '*')
-      .then(returnFirst)
-      .then(dbToGraphQL);
+      .then(returnFirst);
   }
 
   createSourceCitation(sourceId, data) {
@@ -45,24 +42,21 @@ export default class Source {
 
     return db(SOURCE_CITATION_TABLE)
       .insert(graphQLToDb({ id: citationId, sourceId, citation, page }), '*')
-      .then(returnFirst)
-      .then(dbToGraphQL);
+      .then(returnFirst);
   }
 
   updateSourceCitation(id, data) {
     return db(SOURCE_CITATION_TABLE)
       .update({ ...data }, '*')
       .where('id', id)
-      .then(returnFirst)
-      .then(dbToGraphQL);
+      .then(returnFirst);
   }
 
   deleteCitation(id) {
     return db(SOURCE_CITATION_TABLE)
       .delete()
       .where('id', id)
-      .then(() => true)
-      .then(dbToGraphQL);
+      .then(() => true);
   }
 
   attachNote(sourceId, noteId) {
@@ -70,8 +64,7 @@ export default class Source {
 
     return this.db(SOURCE_NOTE_TABLE)
       .insert(graphQLToDb({ id, sourceId, noteId }), '*')
-      .then(returnFirst)
-      .then(dbToGraphQL);
+      .then(returnFirst);
   }
 
   attachSourceCitation(method, relatedId, citations) {
