@@ -1,23 +1,21 @@
+import { Icon, Tooltip } from '@blueprintjs/core';
 import React from 'react';
-import { components } from 'module/common';
-
-const {
-  ui: { Icon },
-} = components;
 
 export default ({ isPreferred, onClick }) => (
   <>
     {isPreferred ? (
-      <Icon icon="circle" title="Default/preferred record" xs primary />
+      <Tooltip content="This is the preferred event when more than one are recorded">
+        <Icon icon="dot" intent="primary" />
+      </Tooltip>
     ) : (
-      <Icon
-        icon="circle"
-        title="Secondary/alternative record"
-        xs
-        disabled
-        onClick={onClick}
-        style={{ cursor: 'pointer' }}
-      />
+      <Tooltip content="This is a secondary/alternative event record. Click to mark this event as the preferred">
+        <Icon
+          icon="dot"
+          intent="disabled"
+          onClick={onClick}
+          style={{ cursor: 'pointer' }}
+        />
+      </Tooltip>
     )}
   </>
 );
