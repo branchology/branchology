@@ -5,10 +5,22 @@ import { Badge } from './';
 
 const ContainerStyles = styled.div`
   margin-bottom: 10px;
-  box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+    0 1px 1px rgba(16, 22, 26, 0.2);
+  border-radius: 3px;
 
   .tabBar {
+    align-items: center;
     display: flex;
+
+    .tabs {
+      display: flex;
+      flex: 1;
+    }
+
+    .action {
+      margin-right: 10px;
+    }
   }
 
   .tabContentContainer {
@@ -16,6 +28,7 @@ const ContainerStyles = styled.div`
     padding: 10px;
   }
 `;
+
 const TabStyles = styled.div`
   border-top: 2px solid transparent;
   cursor: pointer;
@@ -32,7 +45,7 @@ const TabStyles = styled.div`
   }
 `;
 
-const TabContainer = ({ tabs = [], contents = [] }) => {
+const TabContainer = ({ action = null, tabs = [], contents = [] }) => {
   const [selectedTab, selectTab] = useState(0);
 
   if (tabs.length !== contents.length) {
@@ -41,15 +54,18 @@ const TabContainer = ({ tabs = [], contents = [] }) => {
   return (
     <ContainerStyles>
       <div className="tabBar">
-        {tabs.map(({ label, count }, index) => (
-          <Tab
-            label={label}
-            count={count}
-            key={index}
-            onClick={() => selectTab(index)}
-            className={index === selectedTab ? 'active' : ''}
-          />
-        ))}
+        <div className="tabs">
+          {tabs.map(({ label, count }, index) => (
+            <Tab
+              label={label}
+              count={count}
+              key={index}
+              onClick={() => selectTab(index)}
+              className={index === selectedTab ? 'active' : ''}
+            />
+          ))}
+        </div>
+        <div className="action">{action}</div>
       </div>
       <div className="tabContentContainer">{contents[selectedTab]}</div>
     </ContainerStyles>

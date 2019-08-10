@@ -1,18 +1,10 @@
+import { Button, ButtonGroup, Divider, HTMLTable } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { components } from 'module/common';
 import AttributeAdd from './Add';
 import CitationList from './CitationList';
 import AttributeDelete from './Delete';
 import AttributeEdit from './Edit';
 import NoAttributes from './NoAttributes';
-
-const {
-  ui: {
-    DataTable: { Heading, Table },
-    IconButton,
-  },
-  WithUser,
-} = components;
 
 export default ({ person, attributes }) => {
   const [editAttribute, toggleEdit] = useState();
@@ -20,44 +12,40 @@ export default ({ person, attributes }) => {
 
   return (
     <div>
-      <WithUser>
-        {editAttribute && (
-          <AttributeEdit
-            person={person}
-            attribute={editAttribute}
-            onClose={() => toggleEdit(null)}
-          />
-        )}
+      {editAttribute && (
+        <AttributeEdit
+          person={person}
+          attribute={editAttribute}
+          onClose={() => toggleEdit(null)}
+        />
+      )}
 
-        {activeDialog === 'AttributeAdd' && (
-          <AttributeAdd person={person} onClose={toggleDialog} />
-        )}
-      </WithUser>
+      {activeDialog === 'AttributeAdd' && (
+        <AttributeAdd person={person} onClose={toggleDialog} />
+      )}
 
       {attributes.length === 0 && (
         <NoAttributes onAddClick={() => toggleDialog('AttributeAdd')} />
       )}
-
       {attributes.length > 0 && (
-        <Table>
+        <HTMLTable interactive striped>
           <thead>
             <tr>
-              <Heading>Attribute</Heading>
-              <Heading>Date</Heading>
-              <Heading>Details</Heading>
-              <Heading>Place</Heading>
-              <Heading right>
-                <WithUser>
-                  <IconButton
-                    icon="plus-circle"
-                    success
-                    sm
-                    onClick={() => toggleDialog('AttributeAdd')}
-                  >
-                    Add Attribute
-                  </IconButton>
-                </WithUser>
-              </Heading>
+              <th>Attribute</th>
+              <th>Date</th>
+              <th>Details</th>
+              <th>Place</th>
+              <th className="right">
+                <Button
+                  icon="add"
+                  intent="success"
+                  small
+                  minimal
+                  onClick={() => toggleDialog('AttributeAdd')}
+                >
+                  Add Attribute
+                </Button>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -67,17 +55,28 @@ export default ({ person, attributes }) => {
                 <td>{attribute.date}</td>
                 <td>{attribute.data}</td>
                 <td>{attribute.place && attribute.place.description}</td>
-                <td className="actions">
-                  <WithUser>
-                    <IconButton
-                      primary
-                      icon="pencil-alt"
-                      onClick={() => toggleEdit(attribute)}
+                <td className="right">
+                  <ButtonGroup>
+                    <Button
+                      intent="primary"
+                      icon="book"
+                      small
+                      minimal
+                      onClick={() => null}
                     >
-                      Edit
-                    </IconButton>
+                      {attribute.sourceCitations.length}
+                    </Button>
+                    <Divider />
+                    <Button
+                      intent="primary"
+                      icon="edit"
+                      small
+                      minimal
+                      onClick={() => toggleEdit(attribute)}
+                    />
+                    <Divider />
                     <AttributeDelete person={person} data={attribute} />
-                  </WithUser>
+                  </ButtonGroup>
                 </td>
               </tr>,
               <tr
@@ -93,7 +92,7 @@ export default ({ person, attributes }) => {
               </tr>,
             ])}
           </tbody>
-        </Table>
+        </HTMLTable>
       )}
     </div>
   );

@@ -40,6 +40,26 @@ const GlobalStyle = createGlobalStyle`
   strong {
     font-weight: 500;
   }
+
+  .bp3-html-table {
+    width: 100%;
+
+    td.middle, th.middle {
+      vertical-align: middle;
+    }
+
+    td.top, th.top {
+      vertical-align: top;
+    }
+
+    td.right, th.right {
+      text-align: right;
+    }
+
+    td.center, th.center {
+      text-align: center;
+    }
+  }
 `;
 
 const AppContainer = styled.div``;

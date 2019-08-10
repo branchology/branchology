@@ -1,9 +1,5 @@
+import { Alert, Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { components } from 'module/common';
-
-const {
-  ui: { Confirm, IconButton },
-} = components;
 
 const RemoveWithConfirm = ({ data, removeEvent }) => {
   const [confirmOpen, toggle] = useState(false);
@@ -11,28 +7,37 @@ const RemoveWithConfirm = ({ data, removeEvent }) => {
 
   return (
     <>
-      {confirmOpen && (
-        <Confirm
-          title="Warning"
-          icon="exclamation-triangle"
-          message="Are you sure you want to permanently remove this data?"
-          onConfirm={() =>
-            removeEvent(data.id).then(
-              ({
-                data: {
-                  removeEvent: { removed },
-                },
-              }) => {
-                if (removed) {
-                  toggleConfirm();
-                }
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Delete"
+        icon="trash"
+        intent="danger"
+        isOpen={confirmOpen}
+        onCancel={toggleConfirm}
+        onConfirm={() =>
+          removeEvent(data.id).then(
+            ({
+              data: {
+                removeEvent: { removed },
               },
-            )
-          }
-          onCancel={toggleConfirm}
-        />
-      )}
-      <IconButton danger icon="trash" onClick={() => toggleConfirm(true)} />
+            }) => {
+              if (removed) {
+                toggleConfirm();
+              }
+            },
+          )
+        }
+      >
+        <p>Are you sure you want to permanently remove this event?</p>
+      </Alert>
+
+      <Button
+        intent="danger"
+        small
+        minimal
+        icon="cross"
+        onClick={() => toggleConfirm(true)}
+      />
     </>
   );
 };

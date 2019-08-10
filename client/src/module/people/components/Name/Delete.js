@@ -1,10 +1,6 @@
+import { Alert, Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { components } from 'module/common';
 import nameDeleteMutation from '../../query/nameDeleteMutation';
-
-const {
-  ui: { Confirm, IconButton },
-} = components;
 
 const RemovePersonName = ({ name, removePersonName }) => {
   const [confirmOpen, toggle] = useState(false);
@@ -12,16 +8,25 @@ const RemovePersonName = ({ name, removePersonName }) => {
 
   return (
     <>
-      {confirmOpen && (
-        <Confirm
-          title="Warning"
-          icon="exclamation-triangle"
-          message="Are you sure you want to permanently remove this name?"
-          onConfirm={() => removePersonName(name.id)}
-          onCancel={toggleConfirm}
-        />
-      )}
-      <IconButton danger icon="trash" onClick={() => toggleConfirm(true)} />
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Delete"
+        icon="trash"
+        intent="danger"
+        isOpen={confirmOpen}
+        onCancel={toggleConfirm}
+        onConfirm={() => removePersonName(name.id)}
+      >
+        <p>Are you sure you want to permanently remove this name?</p>
+      </Alert>
+
+      <Button
+        intent="danger"
+        icon="cross"
+        minimal
+        small
+        onClick={() => toggleConfirm(true)}
+      />
     </>
   );
 };

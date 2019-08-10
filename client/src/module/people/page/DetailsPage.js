@@ -21,6 +21,8 @@ const DetailsPage = ({ data }) => (
     />
     <Heading person={data.person} />
 
+    <h3>Person Details</h3>
+
     <TabContainer
       tabs={[
         { label: 'Events', count: data.person.events.length },

@@ -11,6 +11,7 @@ export * from './Dialog';
 export * from './FauxLink';
 export * from './Icon';
 export * from './LoadingGraphic';
+export * from './SubHeading';
 export * from './Tabs';
 export * from './UiBlock';
 

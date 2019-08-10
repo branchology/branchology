@@ -1,77 +1,65 @@
+import { Button, HTMLTable } from '@blueprintjs/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useToggle } from 'lib';
-import { components } from 'module/common';
+import { SubHeading } from 'module/common/component/ui';
 import AddChild from './AddChild';
 import NoChildren from './NoChildren';
-
-const {
-  ui: {
-    DataTable: { Cell, Heading, Table },
-    IconButton,
-  },
-  WithUser,
-} = components;
 
 export default ({ children, person, relationship }) => {
   const [addOpen, toggleAdd] = useToggle();
 
   return (
     <div>
-      <div className="header">
-        <h5 className="sectionTitle" style={{ lineHeight: '1.5em' }}>
-          Children
-        </h5>
-        <WithUser>
-          <IconButton icon="plus-circle" success sm onClick={toggleAdd}>
-            Add Child
-          </IconButton>
-        </WithUser>
-      </div>
+      <SubHeading>
+        <h4>Children</h4>
 
-      <WithUser>
-        {addOpen && (
-          <AddChild
-            person={person}
-            relationship={relationship}
-            onClose={toggleAdd}
-          />
-        )}
-      </WithUser>
+        <Button icon="add" intent="success" small minimal onClick={toggleAdd}>
+          Add Child
+        </Button>
+      </SubHeading>
+
+      {addOpen && (
+        <AddChild
+          person={person}
+          relationship={relationship}
+          onClose={toggleAdd}
+        />
+      )}
 
       {children.length === 0 ? (
         <NoChildren onAction={toggleAdd} />
       ) : (
-        <Table>
+        <HTMLTable interactive striped>
           <thead>
             <tr>
-              <Heading> </Heading>
-              <Heading>Given</Heading>
-              <Heading>Surname</Heading>
-              <Heading>Lineage</Heading>
-              <Heading>Birth</Heading>
-              <Heading>Death</Heading>
-              <Heading> </Heading>
+              <th> </th>
+              <th>Given</th>
+              <th>Surname</th>
+              <th>Lineage</th>
+              <th>Birth</th>
+              <th>Death</th>
+              <th> </th>
             </tr>
           </thead>
           <tbody>
             {children.map(({ id, type, person }) => (
               <tr key={id}>
-                <Cell> </Cell>
-                <Cell>
+                <td> </td>
+                <td>
                   <Link to={`/people/${person.id}`}>{person.name.given}</Link>
-                </Cell>
-                <Cell>
+                </td>
+                <td>
                   <Link to={`/people/${person.id}`}>{person.name.surname}</Link>
-                </Cell>
-                <Cell>{type}</Cell>
-                <Cell>{person.birth && person.birth.date}</Cell>
-                <Cell>{person.death && person.death.date}</Cell>
-                <Cell> </Cell>
+                </td>
+                <td>{type}</td>
+                <td>{person.birth && person.birth.date}</td>
+                <td>{person.death && person.death.date}</td>
+                <td> </td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </HTMLTable>
       )}
     </div>
   );

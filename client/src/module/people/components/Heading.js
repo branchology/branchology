@@ -1,13 +1,9 @@
+import { Card } from '@blueprintjs/core';
 import React from 'react';
 import styled from 'styled-components';
-import { components } from 'module/common';
 import ParentNames from '../components/ParentNames';
 
-const {
-  ui: { DataContainer },
-} = components;
-
-const Container = styled(DataContainer)`
+const Container = styled(Card)`
   display: flex;
   margin-bottom: 10px;
 
@@ -32,7 +28,7 @@ const Container = styled(DataContainer)`
 `;
 
 export default ({ person }) => (
-  <Container>
+  <Container elevation={1}>
     <div className="imagePlaceholder" />
     <div className="personDetails">
       <h2 className="personName">

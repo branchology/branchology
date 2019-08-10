@@ -1,15 +1,12 @@
+import { Button } from '@blueprintjs/core';
 import React, { PureComponent } from 'react';
 import { createApiValidationError, translateApiErrors } from 'lib';
-import { components } from 'module/common';
+import { Dialog } from 'module/common/component/ui';
 import { Form, InputText, Select } from 'module/common/component/Form';
 import { NotificationContext } from 'module/common/notifications';
 import attributeTypes from './config';
 import PlaceAutocomplete from '../PlaceAutocomplete';
 import AttributeUpdateMutation from '../../query/attributeUpdateMutation';
-
-const {
-  ui: { Button, Dialog },
-} = components;
 
 function transfigureAttributeTypes() {
   return Object.keys(attributeTypes).map(type => ({
@@ -90,10 +87,10 @@ class AttributeEdit extends PureComponent {
             title="Edit Person Attribute"
             footer={
               <div>
-                <Button type="button" onClick={onClose}>
+                <Button intent="danger" onClick={onClose}>
                   Cancel
                 </Button>
-                <Button type="button" onClick={submit}>
+                <Button intent="primary" onClick={submit}>
                   Save
                 </Button>
               </div>

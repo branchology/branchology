@@ -1,27 +1,16 @@
+import { Button, NonIdealState } from '@blueprintjs/core';
 import React from 'react';
-import pickRandom from 'lib/pickRandom';
-import { components } from 'module/common';
-import NoResults from '../NoResults';
 
-const {
-  ui: { IconButton },
-  WithUser,
-} = components;
-
-const icons = ['ring'];
-
-const message = `There are currently no relationships for this person.`;
-
-export default () => (
-  <NoResults
-    icon={pickRandom(icons)}
-    message={message}
-    actions={
-      <WithUser>
-        <IconButton success icon="plus-circle" onClick={() => null}>
+export default function NoAttributes({ onAction }) {
+  return (
+    <NonIdealState
+      icon="heart-broken"
+      description={`There are currently no relationships for this person.`}
+      action={
+        <Button icon="add" intent="success" onClick={onAction}>
           Add Relationship
-        </IconButton>
-      </WithUser>
-    }
-  />
-);
+        </Button>
+      }
+    />
+  );
+}

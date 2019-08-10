@@ -1,26 +1,16 @@
+import { Button, NonIdealState } from '@blueprintjs/core';
 import React from 'react';
-import pickRandom from 'lib/pickRandom';
-import { components } from 'module/common';
-import NoResults from './NoResults';
 
-const {
-  ui: { IconButton },
-  WithUser,
-} = components;
-
-const noteIcons = ['book-open', 'sticky-note'];
-const message = `There are currently no notes. Do you want to add the first one?`;
-
-export default () => (
-  <NoResults
-    icon={pickRandom(noteIcons)}
-    message={message}
-    actions={
-      <WithUser>
-        <IconButton success icon="plus-circle" onClick={() => null}>
+export default function NoAttributes({ onAction }) {
+  return (
+    <NonIdealState
+      icon="document"
+      description={`There are currently no notes.`}
+      action={
+        <Button icon="add" intent="success" onClick={onAction}>
           Add Note
-        </IconButton>
-      </WithUser>
-    }
-  />
-);
+        </Button>
+      }
+    />
+  );
+}

@@ -1,3 +1,4 @@
+import { Button } from '@blueprintjs/core';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { components } from 'module/common';
@@ -7,7 +8,6 @@ import EventUpdateMutation from '../../query/eventUpdateMutation';
 
 const {
   ui: {
-    Button,
     Dialog,
     Form: { FieldColumn, FieldRow, InputText, Select },
   },
@@ -93,12 +93,11 @@ const EventEdit = ({ event: editEvent, eventTypes, onClose, updateEvent }) => (
             title="Edit Person Event"
             footer={
               <div>
-                <Button danger type="button" onClick={onClose}>
+                <Button intent="danger" onClick={onClose}>
                   Close
                 </Button>
                 <Button
-                  primary
-                  type="button"
+                  intent="primary"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 >

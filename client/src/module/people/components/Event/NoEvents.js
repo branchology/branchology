@@ -1,25 +1,16 @@
+import { Button, NonIdealState } from '@blueprintjs/core';
 import React from 'react';
-import pickRandom from 'lib/pickRandom';
-import { components } from 'module/common';
-import NoResults from '../NoResults';
 
-const {
-  ui: { IconButton },
-  WithUser,
-} = components;
-
-const eventIcons = ['bible', 'birthday-cake', 'calendar'];
-
-export default ({ onAddClick, type }) => (
-  <NoResults
-    icon={pickRandom(eventIcons)}
-    message={`There are currently no events for this ${type}.`}
-    actions={
-      <WithUser>
-        <IconButton success icon="plus-circle" onClick={onAddClick}>
+export default function NoAttributes({ onAddClick, type }) {
+  return (
+    <NonIdealState
+      icon="calendar"
+      description={`There are currently no events for this ${type}.`}
+      action={
+        <Button icon="add" intent="success" onClick={onAddClick}>
           Add Event
-        </IconButton>
-      </WithUser>
-    }
-  />
-);
+        </Button>
+      }
+    />
+  );
+}

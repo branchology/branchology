@@ -1,12 +1,8 @@
 import { InputGroup } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { debounce } from 'throttle-debounce';
-import { components } from 'module/common';
+import { BrowserTitle, DataContainer } from 'module/common/component/ui';
 import PeopleList from '../components/PeopleList';
-
-const {
-  ui: { BrowserTitle },
-} = components;
 
 export default () => {
   const [search, setSearch] = useState();
@@ -29,7 +25,9 @@ export default () => {
         onChange={onSearch}
       />
 
-      <PeopleList search={search} />
+      <DataContainer>
+        <PeopleList search={search} />
+      </DataContainer>
     </div>
   );
 };

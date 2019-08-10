@@ -1,92 +1,73 @@
-import { darken } from 'polished';
+import {
+  Button,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  Navbar,
+  NavbarDivider,
+  NavbarGroup,
+  NavbarHeading,
+  Popover,
+} from '@blueprintjs/core';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
 import { components } from 'module/common';
 
-const {
-  ui: { FauxLink, UiBlock },
-  WithUser,
-} = components;
+const { WithUser } = components;
 
-const Heading = styled.div`
-  align-items: center;
-  color: #333;
-  display: flex;
-  padding: 20px 0 10px 0;
-
-  h1 {
-    font-weight: 400;
-    margin: 0;
-    padding: 0;
-  }
-
-  .logo {
-    max-height: 60px;
-  }
-
-  .nav {
-    flex: 1;
-    text-align: right;
-
-    .user {
-      font-size: 0.85em;
-      margin-bottom: 10px;
-    }
-
-    .menu {
-      .link,
-      .link:visited {
-        background-color: #1aaa54;
-        border-radius: 3px;
-        color: #fff;
-        font-size: 0.9em;
-        font-weight: 400;
-        padding: 5px 10px;
-
-        + .link {
-          margin-left: 10px;
-        }
-
-        &:hover {
-          background-color: ${darken(0.1, '#1aaa54')};
-        }
-      }
-    }
-  }
-`;
-
-export default () => (
-  <UiBlock>
-    <Heading>
-      <img src="/branchology-logo.png" className="logo" alt="Branchology" />
-
-      <div className="nav">
-        <div className="user">
+export default withRouter(({ history }) => (
+  <Navbar>
+    <NavbarGroup align="left">
+      <NavbarHeading>Branchology</NavbarHeading>
+    </NavbarGroup>
+    <NavbarGroup align="right">
+      <Button
+        minimal
+        icon="home"
+        intent="success"
+        text="Home"
+        onClick={() => history.push('/')}
+      />
+      <Button
+        minimal
+        icon="people"
+        intent="success"
+        text="People"
+        onClick={() => history.push('/people')}
+      />
+      <Button
+        minimal
+        icon="map-marker"
+        intent="success"
+        text="Places"
+        onClick={() => history.push('/places')}
+      />
+      <Button
+        minimal
+        icon="book"
+        intent="success"
+        text="Sources"
+        onClick={() => history.push('/sources')}
+      />
+      <NavbarDivider />
+      <Button minimal icon="notifications" />
+      <Popover
+        content={
           <WithUser>
             {({ logout, user }) => (
-              <div>
-                <strong>Welcome, {user.user.email}!</strong>{' '}
-                <FauxLink onClick={logout}>Logout</FauxLink>
-              </div>
+              <Menu>
+                <p>HELLO, {user.user.email}</p>
+                <MenuItem icon="user" text="Profile" />
+                <MenuItem icon="cog" text="Settings" />
+                <MenuDivider />
+                <MenuItem icon="log-out" text="Log Out" onClick={logout} />
+              </Menu>
             )}
           </WithUser>
-        </div>
-        <div className="menu">
-          <Link className="link" to="/">
-            Home
-          </Link>
-          <Link className="link" to="/people">
-            People
-          </Link>
-          <Link className="link" to="/places">
-            Places
-          </Link>
-          <Link className="link" to="/sources">
-            Sources
-          </Link>
-        </div>
-      </div>
-    </Heading>
-  </UiBlock>
-);
+        }
+      >
+        <Button minimal icon="user" />
+      </Popover>
+    </NavbarGroup>
+  </Navbar>
+));

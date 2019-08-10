@@ -1,18 +1,10 @@
+import { Button, ButtonGroup, Divider, HTMLTable } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { components } from 'module/common';
 import NameAdd from './Add';
 import CitationList from './CitationList';
 import NameDelete from './Delete';
 import NameEdit from './Edit';
 import NamePreferredToggle from './PreferredToggle';
-
-const {
-  ui: {
-    DataTable: { Cell, Heading, Table },
-    IconButton,
-  },
-  WithUser,
-} = components;
 
 export default function NameList({ names, person }) {
   const [editName, toggleEdit] = useState();
@@ -20,78 +12,81 @@ export default function NameList({ names, person }) {
 
   return (
     <div>
-      <WithUser>
-        {editName && (
-          <NameEdit name={editName} onClose={() => toggleEdit(null)} />
-        )}
+      {editName && (
+        <NameEdit name={editName} onClose={() => toggleEdit(null)} />
+      )}
 
-        {activeDialog === 'NameAdd' && (
-          <NameAdd
-            person={person}
-            name={{ personId: person.id }}
-            onClose={toggleDialog}
-          />
-        )}
-      </WithUser>
+      {activeDialog === 'NameAdd' && (
+        <NameAdd
+          person={person}
+          name={{ personId: person.id }}
+          onClose={toggleDialog}
+        />
+      )}
 
-      <Table>
+      <HTMLTable interactive striped>
         <thead>
           <tr>
-            <Heading>&nbsp;</Heading>
-            <Heading>Prefix</Heading>
-            <Heading>Given</Heading>
-            <Heading>Surname</Heading>
-            <Heading>Suffix</Heading>
-            <Heading right>
-              <WithUser>
-                <IconButton
-                  icon="plus-circle"
-                  success
-                  sm
-                  onClick={() => toggleDialog('NameAdd')}
-                >
-                  Add Name
-                </IconButton>
-              </WithUser>
-            </Heading>
+            <th>&nbsp;</th>
+            <th>Prefix</th>
+            <th>Given</th>
+            <th>Surname</th>
+            <th>Suffix</th>
+            <th className="right">
+              <Button
+                icon="add"
+                intent="success"
+                small
+                minimal
+                onClick={() => toggleDialog('NameAdd')}
+              >
+                Add Name
+              </Button>
+            </th>
           </tr>
         </thead>
         <tbody>
           {names.map(name => [
             <tr key={name.id}>
-              <Cell center middle>
+              <td className="center middle">
                 <NamePreferredToggle name={name} />
-              </Cell>
-              <Cell>{name.prefix}</Cell>
-              <Cell>{name.given}</Cell>
-              <Cell>{name.surname}</Cell>
-              <Cell>{name.suffix}</Cell>
-              <Cell className="actions">
-                <WithUser>
-                  <IconButton
-                    primary
-                    icon="pencil-alt"
-                    onClick={() => toggleEdit(name)}
-                  />
-                  <IconButton
-                    primary
+              </td>
+              <td>{name.prefix}</td>
+              <td>{name.given}</td>
+              <td>{name.surname}</td>
+              <td>{name.suffix}</td>
+              <td className="right">
+                <ButtonGroup>
+                  <Button
+                    intent="primary"
                     icon="book"
+                    minimal
+                    small
                     onClick={() => toggleEdit(name)}
                   >
-                    0
-                  </IconButton>
+                    {name.sourceCitations.length}
+                  </Button>
+                  <Divider />
+                  <Button
+                    intent="primary"
+                    icon="edit"
+                    minimal
+                    small
+                    onClick={() => toggleEdit(name)}
+                  />
+                  <Divider />
                   <NameDelete person={person} name={name} />
-                </WithUser>
-              </Cell>
+                </ButtonGroup>
+              </td>
             </tr>,
             <tr key={`sources-${name.id}`}>
-              <Cell colSpan="3" className="citations">
+              <td colSpan="3" className="citations">
                 <CitationList citations={name.sourceCitations} entity={name} />
-              </Cell>
+              </td>
             </tr>,
           ])}
         </tbody>
-      </Table>
+      </HTMLTable>
     </div>
   );
 }

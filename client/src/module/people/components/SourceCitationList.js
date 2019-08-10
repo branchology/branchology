@@ -1,19 +1,11 @@
+import { Button, ButtonGroup, HTMLTable } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import nl2br from 'lib/nl2br';
-import { components } from 'module/common';
+import { Confirm } from 'module/common/component/ui';
 import SourceCitationAdd from './Citation/Add';
 import SourceCitationEdit from './Citation/Edit';
 import { NotificationConsumer } from '../../common/notifications';
-
-const {
-  ui: {
-    Confirm,
-    DataTable: { Cell, Heading, Table },
-    IconButton,
-  },
-  WithUser,
-} = components;
 
 const ListContainer = styled.ol`
   font-size: 0.9em;
@@ -38,7 +30,7 @@ const CitationDetails = styled.blockquote`
 
 const ToggleCitation = ({ onClick }) => (
   <span className="toggle" onClick={onClick} title="View Details">
-    <IconButton xs primary icon="search" />
+    <Button small intent="primary" minimal icon="search" />
   </span>
 );
 
@@ -65,77 +57,74 @@ export default ({ citations, entity, ...props }) => {
     <NotificationConsumer>
       {({ notify }) => (
         <ListContainer>
-          <WithUser>
-            {addOpen && (
-              <SourceCitationAdd
-                entity={entity}
-                onClose={toggleAddOpen}
-                addCitation={props.addCitation}
-              />
-            )}
+          {addOpen && (
+            <SourceCitationAdd
+              entity={entity}
+              onClose={toggleAddOpen}
+              addCitation={props.addCitation}
+            />
+          )}
 
-            {selectedForEdit && (
-              <SourceCitationEdit
-                entity={entity}
-                citation={selectedForEdit}
-                onClose={() => toggleEditOpen(null)}
-                updateCitation={props.updateCitation}
-              />
-            )}
+          {selectedForEdit && (
+            <SourceCitationEdit
+              entity={entity}
+              citation={selectedForEdit}
+              onClose={() => toggleEditOpen(null)}
+              updateCitation={props.updateCitation}
+            />
+          )}
 
-            {deleteOpen && (
-              <Confirm
-                title="Warning"
-                icon="exclamation-triangle"
-                message={`Are you sure you want to permanently remove this citation for "${
-                  deleteOpen.source.title
-                }"?`}
-                onConfirm={() =>
-                  props
-                    .removeCitation({
-                      variables: {
-                        entityId: entity.id,
-                        citationId: deleteOpen.id,
-                      },
-                    })
-                    .then(({ data: { removeCitation: { errors } } }) => {
-                      if (errors) {
-                        // TODO: FIXME: Let the user know...
-                        return false;
-                      }
+          {deleteOpen && (
+            <Confirm
+              title="Warning"
+              icon="exclamation-triangle"
+              message={`Are you sure you want to permanently remove this citation for "${
+                deleteOpen.source.title
+              }"?`}
+              onConfirm={() =>
+                props
+                  .removeCitation({
+                    variables: {
+                      entityId: entity.id,
+                      citationId: deleteOpen.id,
+                    },
+                  })
+                  .then(({ data: { removeCitation: { errors } } }) => {
+                    if (errors) {
+                      // TODO: FIXME: Let the user know...
+                      return false;
+                    }
 
-                      notify('Citation Removed Successfully.');
+                    notify('Citation Removed Successfully.');
 
-                      toggleDeleteOpen(null);
-                    })
-                }
-                onCancel={() => toggleDeleteOpen(null)}
-              />
-            )}
-          </WithUser>
+                    toggleDeleteOpen(null);
+                  })
+              }
+              onCancel={() => toggleDeleteOpen(null)}
+            />
+          )}
 
-          <Table>
+          <HTMLTable interactive striped style={{ width: '100%' }}>
             <thead>
               <tr>
-                <Heading>Source</Heading>
-                <Heading>
-                  <WithUser>
-                    <IconButton
-                      sm
-                      success
-                      icon="plus-circle"
-                      onClick={toggleAddOpen}
-                    >
-                      Add
-                    </IconButton>
-                  </WithUser>
-                </Heading>
+                <th>Source</th>
+                <th className="right">
+                  <Button
+                    small
+                    minimal
+                    intent="success"
+                    icon="add"
+                    onClick={toggleAddOpen}
+                  >
+                    Add Citation
+                  </Button>
+                </th>
               </tr>
             </thead>
             <tbody>
               {citations.map(citation => (
                 <tr key={citation.id}>
-                  <Cell>
+                  <td>
                     {citation.source.title}{' '}
                     {citation.page ? `- ${citation.page}` : null}{' '}
                     {expanded.includes(citation.id) && (
@@ -143,30 +132,33 @@ export default ({ citations, entity, ...props }) => {
                         {nl2br(citation.citation)}
                       </CitationDetails>
                     )}
-                  </Cell>
-                  <Cell right>
-                    {citation.citation ? (
-                      <ToggleCitation onClick={() => toggle(citation.id)} />
-                    ) : null}{' '}
-                    <WithUser>
-                      <IconButton
-                        xs
-                        success
-                        icon="pencil-alt"
+                  </td>
+                  <td className="right">
+                    <ButtonGroup minimal={true}>
+                      {citation.citation ? (
+                        <ToggleCitation onClick={() => toggle(citation.id)} />
+                      ) : null}
+
+                      <Button
+                        small
+                        intent="success"
+                        icon="edit"
+                        minimal
                         onClick={() => toggleEditOpen(citation)}
                       />
-                      <IconButton
-                        xs
-                        danger
-                        icon="times"
+                      <Button
+                        small
+                        intent="danger"
+                        icon="cross"
+                        minimal
                         onClick={() => toggleDeleteOpen(citation)}
                       />
-                    </WithUser>
-                  </Cell>
+                    </ButtonGroup>
+                  </td>
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </HTMLTable>
         </ListContainer>
       )}
     </NotificationConsumer>
